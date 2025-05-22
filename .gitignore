@@ -10,6 +10,7 @@
 
 
 # Flutter repo-specific
+mess_app_info.dart
 /bin/cache/
 /bin/internal/bootstrap.bat
 /bin/internal/bootstrap.sh

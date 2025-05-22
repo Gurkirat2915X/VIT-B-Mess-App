@@ -1,24 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vit_b_mess/provider/settings.dart';
 
-class Tabs extends StatefulWidget {
+class Tabs extends ConsumerStatefulWidget {
   const Tabs({super.key});
 
   @override
-  State<Tabs> createState() => _TabsState();
+  ConsumerState<Tabs> createState() => _TabsState();
 }
 
-class _TabsState extends State<Tabs> {
+class _TabsState extends ConsumerState<Tabs> {
+  int pageIndex = 0;
 
-  int pageIndex = 1;
-
-  void _onSelectBottom(int index){
+  void _onSelectBottom(int index) {
     setState(() {
       pageIndex = index;
     });
-  }
+  } 
+
+  
 
   @override
   Widget build(BuildContext context) {
+    final settings = ref.watch(settingsProvider);
     return Scaffold(
       appBar: AppBar(
         // backgroundColor: Color(0xFF4CAF50),
@@ -37,17 +41,31 @@ class _TabsState extends State<Tabs> {
           ],
         ),
       ),
-      body: Center(
-        child: Text("This is the menu"),
+      body: Center(child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text("Hostel: ${settings.hostelType.name}"),
+          Text("Mess: ${settings.selectedMess.name}"),
+          Text("Only Veg: ${settings.onlyVeg}"),
+          Text("Version: ${settings.version}"),
+          Text("First Boot: ${settings.isFirstBoot}"),
+        ],
+      )),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: pageIndex,
+        onTap: _onSelectBottom,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.food_bank_rounded),
+            label: "Menu",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings_applications),
+            label: "Preference",
+          ),
+          BottomNavigationBarItem(icon: Icon(Icons.info), label: "About"),
+        ],
       ),
-     bottomNavigationBar: BottomNavigationBar(currentIndex: pageIndex,
-     onTap: _onSelectBottom,
-     items: [
-      BottomNavigationBarItem(icon: Icon(Icons.food_bank_rounded),label: "Menu"),
-      BottomNavigationBarItem(icon: Icon(Icons.settings_applications),label: "Preference"),
-      BottomNavigationBarItem(icon: Icon(Icons.info),label: "About")
-     ],
-     ),
     );
   }
 }

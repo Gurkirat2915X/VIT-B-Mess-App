@@ -1,57 +1,61 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:vit_b_mess/mess_app_info.dart' as appInfo;
+import 'package:vit_b_mess/models/settings.dart';
+import 'package:vit_b_mess/provider/mess_data.dart';
 
-enum Settings { hostel, mess, vegOnly, firstBoot }
-
-Future<Map<Settings, dynamic>> loadSettingsFromStorage() async {
-  await Hive.openBox('mess_app_data');
-  await Hive.openBox('mess_app_settings');
-  final settingsBox = Hive.box('mess_app_settings');
-  final settingsValues = Map.fromEntries(
-    Settings.values.map((setting) {
-      return MapEntry(setting, settingsBox.get(setting.name));
-    }).toList(),
-  );
-  for (var setting in Settings.values) {
-    if (settingsValues[setting] == null) {
-      settingsValues[Settings.firstBoot] = true;
-    }
-    break;
+Box<Settings> settingsBox = Hive.box<Settings>('mess_app_settings');
+Future<Settings> loadSettingsFromStorage() async {
+  Settings? _settings = settingsBox.get('settings');
+  if (_settings == null) {
+    print("Settings not found in storage, creating default settings");
+    return Settings(
+      isFirstBoot: true,
+      hostelType: Hostels.Boys,
+      selectedMess: MessType.BoysMayuri,
+      onlyVeg: false,
+      version: appInfo.appVersion,
+    );
   }
-  return settingsValues;
+  return _settings;
 }
 
-void saveSettingsToStorage(Map<Settings, dynamic> settings) async {
-  final settingsBox = Hive.box('mess_app_settings');
-  for (var entry in settings.entries) {
-    await settingsBox.put(entry.key.name, entry.value);
-  }
+Future saveSettingsToStorage(Settings settings) async {
+  await settingsBox.put('settings', settings);
+  await settingsBox.flush();
 }
 
-class SettingsProvider extends StateNotifier<Map<Settings, dynamic>> {
-  SettingsProvider() : super({});
+class SettingsProvider extends StateNotifier<Settings> {
+  SettingsProvider()
+    : super(
+        Settings(
+          hostelType: Hostels.Boys,
+          selectedMess: MessType.BoysMayuri,
+          onlyVeg: false,
+          version: appInfo.appVersion,
+          isFirstBoot: true,
+        ),
+      );
 
   Future<void> loadSettings() async {
+    print("Loading settings from storage");
     final settings = await loadSettingsFromStorage();
+    print("Settings loaded from storage: $settings");
     state = settings;
   }
 
-  void saveSettings(Map<Settings, dynamic> settings) {
-    state = {...state, ...settings, Settings.firstBoot: false};
-    saveSettingsToStorage(state);
+  Future saveSettings(Settings settings) async {
+    state = settings;
+    await saveSettingsToStorage(settings);
   }
 
-  void setSetting(Settings setting, dynamic value) {
-    state = {...state, Settings.firstBoot: false, setting: value};
-    saveSettingsToStorage(state);
-  }
-
-  dynamic getSetting(Settings setting) {
-    return state[setting];
+  Settings getSetting() {
+    return state;
   }
 }
 
-final settingsProvider =
-    StateNotifierProvider<SettingsProvider, Map<Settings, dynamic>>((ref) {
-      return SettingsProvider();
-    });
+final settingsProvider = StateNotifierProvider<SettingsProvider, Settings>((
+  ref,
+) {
+  return SettingsProvider();
+});
