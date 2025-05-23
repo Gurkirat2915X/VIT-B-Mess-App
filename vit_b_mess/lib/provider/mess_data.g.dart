@@ -62,6 +62,8 @@ class MessTypeAdapter extends TypeAdapter<MessType> {
         return MessType.JMB;
       case 4:
         return MessType.GirlsMayuri;
+      case 5:
+        return MessType.AB;
       default:
         return MessType.CRCL;
     }
@@ -84,6 +86,9 @@ class MessTypeAdapter extends TypeAdapter<MessType> {
         break;
       case MessType.GirlsMayuri:
         writer.writeByte(4);
+        break;
+      case MessType.AB:
+        writer.writeByte(5);
         break;
     }
   }

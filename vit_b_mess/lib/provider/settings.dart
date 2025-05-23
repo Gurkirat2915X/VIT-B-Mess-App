@@ -15,8 +15,15 @@ Future<Settings> loadSettingsFromStorage() async {
       selectedMess: MessType.BoysMayuri,
       onlyVeg: false,
       version: appInfo.appVersion,
+      newUpdate: true,
     );
   }
+  if (_settings.version != appInfo.appVersion) {
+    print("App version changed, updating settings");
+    _settings.version = appInfo.appVersion;
+    _settings.newUpdate = true;
+  }
+  await saveSettingsToStorage(_settings);
   return _settings;
 }
 
@@ -34,6 +41,7 @@ class SettingsProvider extends StateNotifier<Settings> {
           onlyVeg: false,
           version: appInfo.appVersion,
           isFirstBoot: true,
+          newUpdate: false,
         ),
       );
 

@@ -8,7 +8,7 @@ enum Hostels {
   @HiveField(0)
   Boys,
   @HiveField(1)
-  Girls
+  Girls,
 }
 
 @HiveType(typeId: 2)
@@ -22,7 +22,9 @@ enum MessType {
   @HiveField(3)
   JMB(hostel: Hostels.Boys),
   @HiveField(4)
-  GirlsMayuri(hostel: Hostels.Girls);
+  GirlsMayuri(hostel: Hostels.Girls),
+  @HiveField(5)
+  AB(hostel: Hostels.Girls);
 
   final Hostels hostel;
   const MessType({required this.hostel});

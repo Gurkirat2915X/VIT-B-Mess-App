@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vit_b_mess/mess_app_info.dart' as appInfo;
+import 'package:vit_b_mess/mess_app_info.dart' as app_info;
 import 'package:vit_b_mess/models/settings.dart';
 import 'package:vit_b_mess/provider/mess_data.dart';
 import 'package:vit_b_mess/provider/settings.dart';
@@ -35,7 +35,8 @@ class _FirstSetupOptionsState extends ConsumerState<FirstSetupOptions> {
       hostelType: selectedHostel,
       selectedMess: selectedMess!,
       onlyVeg: isVeg,
-      version: appInfo.appVersion,
+      version: app_info.appVersion,
+      newUpdate: true,
     );
 
     await ref.read(settingsProvider.notifier).saveSettings(userSettings);
@@ -115,11 +116,12 @@ class _FirstSetupOptionsState extends ConsumerState<FirstSetupOptions> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text("Only Veg"),
-                      Checkbox(
+                      const SizedBox(width: 8),
+                      Switch(
                         value: isVeg,
-                        onChanged: (value) {
+                        onChanged: (bool value) {
                           setState(() {
-                            isVeg = !isVeg;
+                            isVeg = value;
                           });
                         },
                       ),

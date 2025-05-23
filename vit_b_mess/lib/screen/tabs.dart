@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vit_b_mess/provider/settings.dart';
+import 'package:vit_b_mess/screen/update.dart';
+import 'package:vit_b_mess/widgets/about.dart';
+import 'package:vit_b_mess/widgets/preference.dart';
 
 class Tabs extends ConsumerStatefulWidget {
   const Tabs({super.key});
@@ -11,18 +14,40 @@ class Tabs extends ConsumerStatefulWidget {
 
 class _TabsState extends ConsumerState<Tabs> {
   int pageIndex = 0;
-
+  Widget? page;
   void _onSelectBottom(int index) {
     setState(() {
       pageIndex = index;
     });
-  } 
-
-  
+  }
 
   @override
   Widget build(BuildContext context) {
     final settings = ref.watch(settingsProvider);
+    if (settings.newUpdate!) {
+      return UpdateScreen();
+    }
+
+    if (pageIndex == 0) {
+      page = Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("Hostel: ${settings.hostelType.name}"),
+            Text("Mess: ${settings.selectedMess.name}"),
+            Text("Only Veg: ${settings.onlyVeg}"),
+            Text("Version: ${settings.version}"),
+            Text("First Boot: ${settings.isFirstBoot}"),
+            Text("New Update: ${settings.newUpdate}"),
+          ],
+        ),
+      );
+    } else if (pageIndex == 1) {
+      page = const Preference();
+    } else {
+      page = const About();
+    }
+
     return Scaffold(
       appBar: AppBar(
         // backgroundColor: Color(0xFF4CAF50),
@@ -41,16 +66,7 @@ class _TabsState extends ConsumerState<Tabs> {
           ],
         ),
       ),
-      body: Center(child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text("Hostel: ${settings.hostelType.name}"),
-          Text("Mess: ${settings.selectedMess.name}"),
-          Text("Only Veg: ${settings.onlyVeg}"),
-          Text("Version: ${settings.version}"),
-          Text("First Boot: ${settings.isFirstBoot}"),
-        ],
-      )),
+      body: page,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: pageIndex,
         onTap: _onSelectBottom,
