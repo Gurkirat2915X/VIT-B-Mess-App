@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:vit_b_mess/models/settings.dart';
 import 'package:vit_b_mess/provider/mess_data.dart';
 import 'package:vit_b_mess/provider/settings.dart';
-
 
 class Preference extends ConsumerStatefulWidget {
   const Preference({super.key});
@@ -20,6 +20,7 @@ class _PreferenceState extends ConsumerState<Preference> {
   MessType? selectedMess;
   bool? isVeg;
   bool allowSave = true;
+  bool _isUpdating = false; // Add this line
   @override
   void initState() {
     super.initState();
@@ -29,7 +30,7 @@ class _PreferenceState extends ConsumerState<Preference> {
     isVeg = settings!.onlyVeg;
   }
 
-  void onClickOkay() async{
+  void onClickOkay() async {
     setState(() {
       allowSave = false;
     });
@@ -55,6 +56,7 @@ class _PreferenceState extends ConsumerState<Preference> {
       newUpdate: settings!.newUpdate,
       messDataVersion: settings!.messDataVersion,
       newUpdateVersion: settings!.newUpdateVersion,
+      updatedTill: settings!.updatedTill,
     );
 
     if (userSettings == settings) {
@@ -90,13 +92,14 @@ class _PreferenceState extends ConsumerState<Preference> {
         children: [
           Icon(
             Icons.settings,
-            size: 100,
+            size: 80,
             color: Theme.of(context).colorScheme.primary,
           ),
           Text(
             "Preferences",
             style: Theme.of(context).textTheme.headlineMedium,
           ),
+          const SizedBox(height: 16),
           SizedBox(
             width: MediaQuery.of(context).size.width * 0.8,
             child: Card(
@@ -160,27 +163,100 @@ class _PreferenceState extends ConsumerState<Preference> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Text("Only Veg"),
-                    SizedBox(width: 8,),
-                    Switch(
-                      value: isVeg!,
-                      onChanged: (bool value) {
-                        setState(() {
-                          isVeg = value;
-                        });
-                      },
-                    ),
+                        SizedBox(width: 8),
+                        Switch(
+                          value: isVeg!,
+                          onChanged: (bool value) {
+                            setState(() {
+                              isVeg = value;
+                            });
+                          },
+                        ),
                       ],
                     ),
                     FilledButton.tonalIcon(
-                    onPressed: allowSave ? onClickOkay : null,
-                    label: Text("Okay"),
-                    
-
-                  ),
+                      onPressed: allowSave ? onClickOkay : null,
+                      label: Text("Okay"),
+                    ),
                   ],
                 ),
               ),
             ),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text("Mess Data Updated Till: ${settings!.updatedTill}"),
+              const SizedBox(width: 8),
+              IconButton(
+                icon:
+                    _isUpdating
+                        ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                        : const Icon(Icons.refresh),
+                color: Theme.of(context).colorScheme.primary,
+                onPressed:
+                    _isUpdating
+                        ? null
+                        : () async {
+                          setState(() {
+                            _isUpdating = true;
+                          });
+                          final hasInternet =
+                              await InternetConnection().hasInternetAccess;
+                          if (!hasInternet) {
+                            if (!mounted) return;
+                            ScaffoldMessenger.of(
+                              context,
+                            ).removeCurrentSnackBar();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                  "No Internet Connection, Please connect to internet to fetch mess updates.",
+                                ),
+                                duration: Duration(seconds: 2),
+                              ),
+                            );
+                            setState(() {
+                              _isUpdating = false;
+                            });
+                            return;
+                          }
+                          final bool updated = await updateMessData(ref);
+
+                          if (!mounted) return;
+                          setState(() {
+                            _isUpdating = false;
+                          });
+
+                          if (updated) {
+                            ScaffoldMessenger.of(
+                              context,
+                            ).removeCurrentSnackBar();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Mess Data Updated"),
+                                duration: Duration(seconds: 2),
+                              ),
+                            );
+                          } else {
+                            ScaffoldMessenger.of(
+                              context,
+                            ).removeCurrentSnackBar();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("No New Updates Available"),
+                                duration: Duration(seconds: 2),
+                              ),
+                            );
+                          }
+                        },
+              ),
+            ],
           ),
         ],
       ),

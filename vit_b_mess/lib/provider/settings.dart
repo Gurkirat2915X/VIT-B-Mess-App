@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:vit_b_mess/mess_app_info.dart' as appInfo;
+import 'package:vit_b_mess/mess_app_info.dart' as app_info;
 import 'package:vit_b_mess/models/settings.dart';
 import 'package:vit_b_mess/provider/mess_data.dart';
 
@@ -14,15 +14,16 @@ Future<Settings> loadSettingsFromStorage() async {
       hostelType: Hostels.Boys,
       selectedMess: MessType.BoysMayuri,
       onlyVeg: false,
-      version: appInfo.appVersion,
+      version: app_info.appVersion,
       newUpdate: true,
       messDataVersion: "0",
-      newUpdateVersion: appInfo.appVersion,
+      newUpdateVersion: app_info.appVersion,
+      updatedTill: ""
     );
   }
-  if (_settings.version != appInfo.appVersion) {
+  if (_settings.version != app_info.appVersion) {
     print("App version changed, updating settings");
-    _settings.version = appInfo.appVersion;
+    _settings.version = app_info.appVersion;
     _settings.newUpdate = true;
   }
   await saveSettingsToStorage(_settings);
@@ -41,11 +42,12 @@ class SettingsProvider extends StateNotifier<Settings> {
           hostelType: Hostels.Boys,
           selectedMess: MessType.BoysMayuri,
           onlyVeg: false,
-          version: appInfo.appVersion,
+          version: app_info.appVersion,
           isFirstBoot: true,
           newUpdate: false,
           messDataVersion: "0",
-          newUpdateVersion: appInfo.appVersion,
+          newUpdateVersion: app_info.appVersion,
+          updatedTill: ""
         ),
       );
 

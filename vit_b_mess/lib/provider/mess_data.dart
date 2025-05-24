@@ -41,24 +41,25 @@ enum MessType {
 Future<bool> updateMessData(WidgetRef ref) async {
   final currentSettings = ref.read(settingsNotifier);
   dynamic data = await fetchMessData();
-  final receivedMessAppVersion =
-      json.decode(data.body)["data"]["messAppVersion"];
+  final receivedMessAppVersion = data["data"]["messAppVersion"];
   if (currentSettings.newUpdateVersion != receivedMessAppVersion) {
     print("New update available: $receivedMessAppVersion");
     currentSettings.newUpdateVersion = receivedMessAppVersion;
   } else {
     print("No new update available.");
   }
-  final messDataVersion = json.decode(data.body)["data"]["messDataVersion"];
+  final messDataVersion = data["data"]["messDataVersion"];
   if (messDataVersion == currentSettings.messDataVersion) {
     print("Mess data version is up to date. No need to update.");
+    currentSettings.updatedTill = data["data"]["UpdatedTill"];
     await ref.read(settingsNotifier.notifier).saveSettings(currentSettings);
     return false;
   }
   print("Mess data version changed. Updating...");
   currentSettings.messDataVersion = messDataVersion;
+  currentSettings.updatedTill = data["data"]["UpdatedTill"];
   await ref.read(settingsNotifier.notifier).saveSettings(currentSettings);
-  final messData = json.decode(data.body)["data"]["data"];
+  final messData = data["data"]["data"];
   final messBox = Hive.box<MessMealDays>("mess_app_data");
   final mess = currentSettings.selectedMess;
   ref
@@ -140,21 +141,21 @@ Future<dynamic> fetchMessData() async {
     print("Error fetching mess data: $e");
     throw Exception("Failed to fetch mess data");
   }
-  return data;
+  return await json.decode(data.body);
 }
 
 Future<MessMealDays> setupMeals(WidgetRef ref) async {
   final data = await fetchMessData();
-  final messData = json.decode(data.body)["data"]["data"];
+  final messData = data["data"]["data"];
   final messBox = Hive.box<MessMealDays>("mess_app_data");
   final currentSettings = ref.read(settingsNotifier);
-  final mess = currentSettings.selectedMess; 
-  final messDataVersion =
-      json.decode(data.body)["data"]["messDataVersion"];
+  final mess = currentSettings.selectedMess;
+
+  final messDataVersion = data["data"]["messDataVersion"];
   currentSettings.messDataVersion = messDataVersion;
-  final newUpdateVersion =
-      json.decode(data.body)["data"]["messAppVersion"];
+  final newUpdateVersion = data["data"]["messAppVersion"];
   currentSettings.newUpdateVersion = newUpdateVersion;
+  currentSettings.updatedTill = data["data"]["UpdatedTill"];
   await ref.read(settingsNotifier.notifier).saveSettings(currentSettings);
   print("Setting up meals for ${mess.name}...");
   return await messSetup(messBox, messData, mess);
@@ -230,6 +231,27 @@ class MessDataProvider extends StateNotifier<MessMealDays> {
 
   void setMessData(MessMealDays newData) {
     state = newData;
+  }
+
+  Meals getDayMeal(int day) {
+    switch (day) {
+      case 0:
+        return state.monday;
+      case 1:
+        return state.tuesday;
+      case 2:
+        return state.wednesday;
+      case 3:
+        return state.thursday;
+      case 4:
+        return state.friday;
+      case 5:
+        return state.saturday;
+      case 6:
+        return state.sunday;
+      default:
+        throw Exception("Invalid day index: $day");
+    }
   }
 }
 

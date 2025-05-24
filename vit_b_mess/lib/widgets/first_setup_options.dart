@@ -19,21 +19,34 @@ class _FirstSetupOptionsState extends ConsumerState<FirstSetupOptions> {
   Hostels selectedHostel = Hostels.Boys;
   MessType? selectedMess;
   bool isVeg = false;
+  bool _isLoading = false;
 
   void onClickOkay() async {
+    setState(() {
+      _isLoading = true;
+    });
+
     final hasInternet = await InternetConnection().hasInternetAccess;
     if (!hasInternet) {
+      setState(() {
+        _isLoading = false;
+      });
       if (!mounted) return;
       ScaffoldMessenger.of(context).removeCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text("No Internet Connection, Please connect to internet for first time setup"),
+          content: Text(
+            "No Internet Connection, Please connect to internet for first time setup",
+          ),
           duration: Duration(seconds: 2),
         ),
       );
       return;
     }
     if (selectedMess == null) {
+      setState(() {
+        _isLoading = false;
+      });
       if (!mounted) return;
       ScaffoldMessenger.of(context).removeCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(
@@ -53,10 +66,15 @@ class _FirstSetupOptionsState extends ConsumerState<FirstSetupOptions> {
       newUpdate: true,
       messDataVersion: "0",
       newUpdateVersion: app_info.appVersion,
+      updatedTill: "",
     );
 
     await ref.read(settingsNotifier.notifier).saveSettings(userSettings);
     await ref.read(messDataNotifier.notifier).loadData(ref);
+
+    setState(() {
+      _isLoading = false;
+    });
 
     if (!mounted) return;
     Navigator.of(
@@ -145,8 +163,19 @@ class _FirstSetupOptionsState extends ConsumerState<FirstSetupOptions> {
                     ],
                   ),
                   FilledButton.tonalIcon(
-                    onPressed: onClickOkay,
-                    label: Text("Okay"),
+                    onPressed: _isLoading ? null : onClickOkay,
+                    icon:
+                        _isLoading
+                            ? SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Theme.of(context).colorScheme.onPrimary,
+                              ),
+                            )
+                            : const Icon(Icons.check),
+                    label: Text(_isLoading ? "Setting up..." : "Okay"),
                   ),
                 ],
               ),

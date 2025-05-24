@@ -28,7 +28,7 @@ final ThemeData messLightTheme = ThemeData(
     bodyMedium: TextStyle(fontSize: 14, color: Color(0xFF757575)),
     labelLarge: TextStyle(fontSize: 14, color: Colors.white),
   ),
-  cardTheme: CardTheme(
+  cardTheme: CardThemeData(
     color: Colors.white,
     elevation: 2,
     shape: RoundedRectangleBorder(
@@ -86,7 +86,7 @@ final ThemeData messDarkTheme = ThemeData(
     bodyMedium: TextStyle(fontSize: 14, color: Color(0xFFBDBDBD)),
     labelLarge: TextStyle(fontSize: 14, color: Colors.black),
   ),
-  cardTheme: CardTheme(
+  cardTheme: CardThemeData(
     color: Color(0xFF1E1E1E),
     elevation: 2,
     shape: RoundedRectangleBorder(
