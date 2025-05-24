@@ -5,6 +5,7 @@ import 'package:vit_b_mess/models/settings.dart';
 import 'package:vit_b_mess/provider/mess_data.dart';
 import 'package:vit_b_mess/provider/settings.dart';
 import 'package:vit_b_mess/screen/tabs.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
 class FirstSetupOptions extends ConsumerStatefulWidget {
   const FirstSetupOptions({super.key});
@@ -20,7 +21,20 @@ class _FirstSetupOptionsState extends ConsumerState<FirstSetupOptions> {
   bool isVeg = false;
 
   void onClickOkay() async {
+    final hasInternet = await InternetConnection().hasInternetAccess;
+    if (!hasInternet) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).removeCurrentSnackBar();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("No Internet Connection, Please connect to internet for first time setup"),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
     if (selectedMess == null) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).removeCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -37,9 +51,12 @@ class _FirstSetupOptionsState extends ConsumerState<FirstSetupOptions> {
       onlyVeg: isVeg,
       version: app_info.appVersion,
       newUpdate: true,
+      messDataVersion: "0",
+      newUpdateVersion: app_info.appVersion,
     );
 
-    await ref.read(settingsProvider.notifier).saveSettings(userSettings);
+    await ref.read(settingsNotifier.notifier).saveSettings(userSettings);
+    await ref.read(messDataNotifier.notifier).loadData(ref);
 
     if (!mounted) return;
     Navigator.of(

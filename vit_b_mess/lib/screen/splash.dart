@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:vit_b_mess/provider/settings.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -33,8 +32,6 @@ class SplashScreen extends StatelessWidget {
               height: 40,
               child: CircularProgressIndicator(),
             ),
-            const SizedBox(height: 20),
-            TextButton(onPressed: loadSettingsFromStorage, child: Text('Load Settings')),
           ],
         ),
       ),

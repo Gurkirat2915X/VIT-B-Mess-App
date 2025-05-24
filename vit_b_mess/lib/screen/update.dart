@@ -13,9 +13,9 @@ class UpdateScreen extends ConsumerStatefulWidget {
 
 class _UpdateScreenState extends ConsumerState<UpdateScreen> {
   Future<void> onClickOkay() async {
-    final settings = ref.read(settingsProvider);
+    final settings = ref.read(settingsNotifier);
     settings.newUpdate = false;
-    await ref.read(settingsProvider.notifier).saveSettings(settings);
+    await ref.read(settingsNotifier.notifier).saveSettings(settings);
     if (!mounted) return;
     Navigator.of(
       context,
@@ -68,6 +68,7 @@ class _UpdateScreenState extends ConsumerState<UpdateScreen> {
               height: 100,
               child: SingleChildScrollView(child: Text(app_info.updateNotes)),
             ),
+            const SizedBox(height: 20),
             ElevatedButton(onPressed: onClickOkay, child: Text("Okay")),
           ],
         ),

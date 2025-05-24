@@ -4,6 +4,7 @@ import 'package:vit_b_mess/models/settings.dart';
 import 'package:vit_b_mess/provider/mess_data.dart';
 import 'package:vit_b_mess/provider/settings.dart';
 
+
 class Preference extends ConsumerStatefulWidget {
   const Preference({super.key});
 
@@ -22,7 +23,7 @@ class _PreferenceState extends ConsumerState<Preference> {
   @override
   void initState() {
     super.initState();
-    settings = ref.read(settingsProvider);
+    settings = ref.read(settingsNotifier);
     selectedHostel = settings!.hostelType;
     selectedMess = settings!.selectedMess;
     isVeg = settings!.onlyVeg;
@@ -52,6 +53,8 @@ class _PreferenceState extends ConsumerState<Preference> {
       onlyVeg: isVeg!,
       version: settings!.version,
       newUpdate: settings!.newUpdate,
+      messDataVersion: settings!.messDataVersion,
+      newUpdateVersion: settings!.newUpdateVersion,
     );
 
     if (userSettings == settings) {
@@ -67,7 +70,8 @@ class _PreferenceState extends ConsumerState<Preference> {
       });
       return;
     }
-    await ref.read(settingsProvider.notifier).saveSettings(userSettings);
+    await ref.read(settingsNotifier.notifier).saveSettings(userSettings);
+    await ref.read(messDataNotifier.notifier).loadData(ref);
     if (!mounted) return;
     ScaffoldMessenger.of(context).removeCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(

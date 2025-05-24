@@ -42,6 +42,8 @@ dependencies:
   build_runner: ^2.4.15
   url_launcher: ^6.3.1
   font_awesome_flutter: ^10.8.0
+  http: ^1.4.0
+  internet_connection_checker_plus: ^2.7.2
 
 dev_dependencies:
   flutter_test:

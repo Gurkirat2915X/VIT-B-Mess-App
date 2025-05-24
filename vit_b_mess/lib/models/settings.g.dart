@@ -23,13 +23,15 @@ class SettingsAdapter extends TypeAdapter<Settings> {
       onlyVeg: fields[3] as bool,
       version: fields[4] as String,
       newUpdate: fields[5] as bool?,
+      messDataVersion: fields[6] as String?,
+      newUpdateVersion: fields[7] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, Settings obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.isFirstBoot)
       ..writeByte(1)
@@ -41,7 +43,11 @@ class SettingsAdapter extends TypeAdapter<Settings> {
       ..writeByte(4)
       ..write(obj.version)
       ..writeByte(5)
-      ..write(obj.newUpdate);
+      ..write(obj.newUpdate)
+      ..writeByte(6)
+      ..write(obj.messDataVersion)
+      ..writeByte(7)
+      ..write(obj.newUpdateVersion);
   }
 
   @override

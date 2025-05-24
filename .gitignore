@@ -7,7 +7,7 @@
 .buildlog/
 .history
 
-
+server/
 
 # Flutter repo-specific
 mess_app_info.dart

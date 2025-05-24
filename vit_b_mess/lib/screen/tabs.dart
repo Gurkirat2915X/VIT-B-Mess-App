@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:vit_b_mess/provider/mess_data.dart';
 import 'package:vit_b_mess/provider/settings.dart';
 import 'package:vit_b_mess/screen/update.dart';
 import 'package:vit_b_mess/widgets/about.dart';
 import 'package:vit_b_mess/widgets/preference.dart';
-
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:vit_b_mess/mess_app_info.dart' as app_info;
 class Tabs extends ConsumerStatefulWidget {
   const Tabs({super.key});
 
@@ -23,7 +26,8 @@ class _TabsState extends ConsumerState<Tabs> {
 
   @override
   Widget build(BuildContext context) {
-    final settings = ref.watch(settingsProvider);
+    final settings = ref.watch(settingsNotifier);
+    final MessData = ref.watch(messDataNotifier);
     if (settings.newUpdate!) {
       return UpdateScreen();
     }
@@ -39,6 +43,45 @@ class _TabsState extends ConsumerState<Tabs> {
             Text("Version: ${settings.version}"),
             Text("First Boot: ${settings.isFirstBoot}"),
             Text("New Update: ${settings.newUpdate}"),
+            Text("Mess Data Version: ${settings.messDataVersion}"),
+            Text("New Update Version: ${settings.newUpdateVersion}"),
+            Text("${MessData.monday.breakfast.veg}"),
+            TextButton(
+              onPressed: () async {
+                bool hasInternet = await InternetConnection().hasInternetAccess;
+                if (!hasInternet) {
+                  if (!mounted) return;
+                  ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("No Internet Connection, Please connect to internet for fetching meals"),
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
+                  return;
+                }
+                if(await ref.read(messDataNotifier.notifier).updateData(ref)) {
+                  if (!mounted) return;
+                  ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Meals fetched successfully!"),
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
+                } else {
+                  if (!mounted) return;
+                  ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Already up to date!"),
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
+                }
+              },
+              child: Text("Fetch Meals"),
+            ),
           ],
         ),
       );
@@ -50,7 +93,22 @@ class _TabsState extends ConsumerState<Tabs> {
 
     return Scaffold(
       appBar: AppBar(
-        // backgroundColor: Color(0xFF4CAF50),
+        actions: [
+            if (settings.newUpdateVersion != settings.version)
+            TextButton.icon(
+              onPressed: () async {
+                Uri url = Uri.parse(app_info.releaseGithubLink);
+                if (!await launchUrl(url)) {
+                    throw Exception('Could not launch $url');
+                  }
+              },
+              label: Text(
+              "Update Available",
+              style: TextStyle(color: Colors.white),
+              ),
+              icon: Icon(Icons.system_update_rounded, color: Colors.white),
+            ),
+        ],
         title: Row(
           children: [
             Hero(

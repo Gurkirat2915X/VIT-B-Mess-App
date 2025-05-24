@@ -5,20 +5,56 @@ part 'meals.g.dart';
 @HiveType(typeId: 3)
 class Meals {
   Meals({
-    required this.messType,
     required this.breakfast,
     required this.lunch,
     required this.snacks,
     required this.dinner,
   });
   @HiveField(0)
-  MessType messType;
+  Meal breakfast;
   @HiveField(1)
-  List<String> breakfast;
+  Meal lunch;
   @HiveField(2)
-  List<String> lunch;
+  Meal snacks;
   @HiveField(3)
-  List<String> snacks;
+  Meal dinner;
+}
+
+@HiveType(typeId: 4)
+class MessMealDays {
+  MessMealDays({
+    required this.mess,
+    required this.monday,
+    required this.tuesday,
+    required this.wednesday,
+    required this.thursday,
+    required this.friday,
+    required this.saturday,
+    required this.sunday,
+  });
+  @HiveField(0)
+  MessType mess;
+  @HiveField(1)
+  Meals monday;
+  @HiveField(2)
+  Meals tuesday;
+  @HiveField(3)
+  Meals wednesday;
   @HiveField(4)
-  List<String> dinner;
+  Meals thursday;
+  @HiveField(5)
+  Meals friday;
+  @HiveField(6)
+  Meals saturday;
+  @HiveField(7)
+  Meals sunday;
+}
+
+@HiveType(typeId: 5)
+class Meal {
+  Meal({required this.nonVeg, required this.veg});
+  @HiveField(0)
+  List<String> nonVeg;
+  @HiveField(1)
+  List<String> veg;
 }

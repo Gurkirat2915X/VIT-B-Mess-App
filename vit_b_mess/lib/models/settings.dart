@@ -12,6 +12,8 @@ class Settings {
     required this.onlyVeg,
     required this.version,
     required this.newUpdate,
+    required this.messDataVersion,
+    required this.newUpdateVersion,
   });
 
   @HiveField(0)
@@ -31,6 +33,12 @@ class Settings {
 
   @HiveField(5)
   bool? newUpdate;
+
+  @HiveField(6)
+  String? messDataVersion;
+
+  @HiveField(7)
+  String? newUpdateVersion;
 
   String getAllInfo(){
     return "Hostel: ${hostelType.name}, Mess: ${selectedMess.name}, Only Veg: $onlyVeg, Version: $version, First Boot: $isFirstBoot newUpdate: $newUpdate";

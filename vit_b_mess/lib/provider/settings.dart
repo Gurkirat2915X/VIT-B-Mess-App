@@ -16,6 +16,8 @@ Future<Settings> loadSettingsFromStorage() async {
       onlyVeg: false,
       version: appInfo.appVersion,
       newUpdate: true,
+      messDataVersion: "0",
+      newUpdateVersion: appInfo.appVersion,
     );
   }
   if (_settings.version != appInfo.appVersion) {
@@ -42,6 +44,8 @@ class SettingsProvider extends StateNotifier<Settings> {
           version: appInfo.appVersion,
           isFirstBoot: true,
           newUpdate: false,
+          messDataVersion: "0",
+          newUpdateVersion: appInfo.appVersion,
         ),
       );
 
@@ -62,7 +66,7 @@ class SettingsProvider extends StateNotifier<Settings> {
   }
 }
 
-final settingsProvider = StateNotifierProvider<SettingsProvider, Settings>((
+final settingsNotifier = StateNotifierProvider<SettingsProvider, Settings>((
   ref,
 ) {
   return SettingsProvider();
