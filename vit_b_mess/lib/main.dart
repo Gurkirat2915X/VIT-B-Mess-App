@@ -1,32 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:vit_b_mess/models/meals.dart';
-import 'package:vit_b_mess/models/settings.dart';
 import 'package:vit_b_mess/provider/mess_data.dart';
 import 'package:vit_b_mess/provider/settings.dart';
 import 'package:vit_b_mess/screen/first_boot.dart';
 import 'package:vit_b_mess/screen/splash.dart';
 import 'package:vit_b_mess/screen/tabs.dart';
+import 'package:vit_b_mess/screen/update.dart';
 import 'package:vit_b_mess/themes.dart';
+import "package:vit_b_mess/hive_setup.dart";
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Hive.initFlutter();
-  Hive.registerAdapter(SettingsAdapter());
-  Hive.registerAdapter(HostelsAdapter());
-  Hive.registerAdapter(MessTypeAdapter());
-  Hive.registerAdapter(MealAdapter());
-  Hive.registerAdapter(MealsAdapter());
-  Hive.registerAdapter(MessMealDaysAdapter());
-
-  await Hive.openBox<Settings>("mess_app_settings");
-  await Hive.openBox<MessMealDays>("mess_app_data");
-  runApp(ProviderScope(child: const MyApp()));
+  await hiveSetup();
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends ConsumerWidget {
   const MyApp({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final settings = ref.watch(settingsNotifier.notifier);
@@ -35,21 +26,38 @@ class MyApp extends ConsumerWidget {
       title: 'VIT-B Mess',
       theme: messLightTheme,
       darkTheme: messDarkTheme,
+      builder: (context, child) {
+        return MediaQuery(
+          data: MediaQuery.of(
+            context,
+          ).copyWith(textScaler: const TextScaler.linear(1.0)),
+          child: child!,
+        );
+      },
       home: FutureBuilder(
-        future: settings.loadSettings().then((_) => {
-          if(!ref.read(settingsNotifier).isFirstBoot){
-            messData.loadData(ref)
-          }
-        }),
+        future: settings.loadSettings().then(
+          (_) => {
+            if (!ref.read(settingsNotifier).isFirstBoot)
+              {messData.loadData(ref)},
+          },
+        ),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasError) {
               return const Center(child: Text('Error loading data'));
-            } else if (settings.getSetting().isFirstBoot) {
-              return const FirstBootScreen();
-            } else {
-              return const Tabs();
             }
+            return Consumer(
+              builder: (context, ref, _) {
+                final settings = ref.watch(settingsNotifier);
+                if (settings.isFirstBoot) {
+                  return const FirstBootScreen();
+                }
+                if (settings.newUpdate == true) {
+                  return const UpdateScreen();
+                }
+                return const Tabs();
+              },
+            );
           }
           return const SplashScreen();
         },

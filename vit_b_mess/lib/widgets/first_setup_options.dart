@@ -4,8 +4,8 @@ import 'package:vit_b_mess/mess_app_info.dart' as app_info;
 import 'package:vit_b_mess/models/settings.dart';
 import 'package:vit_b_mess/provider/mess_data.dart';
 import 'package:vit_b_mess/provider/settings.dart';
-import 'package:vit_b_mess/screen/tabs.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:vit_b_mess/screen/update.dart';
 
 class FirstSetupOptions extends ConsumerStatefulWidget {
   const FirstSetupOptions({super.key});
@@ -21,7 +21,7 @@ class _FirstSetupOptionsState extends ConsumerState<FirstSetupOptions> {
   bool isVeg = false;
   bool _isLoading = false;
 
-  void onClickOkay() async {
+  Future onClickOkay() async {
     setState(() {
       _isLoading = true;
     });
@@ -57,29 +57,24 @@ class _FirstSetupOptionsState extends ConsumerState<FirstSetupOptions> {
       );
       return;
     }
-    final userSettings = Settings(
-      isFirstBoot: false,
-      hostelType: selectedHostel,
-      selectedMess: selectedMess!,
-      onlyVeg: isVeg,
-      version: app_info.appVersion,
-      newUpdate: true,
-      messDataVersion: "0",
-      newUpdateVersion: app_info.appVersion,
-      updatedTill: "",
-    );
-
-    await ref.read(settingsNotifier.notifier).saveSettings(userSettings);
+    final settingsManager = ref.read(settingsNotifier.notifier);
+    
+    final Settings userSettings = settingsManager.getSettings();
+    userSettings.hostelType = selectedHostel;
+    userSettings.selectedMess = selectedMess!;
+    userSettings.onlyVeg = isVeg;
+    userSettings.isFirstBoot = false;
+    userSettings.version = app_info.appVersion;
+    userSettings.newUpdate = true;
+    await settingsManager.saveSettings(userSettings);
     await ref.read(messDataNotifier.notifier).loadData(ref);
-
+    if (!mounted) return;
     setState(() {
       _isLoading = false;
     });
-
-    if (!mounted) return;
-    Navigator.of(
-      context,
-    ).pushReplacement(MaterialPageRoute(builder: (ctx) => const Tabs()));
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => const UpdateScreen()),
+    );
   }
 
   @override
@@ -163,7 +158,12 @@ class _FirstSetupOptionsState extends ConsumerState<FirstSetupOptions> {
                     ],
                   ),
                   FilledButton.tonalIcon(
-                    onPressed: _isLoading ? null : onClickOkay,
+                    onPressed:
+                        _isLoading
+                            ? null
+                            : () async {
+                              await onClickOkay();
+                            },
                     icon:
                         _isLoading
                             ? SizedBox(

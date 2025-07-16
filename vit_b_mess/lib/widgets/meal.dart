@@ -12,98 +12,187 @@ class MealWidget extends ConsumerWidget {
     return Center(
       child: ConstrainedBox(
         constraints: BoxConstraints(
-          maxWidth: MediaQuery.of(context).size.width * 0.9,
-          maxHeight:
-              MediaQuery.of(context).size.height *
-              0.4, // Set your desired max height here
+          maxWidth: MediaQuery.of(context).size.width * 0.95,
+          minWidth: MediaQuery.of(context).size.width * 0.8,
+          minHeight: MediaQuery.of(context).size.height * 0.4,
+          maxHeight: MediaQuery.of(context).size.height * 0.4,
         ),
+
         child: Card(
-          elevation: 4,
+          elevation: 6,
+          shadowColor: Theme.of(context).colorScheme.shadow.withOpacity(0.4),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(16),
           ),
           child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min, // Makes column wrap to content
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Stack(
                 children: [
-                  // Veg Section
-                  Row(
-                    children: [
-                      Icon(Icons.eco, color: Colors.green, size: 20),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        // Prevents text overflow
-                        child: Text(
-                          "Vegetarian",
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  Wrap(
-                    spacing: 8,
-                    runSpacing:
-                        8, // Adds vertical spacing between wrapped lines
-                    children:
-                        currentMeal.veg
-                            .map(
-                              (item) => Chip(
-                                label: Text(item),
-                                backgroundColor:
-                                    Theme.of(
-                                      context,
-                                    ).colorScheme.secondaryContainer,
-                              ),
-                            )
-                            .toList(),
-                  ),
-
-                  // Non-Veg Section
-                  if (!ref.read(settingsNotifier).onlyVeg &&
-                      currentMeal.nonVeg.isNotEmpty) ...[
-                    const SizedBox(height: 16),
-                    Row(
-                      children: [
-                        Icon(Icons.set_meal, color: Colors.red, size: 20),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          // Prevents text overflow
-                          child: Text(
-                            "Non-Vegetarian",
-                            style: Theme.of(context).textTheme.titleLarge,
+                  // Content
+                  SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          _buildSectionHeader(
+                            context,
+                            "Vegetarian",
+                            Icons.eco_rounded,
+                            Colors.green.shade700,
+                            Colors.green.withOpacity(0.1),
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    Wrap(
-                      spacing: 8,
-                      runSpacing:
-                          8, // Adds vertical spacing between wrapped lines
-                      children:
-                          currentMeal.nonVeg
-                              .map(
-                                (item) => Chip(
-                                  label: Text(item),
-                                  backgroundColor:
-                                      Theme.of(
-                                        context,
-                                      ).colorScheme.errorContainer,
-                                ),
+                          const SizedBox(height: 8),
+                          currentMeal.veg.isEmpty
+                              ? _buildEmptyState(
+                                context,
+                                "No vegetarian items available today",
                               )
-                              .toList(),
+                              : _buildItemsGrid(
+                                context,
+                                currentMeal.veg,
+                                Theme.of(
+                                  context,
+                                ).colorScheme.secondaryContainer,
+                                Theme.of(
+                                  context,
+                                ).colorScheme.onSecondaryContainer,
+                              ),
+
+                          // Non-Veg Section
+                          if (!ref.read(settingsNotifier).onlyVeg &&
+                              currentMeal.nonVeg.isNotEmpty) ...[
+                            const SizedBox(height: 10),
+                            _buildSectionHeader(
+                              context,
+                              "Non-Vegetarian",
+                              Icons.set_meal_rounded,
+                              Colors.red.shade700,
+                              Colors.red.withOpacity(0.1),
+                            ),
+                            const SizedBox(height: 10),
+                            _buildItemsGrid(
+                              context,
+                              currentMeal.nonVeg,
+                              Theme.of(context).colorScheme.errorContainer,
+                              Theme.of(context).colorScheme.onErrorContainer,
+                            ),
+                          ],
+                        ],
+                      ),
                     ),
-                  ],
+                  ),
                 ],
               ),
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildSectionHeader(
+    BuildContext context,
+    String title,
+    IconData icon,
+    Color iconColor,
+    Color backgroundColor,
+  ) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, color: iconColor, size: 20),
+          const SizedBox(width: 10),
+          Text(
+            title,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w600,
+              color: iconColor,
+              letterSpacing: 0.2,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEmptyState(BuildContext context, String message) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 20),
+      decoration: BoxDecoration(
+        color: Colors.grey.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Text(
+        message,
+        textAlign: TextAlign.center,
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+          color: Colors.grey.shade600,
+          fontStyle: FontStyle.italic,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildItemsGrid(
+    BuildContext context,
+    List<String> items,
+    Color backgroundColor,
+    Color textColor,
+  ) {
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      children:
+          items.map((item) {
+            return Container(
+              decoration: BoxDecoration(
+                color: backgroundColor,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 3,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(10),
+                  onTap: () {
+                    // Optionally show more details about the item
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text('Selected: $item')));
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 10,
+                    ),
+                    child: Text(
+                      item,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w500,
+                        color: textColor,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          }).toList(),
     );
   }
 }

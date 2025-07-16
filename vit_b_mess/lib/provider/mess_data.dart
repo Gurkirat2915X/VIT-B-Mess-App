@@ -155,6 +155,7 @@ Future<MessMealDays> setupMeals(WidgetRef ref) async {
   currentSettings.messDataVersion = messDataVersion;
   final newUpdateVersion = data["data"]["messAppVersion"];
   currentSettings.newUpdateVersion = newUpdateVersion;
+  print("updated till: ${data["data"]["UpdatedTill"]}");
   currentSettings.updatedTill = data["data"]["UpdatedTill"];
   await ref.read(settingsNotifier.notifier).saveSettings(currentSettings);
   print("Setting up meals for ${mess.name}...");

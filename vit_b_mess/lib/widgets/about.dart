@@ -8,95 +8,114 @@ class About extends ConsumerWidget {
   const About({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Hero(
+              tag: const ValueKey("Icon"),
+              child: Icon(
                 Icons.dining,
                 size: 50,
-                color: Theme.of(context).colorScheme.primary,
+                color: colorScheme.primary,
               ),
-
-              const SizedBox(width: 10),
-              Text(
-                "VIT B Mess",
-                style: Theme.of(context).textTheme.headlineSmall,
+            ),
+            const SizedBox(height: 10),
+            Text(
+              "VIT-B Mess",
+              style: textTheme.headlineSmall,
+            ),
+            const SizedBox(height: 24),
+            Card(
+              child: Column(
+                children: [
+                  ListTile(
+                    leading: const Icon(Icons.info_outline),
+                    title: Text("Version", style: textTheme.titleMedium),
+                    subtitle: Text(app_info.appVersion),
+                  ),
+                  const Divider(height: 1, indent: 16, endIndent: 16),
+                  ListTile(
+                    leading: const FaIcon(FontAwesomeIcons.github),
+                    title: Text("Source Code", style: textTheme.titleMedium),
+                    subtitle: const Text("View on GitHub"),
+                    onTap: () async {
+                      final Uri url = Uri.parse(app_info.projectLink);
+                      if (!await launchUrl(url)) {
+                        throw Exception('Could not launch $url');
+                      }
+                    },
+                  ),
+                ],
               ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text('Repo:', style: Theme.of(context).textTheme.titleMedium),
-              const SizedBox(width: 5),
-              IconButton(
-                icon: const FaIcon(FontAwesomeIcons.github),
-                onPressed: () async {
-                  final Uri url = Uri.parse(app_info.projectLink);
-                  if (!await launchUrl(url)) {
-                    throw Exception('Could not launch $url');
-                  }
-                },
-                tooltip: 'GitHub',
+            ),
+            const SizedBox(height: 16),
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Update Notes", style: textTheme.titleLarge),
+                    const SizedBox(height: 10),
+                    Text(app_info.updateNotes, style: textTheme.bodyMedium),
+                  ],
+                ),
               ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Text(
-            "Version: ${app_info.appVersion}",
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          const SizedBox(height: 10),
-          Text("Update Notes", style: Theme.of(context).textTheme.titleMedium),
-          const SizedBox(height: 10),
-          SizedBox(
-            height: 100,
-            child: SingleChildScrollView(child: Text(app_info.updateNotes)),
-          ),
-          const SizedBox(height: 20),
-          Text(
-            "Developed by: ${app_info.developedBy}",
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          const SizedBox(height: 5),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              IconButton(
-                icon: const FaIcon(FontAwesomeIcons.github),
-                onPressed: () async {
-                  final Uri url = Uri.parse(app_info.githubLink);
-                  if (!await launchUrl(url)) {
-                    throw Exception('Could not launch $url');
-                  }
-                },
-                tooltip: 'GitHub',
+            ),
+            const SizedBox(height: 16),
+            Card(
+              child: Column(
+                children: [
+                  ListTile(
+                    leading: const Icon(Icons.person_outline),
+                    title: Text("Developed by", style: textTheme.titleMedium),
+                    subtitle: Text(app_info.developedBy),
+                  ),
+                  const Divider(height: 1, indent: 16, endIndent: 16),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        IconButton(
+                          icon: const FaIcon(FontAwesomeIcons.github),
+                          onPressed: () async {
+                            final Uri url = Uri.parse(app_info.githubLink);
+                            if (!await launchUrl(url)) {
+                              throw Exception('Could not launch $url');
+                            }
+                          },
+                          tooltip: 'GitHub',
+                        ),
+                        IconButton(
+                          icon: const FaIcon(FontAwesomeIcons.linkedin),
+                          onPressed: () async {
+                            final Uri url = Uri.parse(app_info.linkedInLink);
+                            if (!await launchUrl(url)) {
+                              throw Exception('Could not launch $url');
+                            }
+                          },
+                          tooltip: 'LinkedIn',
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(width: 16),
-              IconButton(
-                icon: const FaIcon(FontAwesomeIcons.linkedin),
-                onPressed: () async {
-                  final Uri url = Uri.parse(app_info.linkedInLink);
-                  if (!await launchUrl(url)) {
-                    throw Exception('Could not launch $url');
-                  }
-                },
-                tooltip: 'LinkedIn',
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Text(
-            "This app is not affiliated with VIT.",
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-        ],
+            ),
+            const SizedBox(height: 24),
+            Text(
+              "This app is not affiliated with VIT.",
+              style: textTheme.bodySmall,
+            ),
+          ],
+        ),
       ),
     );
   }

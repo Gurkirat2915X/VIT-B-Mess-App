@@ -14,7 +14,8 @@ class Settings {
     required this.newUpdate,
     required this.messDataVersion,
     required this.newUpdateVersion,
-    required this.updatedTill
+    required this.updatedTill,
+    this.notificationPermission,
   });
 
   @HiveField(0)
@@ -44,8 +45,11 @@ class Settings {
   @HiveField(8)
   String? updatedTill;
 
-  String getAllInfo(){
-    return "Hostel: ${hostelType.name}, Mess: ${selectedMess.name}, Only Veg: $onlyVeg, Version: $version, First Boot: $isFirstBoot newUpdate: $newUpdate";
+  @HiveField(9)
+  bool? notificationPermission;
+
+  String getAllInfo() {
+    return "Hostel: ${hostelType.name}, Mess: ${selectedMess.name}, Only Veg: $onlyVeg, Version: $version, First Boot: $isFirstBoot newUpdate: $newUpdate, messDataVersion: $messDataVersion, newUpdateVersion: $newUpdateVersion, updatedTill: $updatedTill, notificationPermission: $notificationPermission";
   }
 
   @override
@@ -56,17 +60,12 @@ class Settings {
         other.hostelType == hostelType &&
         other.selectedMess == selectedMess &&
         other.onlyVeg == onlyVeg &&
-        other.version == version;
+        other.version == version &&
+        other.notificationPermission ==  notificationPermission;
   }
 
   @override
   int get hashCode {
-    return Object.hash(
-      isFirstBoot,
-      hostelType,
-      selectedMess,
-      onlyVeg,
-      version,
-    );
+    return Object.hash(isFirstBoot, hostelType, selectedMess, onlyVeg, version);
   }
 }

@@ -26,8 +26,8 @@ class FirstBootScreen extends StatelessWidget {
                 color: Theme.of(context).colorScheme.primary,
               ),
             ),
-            SizedBox(height: 20,),
-            FirstSetupOptions()
+            SizedBox(height: 20),
+            const FirstSetupOptions()
           ],
         ),
       ),

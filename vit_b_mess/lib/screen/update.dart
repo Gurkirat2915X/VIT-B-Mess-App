@@ -2,7 +2,7 @@ import 'package:flutter/Material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vit_b_mess/mess_app_info.dart' as app_info;
 import 'package:vit_b_mess/provider/settings.dart';
-import 'package:vit_b_mess/screen/tabs.dart';
+import 'package:vit_b_mess/screen/notification_permission_screen.dart';
 
 class UpdateScreen extends ConsumerStatefulWidget {
   const UpdateScreen({super.key});
@@ -17,9 +17,9 @@ class _UpdateScreenState extends ConsumerState<UpdateScreen> {
     settings.newUpdate = false;
     await ref.read(settingsNotifier.notifier).saveSettings(settings);
     if (!mounted) return;
-    Navigator.of(
-      context,
-    ).pushReplacement(MaterialPageRoute(builder: (ctx) => const Tabs()));
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (ctx) => const NotificationPermissionScreen()),
+    );
   }
 
   @override
@@ -65,6 +65,7 @@ class _UpdateScreenState extends ConsumerState<UpdateScreen> {
             ),
             const SizedBox(height: 20),
             SizedBox(
+              width: MediaQuery.of(context).size.width * 0.8,
               height: 100,
               child: SingleChildScrollView(child: Text(app_info.updateNotes)),
             ),

@@ -18,14 +18,14 @@ class _MenuState extends ConsumerState<Menu> {
   Meals? messMenu;
   DateTime todayDate = DateTime.now();
   Meal? currentMeal;
-  
+
   int todayIndex = 0;
-  
+
   String currentMealTime = "";
   @override
   void initState() {
     super.initState();
-    todayIndex = todayDate.weekday - 1; // Adjusting for 0-based index
+    todayIndex = todayDate.weekday - 1;
     messMenu = ref.read(messDataNotifier.notifier).getDayMeal(todayIndex);
     currentMeal = getCurrentMeal(messMenu!);
     currentMealTime = getMealTimeString;
@@ -38,7 +38,7 @@ class _MenuState extends ConsumerState<Menu> {
       return meals.breakfast;
     } else if (currentTime.hour < 15) {
       return meals.lunch;
-    } else if (currentTime.hour < 17) {
+    } else if (currentTime.hour < 18) {
       return meals.snacks;
     } else {
       return meals.dinner;
@@ -50,7 +50,7 @@ class _MenuState extends ConsumerState<Menu> {
       return "Breakfast";
     } else if (todayDate.hour < 15) {
       return "Lunch";
-    } else if (todayDate.hour < 17) {
+    } else if (todayDate.hour < 18) {
       return "Snacks";
     } else {
       return "Dinner";
@@ -62,12 +62,11 @@ class _MenuState extends ConsumerState<Menu> {
       todayIndex = day;
       messMenu = ref.read(messDataNotifier.notifier).getDayMeal(day);
       currentMeal = getCurrentMeal(messMenu!);
-      currentMealTime = getMealTimeString; 
+      currentMealTime = getMealTimeString;
     });
   }
 
   void changeMeal(Meal meal, String mealTime) {
-    
     setState(() {
       currentMeal = meal;
       currentMealTime = mealTime;
@@ -81,13 +80,20 @@ class _MenuState extends ConsumerState<Menu> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text("${ref.watch(settingsNotifier).selectedMess.name}'s Menu", style: Theme.of(context).textTheme.headlineMedium),
+          Text(
+            "${ref.watch(settingsNotifier).selectedMess.name}'s Menu",
+            style: Theme.of(context).textTheme.headlineMedium,
+          ),
           const SizedBox(height: 20),
           WeekDays(selectedDay: todayIndex, onDaySelected: changeDay),
           const SizedBox(height: 20),
           MealWidget(currentMeal: currentMeal!),
           const SizedBox(height: 20),
-          MealChanger(currentMeals: messMenu!, onMealChanged: changeMeal, currentMeal: currentMealTime),
+          MealChanger(
+            currentMeals: messMenu!,
+            onMealChanged: changeMeal,
+            currentMeal: currentMealTime,
+          ),
         ],
       ),
     );
