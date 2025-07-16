@@ -18,7 +18,7 @@ VITBMess is a full-stack mobile application developed to enhance the campus dini
 - 🥦 **Veg / Non-Veg Filters** – Customize your meal view based on dietary preferences  
 - 📶 **Offline Mode** – Works seamlessly without internet thanks to local Hive database  
 - ⚡ **Timezone Handling** – Notifications are scheduled accurately across timezones  
-- 💎 **Material Design UI** – Clean, intuitive, and responsive interface for GenZ users
+- 💎 **Material Design UI** – Clean, intuitive, and responsive interface for VITB students
 
 ---
 ## 🔔 Notification Scheduling
