@@ -1,4 +1,4 @@
-# 🍱 VITBMess App - Your Daily Meal Companion!
+# 🍱 VITBMess App - Your Daily Meal Companion! 
 
 VITBMess is a full-stack mobile application developed to enhance the campus dining experience at **VIT Bhopal University**, serving over **10,000+ students** daily. It offers real-time meal updates, customizable notifications, offline support, and a beautifully responsive UI.🌟
 
