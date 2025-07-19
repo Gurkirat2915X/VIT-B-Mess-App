@@ -11,13 +11,10 @@ class FirstBootScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Hero(
-              tag: ValueKey("Icon"),
-              child: Icon(
-                Icons.dining,
-                size: 150,
-                color: Theme.of(context).colorScheme.primary,
-              ),
+            Icon(
+              Icons.dining,
+              size: 150,
+              color: Theme.of(context).colorScheme.primary,
             ),
             const SizedBox(height: 10),
             Text(
@@ -26,8 +23,8 @@ class FirstBootScreen extends StatelessWidget {
                 color: Theme.of(context).colorScheme.primary,
               ),
             ),
-            SizedBox(height: 20),
-            const FirstSetupOptions()
+            const SizedBox(height: 20),
+            const FirstSetupOptions(),
           ],
         ),
       ),

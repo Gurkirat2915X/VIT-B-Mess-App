@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:vit_b_mess/mess_app_info.dart' as app_info;
@@ -10,7 +12,7 @@ Box<Settings> settingsBox = Hive.box<Settings>('mess_app_settings');
 Future<Settings> loadSettingsFromStorage() async {
   Settings? _settings = settingsBox.get('settings');
   if (_settings == null) {
-    print("Settings not found in storage, creating default settings");
+    log("Settings not found in storage, creating default settings");
     return Settings(
       isFirstBoot: true,
       hostelType: Hostels.Boys,
@@ -25,7 +27,7 @@ Future<Settings> loadSettingsFromStorage() async {
     );
   }
   if (_settings.version != app_info.appVersion) {
-    print("App version changed, updating settings");
+    log("App version changed, updating settings");
     _settings.version = app_info.appVersion;
     _settings.newUpdate = true;
   }
@@ -56,13 +58,13 @@ class SettingsProvider extends StateNotifier<Settings> {
       );
 
   Future loadSettings() async {
-    print("Loading settings from storage");
+    log("Loading settings from storage");
     final settings = await loadSettingsFromStorage();
-    print("Settings loaded from storage: ${settings.getAllInfo()}");
+    log("Settings loaded from storage: ${settings.getAllInfo()}");
     state = settings;
   }
   Future saveSettings(Settings settings) async {
-    print("Saving settings: ${settings.getAllInfo()}");
+    log("Saving settings: ${settings.getAllInfo()}");
     await saveSettingsToStorage(settings);
     state = settings;
   }

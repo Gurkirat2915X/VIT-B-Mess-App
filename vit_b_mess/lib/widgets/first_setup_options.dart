@@ -58,7 +58,7 @@ class _FirstSetupOptionsState extends ConsumerState<FirstSetupOptions> {
       return;
     }
     final settingsManager = ref.read(settingsNotifier.notifier);
-    
+
     final Settings userSettings = settingsManager.getSettings();
     userSettings.hostelType = selectedHostel;
     userSettings.selectedMess = selectedMess!;
@@ -66,8 +66,23 @@ class _FirstSetupOptionsState extends ConsumerState<FirstSetupOptions> {
     userSettings.isFirstBoot = false;
     userSettings.version = app_info.appVersion;
     userSettings.newUpdate = true;
-    await settingsManager.saveSettings(userSettings);
-    await ref.read(messDataNotifier.notifier).loadData(ref);
+    try {
+      await ref.read(messDataNotifier.notifier).loadData(ref);
+      await settingsManager.saveSettings(userSettings);
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).removeCurrentSnackBar();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text("There was an error saving settings."),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
     if (!mounted) return;
     setState(() {
       _isLoading = false;

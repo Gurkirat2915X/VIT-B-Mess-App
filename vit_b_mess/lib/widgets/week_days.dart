@@ -16,9 +16,7 @@ class WeekDays extends ConsumerWidget {
     final colorScheme = theme.colorScheme;
 
     return Container(
-      
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-   // Adjust height as needed
       width: double.infinity,
       child: SegmentedButton<int>(
         direction: Axis.horizontal,
@@ -26,25 +24,25 @@ class WeekDays extends ConsumerWidget {
           textStyle: WidgetStatePropertyAll(
             theme.textTheme.labelLarge?.copyWith(fontWeight: FontWeight.bold),
           ),
-          backgroundColor: WidgetStateProperty.resolveWith<Color?>(
-            (Set<WidgetState> states) {
-              if (states.contains(WidgetState.selected)) {
-                return colorScheme.primaryContainer.withOpacity(0.5);
-              }
-              return theme.cardColor;
-            },
-          ),
-          foregroundColor: WidgetStateProperty.resolveWith<Color?>(
-            (Set<WidgetState> states) {
-              if (states.contains(WidgetState.selected)) {
-                return colorScheme.primary;
-              }
-              return colorScheme.onSurface.withOpacity(0.7);
-            },
-          ),
+          backgroundColor: WidgetStateProperty.resolveWith<Color?>((
+            Set<WidgetState> states,
+          ) {
+            if (states.contains(WidgetState.selected)) {
+              return colorScheme.primaryContainer.withValues(alpha: 0.5);
+            }
+            return colorScheme.surface;
+          }),
+          foregroundColor: WidgetStateProperty.resolveWith<Color?>((
+            Set<WidgetState> states,
+          ) {
+            if (states.contains(WidgetState.selected)) {
+              return colorScheme.onPrimaryContainer;
+            }
+            return colorScheme.onSurface.withValues(alpha: 0.7);
+          }),
           side: WidgetStatePropertyAll(
             BorderSide(
-              color: colorScheme.outline.withOpacity(0.2),
+              color: colorScheme.outline.withValues(alpha: 0.2),
               width: 1,
             ),
           ),
@@ -52,21 +50,22 @@ class WeekDays extends ConsumerWidget {
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
           ),
         ),
-        segments: List.generate(7, (index) => index).map((day) {
-          return ButtonSegment<int>(
-            value: day,
-            label: Text(
-              ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][day],
-              style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                fontWeight: FontWeight.bold,
-                fontFamily: Theme.of(context).textTheme.bodyMedium!.fontFamily,
-                color: selectedDay == day
-                    ? colorScheme.primary
-                    : colorScheme.onSurface.withOpacity(0.7),
-              ),
-            ),
-          );
-        }).toList(),
+        segments:
+            List.generate(7, (index) => index).map((day) {
+              return ButtonSegment<int>(
+                value: day,
+                label: Text(
+                  ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][day],
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color:
+                        selectedDay == day
+                            ? colorScheme.onPrimaryContainer
+                            : colorScheme.onSurface.withValues(alpha: 0.7),
+                  ),
+                ),
+              );
+            }).toList(),
         selected: {selectedDay},
         showSelectedIcon: false,
         onSelectionChanged: (Set<int> newSelection) {

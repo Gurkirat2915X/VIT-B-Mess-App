@@ -19,17 +19,10 @@ class About extends ConsumerWidget {
           children: [
             Hero(
               tag: const ValueKey("Icon"),
-              child: Icon(
-                Icons.dining,
-                size: 50,
-                color: colorScheme.primary,
-              ),
+              child: Icon(Icons.dining, size: 50, color: colorScheme.primary),
             ),
             const SizedBox(height: 10),
-            Text(
-              "VIT-B Mess",
-              style: textTheme.headlineSmall,
-            ),
+            Text("VIT-B Mess", style: textTheme.headlineSmall),
             const SizedBox(height: 24),
             Card(
               child: Column(

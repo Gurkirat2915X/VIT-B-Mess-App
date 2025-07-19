@@ -1,3 +1,5 @@
+import "dart:developer";
+
 import "package:flutter/material.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vit_b_mess/provider/settings.dart';
@@ -26,37 +28,40 @@ class _NotificationPermissionScreenState
 
   void requestNotificationPermission(WidgetRef ref) async {
     final status = await Permission.notification.request();
-    print("Notification permission status: $status");
+    log("Notification permission status: $status");
     if (status.isGranted) {
       final alarmStatus = await Permission.scheduleExactAlarm.request();
-      print("Schedule Exact Alarm permission status: $alarmStatus");
+      log("Schedule Exact Alarm permission status: $alarmStatus");
       if (alarmStatus.isGranted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Notification permission granted")),
-        );
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Notification permission granted")),
+          );
+        }
         setState(() {
           settings!.notificationPermission = true;
         });
-        print(settings!.notificationPermission);
         await ref.read(settingsNotifier.notifier).saveSettings(settings!);
-        Navigator.of(
-          context,
-        ).pushReplacement(
-          MaterialPageRoute(
-            builder: (ctx) => const Tabs(),
-          ),
-        );
+        if (mounted) {
+          Navigator.of(
+            context,
+          ).pushReplacement(MaterialPageRoute(builder: (ctx) => const Tabs()));
+        }
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Schedule Exact Alarm permission denied"),
-          ),
-        );
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Schedule Exact Alarm permission denied"),
+            ),
+          );
+        }
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Notification permission denied")),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Notification permission denied")),
+        );
+      }
     }
   }
 
@@ -115,9 +120,11 @@ class _NotificationPermissionScreenState
                         await ref
                             .read(settingsNotifier.notifier)
                             .saveSettings(settings!);
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (ctx) => const Tabs()),
-                        );
+                        if (mounted) {
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(builder: (ctx) => const Tabs()),
+                          );
+                        }
                       },
                       child: const Text("Skip"),
                     ),

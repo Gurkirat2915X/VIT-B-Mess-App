@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -75,25 +77,18 @@ Meals getMealsFromStorage() {
 Meals getDayMeals(int day, MessMealDays state) {
   switch (day) {
     case 0:
-      print("Fetching meals for Monday");
       return state.monday;
     case 1:
-      print("Fetching meals for Tuesday");
       return state.tuesday;
     case 2:
-      print("Fetching meals for Wednesday");
       return state.wednesday;
     case 3:
-      print("Fetching meals for Thursday");
       return state.thursday;
     case 4:
-      print("Fetching meals for Friday");
       return state.friday;
     case 5:
-      print("Fetching meals for Saturday");
       return state.saturday;
     case 6:
-      print("Fetching meals for Sunday");
       return state.sunday;
     default:
       throw Exception("Invalid day index: $day");
@@ -117,7 +112,7 @@ Meal getCurrentMeal(int id, Meals meals) {
 
 @pragma('vm:entry-point')
 Future<void> dailyNotificationInitializer() async {
-  print("Initializing daily notifications...");
+  log("Initializing daily notifications...");
   tz.initializeTimeZones();
   tz.setLocalLocation(tz.getLocation('Asia/Calcutta'));
   await hiveInitializer();
@@ -135,7 +130,7 @@ Future<void> dailyNotificationInitializer() async {
       mealTime,
       currentMeals,
     );
-    print(
+    log(
       "Scheduled notification for ${mealTime.name} at ${mealTime.hour}:${mealTime.minute}",
     );
   }
@@ -163,7 +158,7 @@ Future<void> dailyNotificationInitializer() async {
     'Your daily meal notifications have been set up.',
     platformChannelSpecifics,
   );
-  print("Daily notifications initialized successfully.");
+  log("Daily notifications initialized successfully.");
 }
 
 Future<void> setMealNotification(
@@ -178,9 +173,6 @@ Future<void> setMealNotification(
   ${currentMeal.veg.isNotEmpty ? "Veg: ${currentMeal.veg.join(', ')}\n" : ""}
   ${currentMeal.nonVeg.isNotEmpty ? "Non-Veg: ${currentMeal.nonVeg.join(', ')}" : ""}
   """;
-  print(title);
-  print(body);
-
   final NotificationDetails platformChannelSpecifics = NotificationDetails(
     android: AndroidNotificationDetails(
       'meal_channel',
@@ -209,12 +201,9 @@ Future<void> setMealNotification(
     mealTime.minute,
   );
   if (scheduledDate.isBefore(now)) {
-   print(
-      "Scheduled time for ${mealTime.name} has already passed",
-    );
-
+    log("Scheduled time for ${mealTime.name} has already passed");
   } else {
-    print(
+    log(
       "Scheduling ${mealTime.name} for today at ${mealTime.hour}:${mealTime.minute}",
     );
   }
