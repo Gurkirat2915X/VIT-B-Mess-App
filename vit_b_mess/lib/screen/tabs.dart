@@ -11,6 +11,7 @@ import 'package:vit_b_mess/screen/notification_permission_screen.dart';
 import 'package:vit_b_mess/widgets/preference.dart';
 import 'package:vit_b_mess/mess_app_info.dart' as app_info;
 import 'package:permission_handler/permission_handler.dart';
+import "package:firebase_messaging/firebase_messaging.dart";
 
 Future<bool> checkPermissionGranted() async {
   final notificationStatus = await Permission.notification.status;
@@ -42,6 +43,17 @@ class _TabsState extends ConsumerState<Tabs> {
     );
   }
 
+  void setupPushNotifications() async {
+    final fcm = FirebaseMessaging.instance;
+    if (await checkPermissionGranted()) {
+      await fcm.requestPermission();
+      fcm.subscribeToTopic('mess');
+      print("Subscribed to 'mess' topic");
+    } else {
+      print("Notification permission not granted");
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -69,6 +81,7 @@ class _TabsState extends ConsumerState<Tabs> {
         }
       }
     });
+    setupPushNotifications();
   }
 
   @override
@@ -126,7 +139,7 @@ class _TabsState extends ConsumerState<Tabs> {
       ),
       body: PageView(
         controller: _pageController,
-        physics: const ClampingScrollPhysics(), 
+        physics: const ClampingScrollPhysics(),
         onPageChanged: (index) {
           setState(() {
             pageIndex = index;
@@ -135,7 +148,9 @@ class _TabsState extends ConsumerState<Tabs> {
         children: pages,
       ),
       bottomNavigationBar: NavigationBar(
-        labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected, // Optional: cleaner UI
+        labelBehavior:
+            NavigationDestinationLabelBehavior
+                .onlyShowSelected, // Optional: cleaner UI
         selectedIndex: pageIndex,
         onDestinationSelected: _onSelectBottom,
         destinations: const [
