@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -44,19 +45,19 @@ Future<bool> updateMessData(WidgetRef ref) async {
     dynamic data = await fetchMessData();
     final receivedMessAppVersion = data["data"]["messAppVersion"];
     if (currentSettings.newUpdateVersion != receivedMessAppVersion) {
-      print("New update available: $receivedMessAppVersion");
+      log("New update available: $receivedMessAppVersion");
       currentSettings.newUpdateVersion = receivedMessAppVersion;
     } else {
-      print("No new update available.");
+      log("No new update available.");
     }
     final messDataVersion = data["data"]["messDataVersion"];
     if (messDataVersion == currentSettings.messDataVersion) {
-      print("Mess data version is up to date. No need to update.");
+      log("Mess data version is up to date. No need to update.");
       currentSettings.updatedTill = data["data"]["UpdatedTill"];
       await ref.read(settingsNotifier.notifier).saveSettings(currentSettings);
       return false;
     }
-    print("Mess data version changed. Updating...");
+    log("Mess data version changed. Updating...");
     currentSettings.messDataVersion = messDataVersion;
     currentSettings.updatedTill = data["data"]["UpdatedTill"];
 
@@ -67,10 +68,10 @@ Future<bool> updateMessData(WidgetRef ref) async {
         .read(messDataNotifier.notifier)
         .setMessData(await messSetup(messBox, messData, mess));
     await ref.read(settingsNotifier.notifier).saveSettings(currentSettings);
-    print("Mess data updated successfully for ${mess.name} ok");
+    log("Mess data updated successfully for ${mess.name}");
     return true;
   } catch (e) {
-    print("Error updating mess data: $e");
+    log("Error updating mess data: $e");
     return false;
   }
 }
@@ -114,7 +115,6 @@ Future<MessMealDays> messSetup(
         ),
       );
     }
-    print(meals);
     final messMeals = MessMealDays(
       mess: currentMess,
       monday: meals[0],
@@ -132,7 +132,7 @@ Future<MessMealDays> messSetup(
     throw Exception("Failed to load mess data for ${mess.name}");
   }
 
-  print("Mess data setup completed for ${mess.name}");
+  log("Mess data setup completed for ${mess.name}");
   return messDataLoaded;
 }
 
@@ -148,7 +148,7 @@ Future<dynamic> fetchMessData() async {
       throw Exception("Failed to load mess data: ${data.statusCode}");
     }
   } catch (e) {
-    print("Error fetching mess data: $e");
+    log("Error fetching mess data: $e");
     throw Exception("Failed to fetch mess data");
   }
   return await json.decode(data.body);
@@ -165,13 +165,13 @@ Future<MessMealDays> setupMeals(WidgetRef ref) async {
   currentSettings.messDataVersion = messDataVersion;
   final newUpdateVersion = data["data"]["messAppVersion"];
   currentSettings.newUpdateVersion = newUpdateVersion;
-  print("updated till: ${data["data"]["UpdatedTill"]}");
+  log("updated till: ${data["data"]["UpdatedTill"]}");
   currentSettings.updatedTill = data["data"]["UpdatedTill"];
 
-  print("Setting up meals for ${mess.name}...");
+  log("Setting up meals for ${mess.name}...");
   MessMealDays messMeals = await messSetup(messBox, messData, mess);
   await ref.read(settingsNotifier.notifier).saveSettings(currentSettings);
-  print("Meals setup completed for ${mess.name}");
+  log("Meals setup completed for ${mess.name}");
   return messMeals;
 }
 
@@ -235,11 +235,11 @@ class MessDataProvider extends StateNotifier<MessMealDays> {
     } else {
       state = messData;
     }
-    print("Mess data loaded for ${mess.name}");
+    log("Mess data loaded for ${mess.name}");
   }
 
   Future<bool> updateData(WidgetRef ref) async {
-    print("Updating mess data...");
+    log("Updating mess data...");
     return await updateMessData(ref);
   }
 

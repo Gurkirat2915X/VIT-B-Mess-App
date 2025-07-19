@@ -1,6 +1,7 @@
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:vit_b_mess/routines/mess_notification.dart';
+import "dart:developer";
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -13,7 +14,7 @@ DateTime _getNextMidnight() {
 }
 
 Future<void> notificationSetup() async {
-  print("Daily notification initializer called");
+  log("Daily notification initializer called");
 
   try {
     await AndroidAlarmManager.initialize();
@@ -21,7 +22,7 @@ Future<void> notificationSetup() async {
     await notificationInitializer();
     DateTime now = DateTime.now();
     if (now.hour >= 0 && now.hour < 3) {
-      print("Preventing notification setup (midnight to 3 AM)");
+      log("Preventing notification setup (midnight to 3 AM)");
       return;
     }
 
@@ -40,12 +41,12 @@ Future<void> notificationSetup() async {
       allowWhileIdle: true,
     );
     if (success) {
-      print("Notification alarm scheduled successfully for $startTime");
+      log("Notification alarm scheduled successfully for $startTime");
     } else {
-      print("Failed to schedule notification alarm");
+      log("Failed to schedule notification alarm");
     }
   } catch (e) {
-    print("Error scheduling notification: $e");
+    log("Error scheduling notification: $e");
   }
 }
 
@@ -56,14 +57,14 @@ Future<void> notificationInitializer() async {
     final InitializationSettings initializationSettings =
         InitializationSettings(android: initializationSettingsAndroid);
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-    print("Notification system initialized");
+    log("Notification system initialized");
   } catch (e) {
-    print("Failed to initialize notifications: $e");
+    log("Failed to initialize notifications: $e");
   }
 }
 
 Future<void> cancelNotification() async {
-  print("Cancelling all notifications");
+  log("Cancelling all notifications");
   await flutterLocalNotificationsPlugin.cancelAll();
   await AndroidAlarmManager.cancel(alarmId);
 }

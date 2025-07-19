@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -48,9 +50,9 @@ class _TabsState extends ConsumerState<Tabs> {
     if (await checkPermissionGranted()) {
       await fcm.requestPermission();
       fcm.subscribeToTopic('mess');
-      print("Subscribed to 'mess' topic");
+      log("Subscribed to 'mess' topic");
     } else {
-      print("Notification permission not granted");
+      log("Notification permission not granted");
     }
   }
 
@@ -62,11 +64,13 @@ class _TabsState extends ConsumerState<Tabs> {
     settings.loadSettings().then((_) async {
       Settings currentSettings = settings.getSettings();
       if (currentSettings.notificationPermission == null) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (ctx) => const NotificationPermissionScreen(),
-          ),
-        );
+        if (mounted) {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (ctx) => const NotificationPermissionScreen(),
+            ),
+          );
+        }
       } else {
         final isGranted = await checkPermissionGranted();
         if (isGranted != currentSettings.notificationPermission) {
@@ -115,25 +119,25 @@ class _TabsState extends ConsumerState<Tabs> {
                   throw Exception('Could not launch $url');
                 }
               },
-              label: Text(
+              label: const Text(
                 "Update Available",
                 style: TextStyle(color: Colors.white),
               ),
-              icon: Icon(Icons.system_update_rounded, color: Colors.white),
+              icon: const Icon(
+                Icons.system_update_rounded,
+                color: Colors.white,
+              ),
             ),
         ],
         title: Row(
           children: [
-            Hero(
-              tag: ValueKey("Icon"),
-              child: Icon(
-                Icons.dining,
-                color: Theme.of(context).colorScheme.primary,
-                size: 40,
-              ),
+            Icon(
+              Icons.dining,
+              color: Theme.of(context).colorScheme.primary,
+              size: 40,
             ),
-            SizedBox(width: 10),
-            Text("VIT-B Mess"),
+            const SizedBox(width: 10),
+            const Text("VIT-B Mess"),
           ],
         ),
       ),
@@ -148,9 +152,7 @@ class _TabsState extends ConsumerState<Tabs> {
         children: pages,
       ),
       bottomNavigationBar: NavigationBar(
-        labelBehavior:
-            NavigationDestinationLabelBehavior
-                .onlyShowSelected, // Optional: cleaner UI
+        labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
         selectedIndex: pageIndex,
         onDestinationSelected: _onSelectBottom,
         destinations: const [

@@ -20,7 +20,9 @@ class MealWidget extends ConsumerWidget {
 
         child: Card(
           elevation: 6,
-          shadowColor: Theme.of(context).colorScheme.shadow.withOpacity(0.4),
+          shadowColor: Theme.of(
+            context,
+          ).colorScheme.shadow.withValues(alpha: 0.4),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
@@ -42,7 +44,7 @@ class MealWidget extends ConsumerWidget {
                             "Vegetarian",
                             Icons.eco_rounded,
                             Colors.green.shade700,
-                            Colors.green.withOpacity(0.1),
+                            Colors.green.withValues(alpha: 0.1),
                           ),
                           const SizedBox(height: 8),
                           currentMeal.veg.isEmpty
@@ -60,8 +62,6 @@ class MealWidget extends ConsumerWidget {
                                   context,
                                 ).colorScheme.onSecondaryContainer,
                               ),
-
-                          // Non-Veg Section
                           if (!ref.read(settingsNotifier).onlyVeg &&
                               currentMeal.nonVeg.isNotEmpty) ...[
                             const SizedBox(height: 10),
@@ -70,7 +70,7 @@ class MealWidget extends ConsumerWidget {
                               "Non-Vegetarian",
                               Icons.set_meal_rounded,
                               Colors.red.shade700,
-                              Colors.red.withOpacity(0.1),
+                              Colors.red.withValues(alpha: 0.1),
                             ),
                             const SizedBox(height: 10),
                             _buildItemsGrid(
@@ -129,7 +129,7 @@ class MealWidget extends ConsumerWidget {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 20),
       decoration: BoxDecoration(
-        color: Colors.grey.withOpacity(0.1),
+        color: Colors.grey.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Text(
@@ -160,7 +160,7 @@ class MealWidget extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(10),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.5),
                     blurRadius: 3,
                     offset: const Offset(0, 2),
                   ),

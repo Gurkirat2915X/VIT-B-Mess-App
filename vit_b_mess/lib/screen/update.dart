@@ -39,14 +39,7 @@ class _UpdateScreenState extends ConsumerState<UpdateScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Hero(
-                    tag: const ValueKey("Icon"),
-                    child: Icon(
-                      Icons.dining,
-                      size: 50,
-                      color: colorScheme.primary,
-                    ),
-                  ),
+                  Icon(Icons.dining, size: 50, color: colorScheme.primary),
                   const SizedBox(width: 16),
                   Text(
                     "VIT B Mess",
@@ -57,12 +50,10 @@ class _UpdateScreenState extends ConsumerState<UpdateScreen> {
                 ],
               ),
               const SizedBox(height: 40),
-              
-              // Success Icon and Message
               Container(
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
-                  color: colorScheme.primaryContainer.withOpacity(0.3),
+                  color: colorScheme.primaryContainer.withValues(alpha: 0.3),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
@@ -72,7 +63,6 @@ class _UpdateScreenState extends ConsumerState<UpdateScreen> {
                 ),
               ),
               const SizedBox(height: 24),
-              
               Text(
                 "Successfully Updated!",
                 style: textTheme.headlineMedium?.copyWith(
@@ -82,16 +72,13 @@ class _UpdateScreenState extends ConsumerState<UpdateScreen> {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 8),
-              
               Text(
                 "Version ${app_info.appVersion}",
                 style: textTheme.titleLarge?.copyWith(
-                  color: colorScheme.onSurface.withOpacity(0.7),
+                  color: colorScheme.onSurface.withValues(alpha: 0.7),
                 ),
               ),
               const SizedBox(height: 32),
-              
-              // Update Notes Card
               Card(
                 elevation: 2,
                 child: Padding(
@@ -117,15 +104,11 @@ class _UpdateScreenState extends ConsumerState<UpdateScreen> {
                       ),
                       const SizedBox(height: 16),
                       Container(
-                        constraints: const BoxConstraints(
-                          maxHeight: 200,
-                        ),
+                        constraints: const BoxConstraints(maxHeight: 200),
                         child: SingleChildScrollView(
                           child: Text(
                             app_info.updateNotes,
-                            style: textTheme.bodyMedium?.copyWith(
-                              height: 1.5,
-                            ),
+                            style: textTheme.bodyMedium?.copyWith(height: 1.5),
                           ),
                         ),
                       ),
@@ -134,8 +117,6 @@ class _UpdateScreenState extends ConsumerState<UpdateScreen> {
                 ),
               ),
               const SizedBox(height: 40),
-              
-              // Continue Button
               SizedBox(
                 width: double.infinity,
                 child: FilledButton.icon(

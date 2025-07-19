@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:vit_b_mess/routines/mess_notification.dart';
 import 'package:workmanager/workmanager.dart';
@@ -8,7 +9,7 @@ const dailyNotificationTask = "dailyNotificationTask";
 void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
     if (task == dailyNotificationTask) {
-      print("Workmanager: Executing daily notification task.");
+      log("Workmanager: Executing daily notification task.");
       await notificationInitializer();
       await dailyNotificationInitializer();
     }
@@ -20,7 +21,7 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
 Future<void> notificationSetup() async {
-  print("Daily notification initializer called");
+  log("Daily notification initializer called");
   await Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
   await notificationInitializer();
   await scheduleDailyTask();
@@ -40,7 +41,7 @@ Future<void> scheduleDailyTask() async {
     backoffPolicy: BackoffPolicy.linear,
     constraints: Constraints(networkType: NetworkType.notRequired),
   );
-  print(
+  log(
     "Workmanager task scheduled to run at $tomorrowMidnight with the delay of $initialDelay, repeating daily.",
   );
 }
@@ -55,7 +56,7 @@ Future<void> notificationInitializer() async {
 }
 
 Future<void> cancelNotification() async {
-  print("Cancelling all notifications");
+  log("Cancelling all notifications");
   await flutterLocalNotificationsPlugin.cancelAll();
   await Workmanager().cancelAll();
 }

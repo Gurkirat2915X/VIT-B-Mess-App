@@ -51,42 +51,39 @@ class MealChanger extends ConsumerWidget {
           textStyle: WidgetStatePropertyAll(
             theme.textTheme.labelLarge?.copyWith(fontWeight: FontWeight.bold),
           ),
-          backgroundColor: WidgetStateProperty.resolveWith<Color?>(
-            (Set<WidgetState> states) {
-              if (states.contains(WidgetState.selected)) {
-                return colorScheme.primaryContainer.withOpacity(0.5);
-              }
-              return theme.cardColor;
-            },
-          ),
-          foregroundColor: WidgetStateProperty.resolveWith<Color?>(
-            (Set<WidgetState> states) {
-              if (states.contains(WidgetState.selected)) {
-                return colorScheme.primary;
-              }
-              return colorScheme.onSurface.withOpacity(0.7);
-            },
-          ),
+          backgroundColor: WidgetStateProperty.resolveWith<Color?>((
+            Set<WidgetState> states,
+          ) {
+            if (states.contains(WidgetState.selected)) {
+              return colorScheme.primaryContainer.withValues(alpha: 0.5);
+            }
+            return theme.cardColor;
+          }),
+          foregroundColor: WidgetStateProperty.resolveWith<Color?>((
+            Set<WidgetState> states,
+          ) {
+            if (states.contains(WidgetState.selected)) {
+              return colorScheme.primary;
+            }
+            return colorScheme.onSurface.withValues(alpha: 0.7);
+          }),
           side: WidgetStatePropertyAll(
-            BorderSide(
-              color: colorScheme.outline.withOpacity(0.2),
-              width: 1,
-            ),
+            BorderSide(color: colorScheme.outline.withValues(alpha: 0.2), width: 1),
           ),
           shape: WidgetStatePropertyAll<RoundedRectangleBorder>(
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
           ),
         ),
-        segments: mealOptions.map((meal) {
-          return ButtonSegment<String>(value: meal, label: Text(meal));
-        }).toList(),
+        segments:
+            mealOptions.map((meal) {
+              return ButtonSegment<String>(value: meal, label: Text(meal));
+            }).toList(),
         selected: {currentMeal},
         showSelectedIcon: false,
         onSelectionChanged: (Set<String> newSelection) {
           if (newSelection.isNotEmpty) {
             _handleMealSelection(newSelection.first);
           }
-        
         },
       ),
     );
