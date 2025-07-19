@@ -263,7 +263,7 @@ class _PreferenceState extends ConsumerState<Preference> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          updated ? "Mess Data Updated" : "No New Updates Available",
+          updated ? "Mess Data Updated" : "No New Mess Updates Available",
         ),
       ),
     );
