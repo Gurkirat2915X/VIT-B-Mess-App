@@ -6,11 +6,15 @@
 *.swp
 .buildlog/
 .history
-
+#By GSD
 server/
+mess_app_info.dart
+firebase_options.dart
+firebase.json
+google-services.json
 
 # Flutter repo-specific
-mess_app_info.dart
+
 /bin/cache/
 /bin/internal/bootstrap.bat
 /bin/internal/bootstrap.sh

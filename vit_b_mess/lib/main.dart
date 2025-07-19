@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vit_b_mess/provider/mess_data.dart';
 import 'package:vit_b_mess/provider/settings.dart';
@@ -8,10 +9,21 @@ import 'package:vit_b_mess/screen/tabs.dart';
 import 'package:vit_b_mess/screen/update.dart';
 import 'package:vit_b_mess/themes.dart';
 import "package:vit_b_mess/hive_setup.dart";
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Lock orientation to portrait mode only
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+  
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await hiveSetup();
+
   runApp(const ProviderScope(child: MyApp()));
 }
 
