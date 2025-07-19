@@ -29,7 +29,6 @@ class _MenuState extends ConsumerState<Menu> {
     messMenu = ref.read(messDataNotifier.notifier).getDayMeal(todayIndex);
     currentMeal = getCurrentMeal(messMenu!);
     currentMealTime = getMealTimeString;
-    print(ref.read(settingsNotifier).updatedTill);
   }
 
   Meal getCurrentMeal(Meals meals) {

@@ -53,18 +53,20 @@ class _PreferenceState extends ConsumerState<Preference> {
     if (notificationEnabled!) {
       bool isGranted = await checkPermissionGranted();
       if (!isGranted) {
-        ScaffoldMessenger.of(context).removeCurrentSnackBar();
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Please enable notifications in settings"),
-            duration: Duration(seconds: 2),
-          ),
-        );
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (ctx) => const NotificationPermissionScreen(),
-          ),
-        );
+        if (mounted) {
+          ScaffoldMessenger.of(context).removeCurrentSnackBar();
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Please enable notifications in settings"),
+              duration: Duration(seconds: 2),
+            ),
+          );
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (ctx) => const NotificationPermissionScreen(),
+            ),
+          );
+        }
         return;
       }
       notificationSetup();
@@ -85,13 +87,15 @@ class _PreferenceState extends ConsumerState<Preference> {
     );
 
     if (userSettings == settings) {
-      ScaffoldMessenger.of(context).removeCurrentSnackBar();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("No Changes Made"),
-          duration: Duration(seconds: 2),
-        ),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).removeCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("No Changes Made"),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
       return;
     }
     await ref.read(settingsNotifier.notifier).saveSettings(userSettings);

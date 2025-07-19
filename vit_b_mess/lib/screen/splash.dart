@@ -10,13 +10,10 @@ class SplashScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Hero(
-              tag: ValueKey("Icon"),
-              child: Icon(
-                Icons.dining,
-                size: 200,
-                color: Theme.of(context).colorScheme.primary,
-              ),
+            Icon(
+              Icons.dining,
+              size: 200,
+              color: Theme.of(context).colorScheme.primary,
             ),
             const SizedBox(height: 20),
             Text(
