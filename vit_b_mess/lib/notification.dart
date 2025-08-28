@@ -13,7 +13,7 @@ DateTime _getNextMidnight() {
   return DateTime(tomorrow.year, tomorrow.month, tomorrow.day, 0, 0, 0);
 }
 
-Future<void> notificationSetup() async {
+Future<void> notificationSetup({bool setup = false}) async {
   log("Daily notification initializer called");
 
   try {
@@ -21,9 +21,11 @@ Future<void> notificationSetup() async {
 
     await notificationInitializer();
     DateTime now = DateTime.now();
-    if (now.hour >= 0 && now.hour < 3) {
+    if (!setup){
+      if (now.hour >= 0 && now.hour < 3) {
       log("Preventing notification setup (midnight to 3 AM)");
       return;
+    }
     }
 
     await AndroidAlarmManager.cancel(alarmId);

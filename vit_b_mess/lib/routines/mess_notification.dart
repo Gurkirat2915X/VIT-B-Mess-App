@@ -34,14 +34,34 @@ final List<MealTime> mealTimes = [
 
 Future<void> hiveInitializer() async {
   await Hive.initFlutter();
-  Hive.registerAdapter(SettingsAdapter());
-  Hive.registerAdapter(HostelsAdapter());
-  Hive.registerAdapter(MessTypeAdapter());
-  Hive.registerAdapter(MealAdapter());
-  Hive.registerAdapter(MealsAdapter());
-  Hive.registerAdapter(MessMealDaysAdapter());
-  await Hive.openBox<Settings>("mess_app_settings");
-  await Hive.openBox<MessMealDays>("mess_app_data");
+  
+  // Check if adapters are already registered before registering them
+  if (!Hive.isAdapterRegistered(0)) {
+    Hive.registerAdapter(SettingsAdapter());
+  }
+  if (!Hive.isAdapterRegistered(1)) {
+    Hive.registerAdapter(HostelsAdapter());
+  }
+  if (!Hive.isAdapterRegistered(2)) {
+    Hive.registerAdapter(MessTypeAdapter());
+  }
+  if (!Hive.isAdapterRegistered(3)) {
+    Hive.registerAdapter(MealAdapter());
+  }
+  if (!Hive.isAdapterRegistered(4)) {
+    Hive.registerAdapter(MealsAdapter());
+  }
+  if (!Hive.isAdapterRegistered(5)) {
+    Hive.registerAdapter(MessMealDaysAdapter());
+  }
+  
+  // Open boxes only if they're not already open
+  if (!Hive.isBoxOpen("mess_app_settings")) {
+    await Hive.openBox<Settings>("mess_app_settings");
+  }
+  if (!Hive.isBoxOpen("mess_app_data")) {
+    await Hive.openBox<MessMealDays>("mess_app_data");
+  }
 }
 
 Future<FlutterLocalNotificationsPlugin> notificationInitializer(
@@ -113,15 +133,16 @@ Meal getCurrentMeal(int id, Meals meals) {
 @pragma('vm:entry-point')
 Future<void> dailyNotificationInitializer() async {
   log("Initializing daily notifications...");
-  tz.initializeTimeZones();
-  tz.setLocalLocation(tz.getLocation('Asia/Calcutta'));
-  await hiveInitializer();
-  await AndroidAlarmManager.initialize();
+  try {
+    tz.initializeTimeZones();
+    tz.setLocalLocation(tz.getLocation('Asia/Calcutta'));
+    await hiveInitializer();
+    await AndroidAlarmManager.initialize();
 
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      await notificationInitializer(FlutterLocalNotificationsPlugin());
+    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+        await notificationInitializer(FlutterLocalNotificationsPlugin());
 
-  final Meals currentMeals = getMealsFromStorage();
+    final Meals currentMeals = getMealsFromStorage();
 
   // Schedule all meal notifications
   for (final mealTime in mealTimes) {
@@ -159,6 +180,9 @@ Future<void> dailyNotificationInitializer() async {
     platformChannelSpecifics,
   );
   log("Daily notifications initialized successfully.");
+  } catch (e) {
+    log("Error initializing daily notifications: $e");
+  }
 }
 
 Future<void> setMealNotification(
@@ -201,12 +225,13 @@ Future<void> setMealNotification(
     mealTime.minute,
   );
   if (scheduledDate.isBefore(now)) {
-    log("Scheduled time for ${mealTime.name} has already passed");
-  } else {
-    log(
-      "Scheduling ${mealTime.name} for today at ${mealTime.hour}:${mealTime.minute}",
-    );
+    log("Scheduled time for ${mealTime.name} has already passed - skipping notification");
+    return; 
   }
+  
+  log(
+    "Scheduling ${mealTime.name} for today at ${mealTime.hour}:${mealTime.minute}",
+  );
 
   await flutterLocalNotificationsPlugin.zonedSchedule(
     mealTime.id,
@@ -215,6 +240,5 @@ Future<void> setMealNotification(
     scheduledDate,
     platformChannelSpecifics,
     androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-    // payload: null,
   );
 }

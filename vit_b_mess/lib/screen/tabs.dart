@@ -97,12 +97,13 @@ class _TabsState extends ConsumerState<Tabs> {
   @override
   Widget build(BuildContext context) {
     final settings = ref.watch(settingsNotifier);
+    final colorScheme = Theme.of(context).colorScheme;
 
     if (settings.newUpdate!) {
       return const UpdateScreen();
     }
 
-    final List<Widget> pages = [
+    final List<Widget> pages = <Widget>[
       const Menu(),
       const Preference(),
       const About(),
@@ -110,68 +111,145 @@ class _TabsState extends ConsumerState<Tabs> {
 
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          if (settings.newUpdateVersion != settings.version)
-            TextButton.icon(
-              onPressed: () async {
-                Uri url = Uri.parse(app_info.releaseGithubLink);
-                if (!await launchUrl(url)) {
-                  throw Exception('Could not launch $url');
-                }
-              },
-              label: const Text(
-                "Update Available",
-                style: TextStyle(color: Colors.white),
-              ),
-              icon: const Icon(
-                Icons.system_update_rounded,
-                color: Colors.white,
-              ),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        scrolledUnderElevation: 8,
+        surfaceTintColor: colorScheme.primary.withValues(alpha: 0.08),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                colorScheme.primary.withValues(alpha: 0.1),
+                colorScheme.secondary.withValues(alpha: 0.05),
+              ],
             ),
-        ],
+          ),
+        ),
         title: Row(
           children: [
-            Icon(
-              Icons.dining,
-              color: Theme.of(context).colorScheme.primary,
-              size: 40,
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: colorScheme.primary.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Hero(
+                tag: const ValueKey("Icon"),
+                child: Icon(
+                  Icons.restaurant,
+                  color: colorScheme.primary,
+                  size: 28,
+                ),
+              ),
             ),
-            const SizedBox(width: 10),
-            const Text("VIT-B Mess"),
+            const SizedBox(width: 16),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "VIT-B Mess",
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: -0.5,
+                  ),
+                ),
+                Text(
+                  "Your daily meal companion",
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: colorScheme.onSurface.withValues(alpha: 0.7),
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
-      ),
-      body: PageView(
-        controller: _pageController,
-        physics: const ClampingScrollPhysics(),
-        onPageChanged: (index) {
-          setState(() {
-            pageIndex = index;
-          });
-        },
-        children: pages,
-      ),
-      bottomNavigationBar: NavigationBar(
-        labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
-        selectedIndex: pageIndex,
-        onDestinationSelected: _onSelectBottom,
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.food_bank_outlined),
-            selectedIcon: Icon(Icons.food_bank_rounded),
-            label: "Menu",
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.settings_applications_outlined),
-            selectedIcon: Icon(Icons.settings_applications),
-            label: "Preference",
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.info_outline),
-            selectedIcon: Icon(Icons.info),
-            label: "About",
-          ),
+        actions: [
+          if (settings.newUpdateVersion != settings.version)
+            Container(
+              margin: const EdgeInsets.only(right: 8),
+              child: FilledButton.tonal(
+                onPressed: () async {
+                  Uri url = Uri.parse(app_info.releaseGithubLink);
+                  if (!await launchUrl(url)) {
+                    throw Exception('Could not launch $url');
+                  }
+                },
+                style: FilledButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  minimumSize: const Size(0, 36),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.system_update_rounded, size: 18),
+                    const SizedBox(width: 6),
+                    const Text(
+                      "Update",
+                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          const SizedBox(width: 8),
         ],
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              colorScheme.primary.withValues(alpha: 0.02),
+              colorScheme.surface,
+            ],
+            stops: const [0.0, 0.3],
+          ),
+        ),
+        child: PageView(
+          controller: _pageController,
+          physics: const ClampingScrollPhysics(),
+          onPageChanged: (index) {
+            setState(() {
+              pageIndex = index;
+            });
+          },
+          children: pages,
+        ),
+      ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.1),
+              blurRadius: 20,
+              offset: const Offset(0, -5),
+            ),
+          ],
+        ),
+        child: NavigationBar(
+          selectedIndex: pageIndex,
+          onDestinationSelected: _onSelectBottom,
+          destinations: const [
+            NavigationDestination(
+              icon: Icon(Icons.restaurant_menu_outlined),
+              selectedIcon: Icon(Icons.restaurant_menu),
+              label: "Menu",
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.tune_outlined),
+              selectedIcon: Icon(Icons.tune),
+              label: "Settings",
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.info_outline),
+              selectedIcon: Icon(Icons.info),
+              label: "About",
+            ),
+          ],
+        ),
       ),
     );
   }

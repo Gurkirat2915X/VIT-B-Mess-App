@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dark theme colors for Android 11 and below -->
+    <color name="ic_launcher_background">#2E7D32</color>
+</resources>

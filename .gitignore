@@ -12,7 +12,7 @@ mess_app_info.dart
 firebase_options.dart
 firebase.json
 google-services.json
-
+/server copy
 # Flutter repo-specific
 
 /bin/cache/

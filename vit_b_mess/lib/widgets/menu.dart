@@ -18,17 +18,22 @@ class _MenuState extends ConsumerState<Menu> {
   Meals? messMenu;
   DateTime todayDate = DateTime.now();
   Meal? currentMeal;
-
   int todayIndex = 0;
-
   String currentMealTime = "";
+
   @override
   void initState() {
     super.initState();
+    _initializeMenu();
+  }
+
+  void _initializeMenu() {
     todayIndex = todayDate.weekday - 1;
     messMenu = ref.read(messDataNotifier.notifier).getDayMeal(todayIndex);
-    currentMeal = getCurrentMeal(messMenu!);
-    currentMealTime = getMealTimeString;
+    if (messMenu != null) {
+      currentMeal = getCurrentMeal(messMenu!);
+      currentMealTime = getMealTimeString;
+    }
   }
 
   Meal getCurrentMeal(Meals meals) {
@@ -60,8 +65,10 @@ class _MenuState extends ConsumerState<Menu> {
     setState(() {
       todayIndex = day;
       messMenu = ref.read(messDataNotifier.notifier).getDayMeal(day);
-      currentMeal = getCurrentMeal(messMenu!);
-      currentMealTime = getMealTimeString;
+      if (messMenu != null) {
+        currentMeal = getCurrentMeal(messMenu!);
+        currentMealTime = getMealTimeString;
+      }
     });
   }
 
@@ -74,25 +81,56 @@ class _MenuState extends ConsumerState<Menu> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    // Handle loading state
+    if (messMenu == null || currentMeal == null) {
+      return const Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(),
+            SizedBox(height: 16),
+            Text('Loading menu...'),
+          ],
+        ),
+      );
+    }
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(12, 16, 12, 12),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(
-            "${ref.watch(settingsNotifier).selectedMess.name}'s Menu",
-            style: Theme.of(context).textTheme.headlineMedium,
+          const SizedBox(height: 18), 
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.restaurant_menu,
+                color: Theme.of(context).colorScheme.primary,
+                size: 28,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                "${ref.watch(settingsNotifier).selectedMess.name}'s Menu",
+                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
           WeekDays(selectedDay: todayIndex, onDaySelected: changeDay),
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
           MealWidget(currentMeal: currentMeal!),
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
           MealChanger(
             currentMeals: messMenu!,
             onMealChanged: changeMeal,
             currentMeal: currentMealTime,
           ),
+          const SizedBox(height: 24), // Bottom padding for navigation bar
         ],
       ),
     );

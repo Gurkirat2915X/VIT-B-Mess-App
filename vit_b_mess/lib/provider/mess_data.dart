@@ -39,14 +39,16 @@ enum MessType {
   }
 }
 
-Future<bool> updateMessData(WidgetRef ref) async {
+Future<List<bool>> updateMessData(WidgetRef ref) async {
   try {
     final currentSettings = ref.read(settingsNotifier);
+    var updateMessages = <bool>[false, false];
     dynamic data = await fetchMessData();
     final receivedMessAppVersion = data["data"]["messAppVersion"];
     if (currentSettings.newUpdateVersion != receivedMessAppVersion) {
       log("New update available: $receivedMessAppVersion");
       currentSettings.newUpdateVersion = receivedMessAppVersion;
+      updateMessages[0] = true;
     } else {
       log("No new update available.");
     }
@@ -55,7 +57,7 @@ Future<bool> updateMessData(WidgetRef ref) async {
       log("Mess data version is up to date. No need to update.");
       currentSettings.updatedTill = data["data"]["UpdatedTill"];
       await ref.read(settingsNotifier.notifier).saveSettings(currentSettings);
-      return false;
+      return updateMessages;
     }
     log("Mess data version changed. Updating...");
     currentSettings.messDataVersion = messDataVersion;
@@ -69,10 +71,10 @@ Future<bool> updateMessData(WidgetRef ref) async {
         .setMessData(await messSetup(messBox, messData, mess));
     await ref.read(settingsNotifier.notifier).saveSettings(currentSettings);
     log("Mess data updated successfully for ${mess.name}");
-    return true;
+    return updateMessages;
   } catch (e) {
     log("Error updating mess data: $e");
-    return false;
+    return <bool>[false, false, true];
   }
 }
 
@@ -238,7 +240,7 @@ class MessDataProvider extends StateNotifier<MessMealDays> {
     log("Mess data loaded for ${mess.name}");
   }
 
-  Future<bool> updateData(WidgetRef ref) async {
+  Future<List<bool>> updateData(WidgetRef ref) async {
     log("Updating mess data...");
     return await updateMessData(ref);
   }
