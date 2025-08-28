@@ -129,7 +129,7 @@ class _PreferenceState extends ConsumerState<Preference> with TickerProviderStat
       messDataVersion: settings!.messDataVersion,
       newUpdateVersion: settings!.newUpdateVersion,
       updatedTill: settings!.updatedTill,
-      notificationPermission: notificationEnabled,
+      notificationPermission: notificationEnabled!,
     );
 
     if (userSettings == settings) {
@@ -157,6 +157,7 @@ class _PreferenceState extends ConsumerState<Preference> with TickerProviderStat
         duration: Duration(seconds: 2),
       ),
     );
+    settings = userSettings;
     setState(() {
       allowSave = true;
     });
