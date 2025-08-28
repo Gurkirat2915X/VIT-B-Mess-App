@@ -36,7 +36,7 @@ The app schedules notifications 30 minutes before:
 
 | 📋 Home | 🍽️ Meal Details | 🔔 Notification |
 |--------|-----------------|-----------------|
-| ![Home Screen](UI/home_screen.jpg) | ![Meal Detail](UI/meal_detail_screen.jpg) | ![Notification](UI/notification_screen.jpg) |
+| ![Preference Screen](UI/home_screen.jpg) | ![Meal Detail](UI/meal_detail_screen.jpg) | ![Notification](UI/notification_screen.jpg) |
 ---
 
 ## 🔧 Tech Stack
