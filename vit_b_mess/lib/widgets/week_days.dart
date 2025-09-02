@@ -37,12 +37,63 @@ class _WeekDaysState extends ConsumerState<WeekDays>
     _scrollController.addListener(_updateScrollIndicators);
     _animationController.forward();
     
-    // Check if scrolling is possible after the widget is built
+    // Check if scrolling is possible after the widget is built and scroll to selected day
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_scrollController.hasClients) {
+        _scrollToSelectedDay();
         _updateScrollIndicators();
       }
     });
+  }
+
+  @override
+  void didUpdateWidget(WeekDays oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Scroll to selected day when the selected day changes
+    if (oldWidget.selectedDay != widget.selectedDay) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (_scrollController.hasClients) {
+          _scrollToSelectedDay();
+        }
+      });
+    }
+  }
+
+  void _scrollToSelectedDay() {
+    if (!_scrollController.hasClients) return;
+    
+    // Calculate the position of the selected day button
+    // Each button has margins of 4px (all around) + padding of 16px horizontal
+    // Total button width is approximately 70-80px depending on text width
+    const double estimatedButtonWidth = 75.0;
+    final double targetPosition = widget.selectedDay * estimatedButtonWidth;
+    final double maxScroll = _scrollController.position.maxScrollExtent;
+    final double viewportWidth = _scrollController.position.viewportDimension;
+    
+    // Only scroll if the selected day might be out of view
+    final double currentScroll = _scrollController.offset;
+    final double buttonStart = targetPosition - 20; // Small buffer
+    final double buttonEnd = targetPosition + estimatedButtonWidth + 20; // Small buffer
+    
+    double? newScrollPosition;
+    
+    // If button is to the left of viewport, scroll left
+    if (buttonStart < currentScroll) {
+      newScrollPosition = (buttonStart).clamp(0.0, maxScroll);
+    }
+    // If button is to the right of viewport, scroll right
+    else if (buttonEnd > currentScroll + viewportWidth) {
+      newScrollPosition = (buttonEnd - viewportWidth).clamp(0.0, maxScroll);
+    }
+    
+    // Animate to new position if needed
+    if (newScrollPosition != null) {
+      _scrollController.animateTo(
+        newScrollPosition,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    }
   }
 
   void _updateScrollIndicators() {
@@ -136,7 +187,6 @@ class _WeekDaysState extends ConsumerState<WeekDays>
 
   Widget _buildDayButton(BuildContext context, int dayIndex, bool isSelected) {
     final colorScheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
     final dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
     return GestureDetector(
@@ -161,13 +211,15 @@ class _WeekDaysState extends ConsumerState<WeekDays>
         ),
         child: AnimatedDefaultTextStyle(
           duration: const Duration(milliseconds: 200),
-          style: textTheme.labelLarge?.copyWith(
+          style: TextStyle(
             color: isSelected 
                 ? colorScheme.onPrimary 
                 : colorScheme.onSurface.withValues(alpha: 0.7),
             fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
             letterSpacing: 0.5,
-          ) ?? const TextStyle(),
+            fontSize: 14.0,
+            inherit: false,
+          ),
           child: Text(dayNames[dayIndex]),
         ),
       ),

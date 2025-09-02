@@ -21,11 +21,11 @@ Future<void> notificationSetup({bool setup = false}) async {
 
     await notificationInitializer();
     DateTime now = DateTime.now();
-    if (!setup){
+    if (!setup) {
       if (now.hour >= 0 && now.hour < 3) {
-      log("Preventing notification setup (midnight to 3 AM)");
-      return;
-    }
+        log("Preventing notification setup (midnight to 3 AM)");
+        return;
+      }
     }
 
     await AndroidAlarmManager.cancel(alarmId);

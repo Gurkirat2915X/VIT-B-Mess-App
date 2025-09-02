@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 class AppColors {
   // Primary colors - Modern green palette
   static const Color primaryGreen = Color(0xFF2E7D32); // Deep forest green
-  static const Color lightGreen = Color(0xFF66BB6A);   // Light fresh green
+  static const Color lightGreen = Color(0xFF66BB6A); // Light fresh green
   static const Color accentOrange = Color(0xFFFF7043); // Warm orange accent
-  
+
   // Surface colors
   static const Color lightSurface = Color(0xFFFAFAFA);
   static const Color darkSurface = Color(0xFF121212);
   static const Color cardLight = Color(0xFFFFFFFF);
   static const Color cardDark = Color(0xFF1E1E1E);
-  
+
   // Text colors
   static const Color textPrimary = Color(0xFF212121);
   static const Color textSecondary = Color(0xFF757575);
@@ -33,7 +33,7 @@ final ThemeData messLightTheme = ThemeData(
     secondaryContainer: AppColors.accentOrange.withValues(alpha: 0.15),
   ),
   scaffoldBackgroundColor: AppColors.lightSurface,
-  
+
   // Modern AppBar design
   appBarTheme: AppBarTheme(
     backgroundColor: Colors.transparent,
@@ -47,12 +47,9 @@ final ThemeData messLightTheme = ThemeData(
       color: AppColors.textPrimary,
       letterSpacing: -0.5,
     ),
-    iconTheme: const IconThemeData(
-      color: AppColors.primaryGreen,
-      size: 24,
-    ),
+    iconTheme: const IconThemeData(color: AppColors.primaryGreen, size: 24),
   ),
-  
+
   // Enhanced typography
   textTheme: const TextTheme(
     displayLarge: TextStyle(
@@ -116,7 +113,7 @@ final ThemeData messLightTheme = ThemeData(
       letterSpacing: 0.5,
     ),
   ),
-  
+
   // Modern card design
   cardTheme: CardThemeData(
     color: AppColors.cardLight,
@@ -126,7 +123,7 @@ final ThemeData messLightTheme = ThemeData(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
     margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
   ),
-  
+
   // Enhanced button themes
   filledButtonTheme: FilledButtonThemeData(
     style: FilledButton.styleFrom(
@@ -142,7 +139,7 @@ final ThemeData messLightTheme = ThemeData(
       ),
     ),
   ),
-  
+
   outlinedButtonTheme: OutlinedButtonThemeData(
     style: OutlinedButton.styleFrom(
       foregroundColor: AppColors.primaryGreen,
@@ -156,14 +153,14 @@ final ThemeData messLightTheme = ThemeData(
       ),
     ),
   ),
-  
+
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
     backgroundColor: AppColors.primaryGreen,
     foregroundColor: Colors.white,
     elevation: 6,
     shape: CircleBorder(),
   ),
-  
+
   // Modern navigation theme
   navigationBarTheme: NavigationBarThemeData(
     backgroundColor: AppColors.cardLight,
@@ -185,18 +182,12 @@ final ThemeData messLightTheme = ThemeData(
     }),
     iconTheme: WidgetStateProperty.resolveWith((states) {
       if (states.contains(WidgetState.selected)) {
-        return const IconThemeData(
-          color: AppColors.primaryGreen,
-          size: 24,
-        );
+        return const IconThemeData(color: AppColors.primaryGreen, size: 24);
       }
-      return const IconThemeData(
-        color: AppColors.textSecondary,
-        size: 24,
-      );
+      return const IconThemeData(color: AppColors.textSecondary, size: 24);
     }),
   ),
-  
+
   // Chip theme
   chipTheme: ChipThemeData(
     backgroundColor: AppColors.primaryGreen.withValues(alpha: 0.1),
@@ -224,7 +215,7 @@ final ThemeData messDarkTheme = ThemeData(
     secondaryContainer: AppColors.accentOrange.withValues(alpha: 0.2),
   ),
   scaffoldBackgroundColor: AppColors.darkSurface,
-  
+
   // Dark AppBar design
   appBarTheme: AppBarTheme(
     backgroundColor: Colors.transparent,
@@ -238,12 +229,9 @@ final ThemeData messDarkTheme = ThemeData(
       color: AppColors.textOnDark,
       letterSpacing: -0.5,
     ),
-    iconTheme: const IconThemeData(
-      color: AppColors.lightGreen,
-      size: 24,
-    ),
+    iconTheme: const IconThemeData(color: AppColors.lightGreen, size: 24),
   ),
-  
+
   // Dark typography
   textTheme: const TextTheme(
     displayLarge: TextStyle(
@@ -307,7 +295,7 @@ final ThemeData messDarkTheme = ThemeData(
       letterSpacing: 0.5,
     ),
   ),
-  
+
   // Dark card design
   cardTheme: CardThemeData(
     color: AppColors.cardDark,
@@ -317,7 +305,7 @@ final ThemeData messDarkTheme = ThemeData(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
     margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
   ),
-  
+
   // Dark button themes
   filledButtonTheme: FilledButtonThemeData(
     style: FilledButton.styleFrom(
@@ -333,7 +321,7 @@ final ThemeData messDarkTheme = ThemeData(
       ),
     ),
   ),
-  
+
   outlinedButtonTheme: OutlinedButtonThemeData(
     style: OutlinedButton.styleFrom(
       foregroundColor: AppColors.lightGreen,
@@ -347,14 +335,14 @@ final ThemeData messDarkTheme = ThemeData(
       ),
     ),
   ),
-  
+
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
     backgroundColor: AppColors.lightGreen,
     foregroundColor: AppColors.darkSurface,
     elevation: 6,
     shape: CircleBorder(),
   ),
-  
+
   // Dark navigation theme
   navigationBarTheme: NavigationBarThemeData(
     backgroundColor: AppColors.cardDark,
@@ -376,18 +364,12 @@ final ThemeData messDarkTheme = ThemeData(
     }),
     iconTheme: WidgetStateProperty.resolveWith((states) {
       if (states.contains(WidgetState.selected)) {
-        return const IconThemeData(
-          color: AppColors.lightGreen,
-          size: 24,
-        );
+        return const IconThemeData(color: AppColors.lightGreen, size: 24);
       }
-      return const IconThemeData(
-        color: Color(0xFFBDBDBD),
-        size: 24,
-      );
+      return const IconThemeData(color: Color(0xFFBDBDBD), size: 24);
     }),
   ),
-  
+
   // Dark chip theme
   chipTheme: ChipThemeData(
     backgroundColor: AppColors.lightGreen.withValues(alpha: 0.15),
@@ -399,3 +381,41 @@ final ThemeData messDarkTheme = ThemeData(
     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
   ),
 );
+
+
+class AppThemes {
+  static ThemeData createLightTheme(ColorScheme? lightDynamic) {
+    if (lightDynamic != null) {
+      return ThemeData(
+        useMaterial3: true,
+        colorScheme: lightDynamic.copyWith(
+          secondary: AppColors.primaryGreen,
+        ),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          scrolledUnderElevation: 4,
+        ),
+      );
+    }
+    return messLightTheme;
+  }
+
+
+  static ThemeData createDarkTheme(ColorScheme? darkDynamic) {
+    if (darkDynamic != null) {
+      return ThemeData(
+        useMaterial3: true,
+        colorScheme: darkDynamic.copyWith(
+          secondary: AppColors.primaryGreen,
+        ),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          scrolledUnderElevation: 4,
+        ),
+      );
+    }
+    return messDarkTheme;
+  }
+}

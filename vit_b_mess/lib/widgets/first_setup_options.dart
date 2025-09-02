@@ -36,18 +36,18 @@ class _FirstSetupOptionsState extends ConsumerState<FirstSetupOptions> {
         ScaffoldMessenger.of(context).removeCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Row(
+            content: Row(
               children: [
-                Icon(Icons.wifi_off, color: Colors.white),
-                SizedBox(width: 8),
-                Expanded(
+                Icon(Icons.wifi_off, color: Theme.of(context).colorScheme.onSecondary),
+                const SizedBox(width: 8),
+                const Expanded(
                   child: Text(
                     "No internet connection. Please connect to set up your preferences.",
                   ),
                 ),
               ],
             ),
-            backgroundColor: Colors.orange.shade600,
+            backgroundColor: Theme.of(context).colorScheme.secondary,
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
@@ -101,14 +101,14 @@ class _FirstSetupOptionsState extends ConsumerState<FirstSetupOptions> {
       // Show success message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Row(
+          content: Row(
             children: [
-              Icon(Icons.check_circle, color: Colors.white),
-              SizedBox(width: 8),
-              Text("Setup completed successfully!"),
+              Icon(Icons.check_circle, color: Theme.of(context).colorScheme.onPrimary),
+              const SizedBox(width: 8),
+              const Text("Setup completed successfully!"),
             ],
           ),
-          backgroundColor: Colors.green.shade600,
+          backgroundColor: Theme.of(context).colorScheme.primary,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
@@ -132,11 +132,11 @@ class _FirstSetupOptionsState extends ConsumerState<FirstSetupOptions> {
       ScaffoldMessenger.of(context).removeCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Row(
+          content: Row(
             children: [
-              Icon(Icons.error, color: Colors.white),
-              SizedBox(width: 8),
-              Expanded(
+              Icon(Icons.error, color: Theme.of(context).colorScheme.onError),
+              const SizedBox(width: 8),
+              const Expanded(
                 child: Text("Failed to save settings. Please try again."),
               ),
             ],
@@ -273,7 +273,7 @@ class _FirstSetupOptionsState extends ConsumerState<FirstSetupOptions> {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Icon(
-                            Icons.restaurant_rounded,
+                            Icons.restaurant_menu_rounded,
                             color: colorScheme.primary,
                             size: 20,
                           ),
@@ -376,12 +376,12 @@ class _FirstSetupOptionsState extends ConsumerState<FirstSetupOptions> {
                     await onClickOkay();
                   },
                   icon: _isLoading
-                      ? const SizedBox(
+                      ? SizedBox(
                           width: 20,
                           height: 20,
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                            valueColor: AlwaysStoppedAnimation<Color>(colorScheme.onPrimary),
                           ),
                         )
                       : const Icon(Icons.arrow_forward_rounded),

@@ -11,6 +11,7 @@ import 'package:vit_b_mess/themes.dart';
 import "package:vit_b_mess/hive_setup.dart";
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:dynamic_color/dynamic_color.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,109 +46,121 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return MaterialApp(
-      title: 'VIT-B Mess',
-      theme: messLightTheme,
-      darkTheme: messDarkTheme,
-      themeMode: ThemeMode.system,
-      debugShowCheckedModeBanner: false,
-      builder: (context, child) {
-        // Ensure consistent text scaling and handle MediaQuery constraints
-        return MediaQuery(
-          data: MediaQuery.of(
-            context,
-          ).copyWith(textScaler: const TextScaler.linear(1.0)),
-          child: child!,
+    return DynamicColorBuilder(
+      builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
+        return MaterialApp(
+          title: 'VIT-B Mess',
+          theme: AppThemes.createLightTheme(lightDynamic),
+          darkTheme: AppThemes.createDarkTheme(darkDynamic),
+          themeMode: ThemeMode.system, 
+          debugShowCheckedModeBanner: false,
+          builder: (context, child) {
+            return MediaQuery(
+              data: MediaQuery.of(
+                context,
+              ).copyWith(textScaler: const TextScaler.linear(1.0)),
+              child: child!,
+            );
+          },
+          home: FutureBuilder(
+            future: _initialize(ref),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const SplashScreen();
+              }
+
+              if (snapshot.hasError) {
+                return Scaffold(
+                  backgroundColor: Theme.of(context).colorScheme.surface,
+                  body: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(24),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.errorContainer,
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.error.withValues(alpha: 0.3),
+                            ),
+                          ),
+                          child: Icon(
+                            Icons.error_outline_rounded,
+                            size: 64,
+                            color: Theme.of(context).colorScheme.error,
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        Text(
+                          'Oops! Something went wrong',
+                          style: Theme.of(
+                            context,
+                          ).textTheme.headlineSmall?.copyWith(
+                            color: Theme.of(context).colorScheme.onSurface,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Please restart the app to try again',
+                          style: Theme.of(
+                            context,
+                          ).textTheme.bodyMedium?.copyWith(
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 24),
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            SystemNavigator.pop();
+                          },
+                          icon: const Icon(Icons.refresh_rounded),
+                          label: const Text('Restart App'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                Theme.of(context).colorScheme.primary,
+                            foregroundColor:
+                                Theme.of(context).colorScheme.onPrimary,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 24,
+                              vertical: 12,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }
+
+              return Consumer(
+                builder: (context, ref, _) {
+                  final settings = ref.watch(settingsNotifier);
+
+                  if (settings.isFirstBoot) {
+                    return const FirstBootScreen();
+                  }
+
+                  if (settings.newUpdate == true) {
+                    return const UpdateScreen();
+                  }
+
+                  return const Tabs();
+                },
+              );
+            },
+          ),
         );
       },
-      home: FutureBuilder(
-        future: _initialize(ref),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const SplashScreen();
-          }
-
-          if (snapshot.hasError) {
-            return Scaffold(
-              backgroundColor: const Color(0xFFF8F9FA),
-              body: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(24),
-                      decoration: BoxDecoration(
-                        color: Colors.red.shade50,
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: Colors.red.shade200),
-                      ),
-                      child: Icon(
-                        Icons.error_outline_rounded,
-                        size: 64,
-                        color: Colors.red.shade400,
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    Text(
-                      'Oops! Something went wrong',
-                      style: Theme.of(
-                        context,
-                      ).textTheme.headlineSmall?.copyWith(
-                        color: Colors.grey.shade800,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Please restart the app to try again',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Colors.grey.shade600,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 24),
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        SystemNavigator.pop();
-                      },
-                      icon: const Icon(Icons.refresh_rounded),
-                      label: const Text('Restart App'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primaryGreen,
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 24,
-                          vertical: 12,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          }
-
-          return Consumer(
-            builder: (context, ref, _) {
-              final settings = ref.watch(settingsNotifier);
-
-              if (settings.isFirstBoot) {
-                return const FirstBootScreen();
-              }
-
-              if (settings.newUpdate == true) {
-                return const UpdateScreen();
-              }
-
-              return const Tabs();
-            },
-          );
-        },
-      ),
     );
   }
 }

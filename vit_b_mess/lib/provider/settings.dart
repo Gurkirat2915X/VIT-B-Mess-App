@@ -6,8 +6,6 @@ import 'package:vit_b_mess/mess_app_info.dart' as app_info;
 import 'package:vit_b_mess/models/settings.dart';
 import 'package:vit_b_mess/provider/mess_data.dart';
 
-
-
 Box<Settings> settingsBox = Hive.box<Settings>('mess_app_settings');
 Future<Settings> loadSettingsFromStorage() async {
   Settings? _settings = settingsBox.get('settings');
@@ -53,7 +51,7 @@ class SettingsProvider extends StateNotifier<Settings> {
           messDataVersion: "0",
           newUpdateVersion: app_info.appVersion,
           updatedTill: "",
-          notificationPermission: null, 
+          notificationPermission: null,
         ),
       );
 
@@ -63,13 +61,12 @@ class SettingsProvider extends StateNotifier<Settings> {
     log("Settings loaded from storage: ${settings.getAllInfo()}");
     state = settings;
   }
+
   Future saveSettings(Settings settings) async {
     log("Saving settings: ${settings.getAllInfo()}");
     await saveSettingsToStorage(settings);
     state = settings;
   }
-
- 
 
   Settings getSettings() {
     return state;

@@ -45,17 +45,15 @@ Future<void> hiveInitializer() async {
   if (!Hive.isAdapterRegistered(2)) {
     Hive.registerAdapter(MessTypeAdapter());
   }
-  if (!Hive.isAdapterRegistered(3)) {
+  if (!Hive.isAdapterRegistered(5)) {
     Hive.registerAdapter(MealAdapter());
   }
-  if (!Hive.isAdapterRegistered(4)) {
+  if (!Hive.isAdapterRegistered(3)) {
     Hive.registerAdapter(MealsAdapter());
   }
-  if (!Hive.isAdapterRegistered(5)) {
+  if (!Hive.isAdapterRegistered(4)) {
     Hive.registerAdapter(MessMealDaysAdapter());
   }
-  
-  // Open boxes only if they're not already open
   if (!Hive.isBoxOpen("mess_app_settings")) {
     await Hive.openBox<Settings>("mess_app_settings");
   }
@@ -205,6 +203,7 @@ Future<void> setMealNotification(
       importance: Importance.max,
       priority: Priority.high,
       showWhen: true,
+      enableVibration: true,
       styleInformation: BigTextStyleInformation(
         body,
         htmlFormatBigText: true,

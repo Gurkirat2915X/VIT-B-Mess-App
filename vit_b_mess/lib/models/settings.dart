@@ -61,7 +61,7 @@ class Settings {
         other.selectedMess == selectedMess &&
         other.onlyVeg == onlyVeg &&
         other.version == version &&
-        other.notificationPermission ==  notificationPermission;
+        other.notificationPermission == notificationPermission;
   }
 
   @override

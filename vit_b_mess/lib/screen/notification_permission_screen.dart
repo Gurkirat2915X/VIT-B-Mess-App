@@ -2,9 +2,9 @@ import "dart:developer";
 
 import "package:flutter/material.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vit_b_mess/provider/settings.dart';
 import "package:permission_handler/permission_handler.dart";
 import "package:vit_b_mess/models/settings.dart";
+import "package:vit_b_mess/provider/settings.dart";
 import "package:vit_b_mess/routines/mess_notification.dart";
 import "package:vit_b_mess/screen/tabs.dart";
 
@@ -75,14 +75,14 @@ class _NotificationPermissionScreenState
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: const Row(
+                content: Row(
                   children: [
-                    Icon(Icons.check_circle, color: Colors.white),
-                    SizedBox(width: 8),
-                    Text("Notifications enabled successfully!"),
+                    Icon(Icons.check_circle, color: Theme.of(context).colorScheme.onPrimary),
+                    const SizedBox(width: 8),
+                    const Text("Notifications enabled successfully!"),
                   ],
                 ),
-                backgroundColor: Colors.green.shade600,
+                backgroundColor: Theme.of(context).colorScheme.primary,
                 behavior: SnackBarBehavior.floating,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -106,14 +106,14 @@ class _NotificationPermissionScreenState
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: const Row(
+                content: Row(
                   children: [
-                    Icon(Icons.warning, color: Colors.white),
-                    SizedBox(width: 8),
-                    Text("Alarm scheduling permission needed"),
+                    Icon(Icons.warning, color: Theme.of(context).colorScheme.onSecondary),
+                    const SizedBox(width: 8),
+                    const Text("Alarm scheduling permission needed"),
                   ],
                 ),
-                backgroundColor: Colors.orange.shade600,
+                backgroundColor: Theme.of(context).colorScheme.secondary,
                 behavior: SnackBarBehavior.floating,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -126,14 +126,14 @@ class _NotificationPermissionScreenState
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: const Row(
+              content: Row(
                 children: [
-                  Icon(Icons.error, color: Colors.white),
-                  SizedBox(width: 8),
-                  Text("Notification permission denied"),
+                  Icon(Icons.error, color: Theme.of(context).colorScheme.onError),
+                  const SizedBox(width: 8),
+                  const Text("Notification permission denied"),
                 ],
               ),
-              backgroundColor: Colors.red.shade600,
+              backgroundColor: Theme.of(context).colorScheme.error,
               behavior: SnackBarBehavior.floating,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
@@ -147,14 +147,14 @@ class _NotificationPermissionScreenState
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Row(
+            content: Row(
               children: [
-                Icon(Icons.error, color: Colors.white),
-                SizedBox(width: 8),
-                Text("Failed to request permission"),
+                Icon(Icons.error, color: Theme.of(context).colorScheme.onError),
+                const SizedBox(width: 8),
+                const Text("Failed to request permission"),
               ],
             ),
-            backgroundColor: Colors.red.shade600,
+            backgroundColor: Theme.of(context).colorScheme.error,
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
@@ -307,12 +307,12 @@ class _NotificationPermissionScreenState
                                   requestNotificationPermission(ref);
                                 },
                                 icon: isLoading 
-                                  ? const SizedBox(
+                                  ? SizedBox(
                                       width: 20,
                                       height: 20,
                                       child: CircularProgressIndicator(
                                         strokeWidth: 2,
-                                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                        valueColor: AlwaysStoppedAnimation<Color>(colorScheme.onPrimary),
                                       ),
                                     )
                                   : const Icon(Icons.notifications_rounded),

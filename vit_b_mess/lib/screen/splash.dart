@@ -127,7 +127,7 @@ class _SplashScreenState extends State<SplashScreen>
                           ],
                         ),
                         child: Icon(
-                          Icons.restaurant_menu,
+                          Icons.restaurant,
                           size: 120,
                           color: colorScheme.primary,
                         ),
