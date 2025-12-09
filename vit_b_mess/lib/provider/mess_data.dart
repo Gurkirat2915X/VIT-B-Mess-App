@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
-
+import 'package:vit_b_mess/routines/mess_notification.dart'
+    as mess_notification;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:vit_b_mess/models/meals.dart';
@@ -8,6 +9,26 @@ import 'package:vit_b_mess/provider/settings.dart';
 import 'package:vit_b_mess/mess_app_info.dart' as app_info;
 import "package:http/http.dart" as http;
 part 'mess_data.g.dart';
+
+final initialMeal = Meal(nonVeg: [], veg: []);
+
+final initialMeals = Meals(
+  breakfast: initialMeal,
+  lunch: initialMeal,
+  snacks: initialMeal,
+  dinner: initialMeal,
+);
+
+final initialMessMealDays = MessMealDays(
+  mess: MessType.BoysMayuri,
+  monday: initialMeals,
+  tuesday: initialMeals,
+  wednesday: initialMeals,
+  thursday: initialMeals,
+  friday: initialMeals,
+  saturday: initialMeals,
+  sunday: initialMeals,
+);
 
 @HiveType(typeId: 1)
 enum Hostels {
@@ -45,7 +66,8 @@ Future<List<bool>> updateMessData(WidgetRef ref) async {
     var updateMessages = <bool>[false, false];
     dynamic data = await fetchMessData();
     final receivedMessAppVersion = data["data"]["messAppVersion"];
-    if (currentSettings.newUpdateVersion != receivedMessAppVersion) {
+    if (currentSettings.newUpdateVersion != receivedMessAppVersion ||
+        app_info.appVersion != receivedMessAppVersion) {
       log("New update available: $receivedMessAppVersion");
       currentSettings.newUpdateVersion = receivedMessAppVersion;
       updateMessages[0] = true;
@@ -62,6 +84,7 @@ Future<List<bool>> updateMessData(WidgetRef ref) async {
     log("Mess data version changed. Updating...");
     currentSettings.messDataVersion = messDataVersion;
     currentSettings.updatedTill = data["data"]["UpdatedTill"];
+    updateMessages[1] = true;
 
     final messData = data["data"]["data"];
     final messBox = Hive.box<MessMealDays>("mess_app_data");
@@ -71,6 +94,7 @@ Future<List<bool>> updateMessData(WidgetRef ref) async {
         .setMessData(await messSetup(messBox, messData, mess));
     await ref.read(settingsNotifier.notifier).saveSettings(currentSettings);
     log("Mess data updated successfully for ${mess.name}");
+    mess_notification.dailyNotificationInitializer();
     return updateMessages;
   } catch (e) {
     log("Error updating mess data: $e");
@@ -85,7 +109,6 @@ Future<MessMealDays> messSetup(
 ) async {
   for (MessType currentMess in MessType.values) {
     final messTypeData = messData[currentMess.name];
-    // print(messTypeData);
     List<Meals> meals = [];
     if (messTypeData == null) continue;
     for (int i = 0; i < 7; i++) {
@@ -177,55 +200,11 @@ Future<MessMealDays> setupMeals(WidgetRef ref) async {
   return messMeals;
 }
 
-class MessDataProvider extends StateNotifier<MessMealDays> {
-  MessDataProvider()
-    : super(
-        MessMealDays(
-          mess: MessType.CRCL,
-          monday: Meals(
-            breakfast: Meal(nonVeg: [], veg: []),
-            lunch: Meal(nonVeg: [], veg: []),
-            snacks: Meal(nonVeg: [], veg: []),
-            dinner: Meal(nonVeg: [], veg: []),
-          ),
-          tuesday: Meals(
-            breakfast: Meal(nonVeg: [], veg: []),
-            lunch: Meal(nonVeg: [], veg: []),
-            snacks: Meal(nonVeg: [], veg: []),
-            dinner: Meal(nonVeg: [], veg: []),
-          ),
-          wednesday: Meals(
-            breakfast: Meal(nonVeg: [], veg: []),
-            lunch: Meal(nonVeg: [], veg: []),
-            snacks: Meal(nonVeg: [], veg: []),
-            dinner: Meal(nonVeg: [], veg: []),
-          ),
-          thursday: Meals(
-            breakfast: Meal(nonVeg: [], veg: []),
-            lunch: Meal(nonVeg: [], veg: []),
-            snacks: Meal(nonVeg: [], veg: []),
-            dinner: Meal(nonVeg: [], veg: []),
-          ),
-          friday: Meals(
-            breakfast: Meal(nonVeg: [], veg: []),
-            lunch: Meal(nonVeg: [], veg: []),
-            snacks: Meal(nonVeg: [], veg: []),
-            dinner: Meal(nonVeg: [], veg: []),
-          ),
-          saturday: Meals(
-            breakfast: Meal(nonVeg: [], veg: []),
-            lunch: Meal(nonVeg: [], veg: []),
-            snacks: Meal(nonVeg: [], veg: []),
-            dinner: Meal(nonVeg: [], veg: []),
-          ),
-          sunday: Meals(
-            breakfast: Meal(nonVeg: [], veg: []),
-            lunch: Meal(nonVeg: [], veg: []),
-            snacks: Meal(nonVeg: [], veg: []),
-            dinner: Meal(nonVeg: [], veg: []),
-          ),
-        ),
-      );
+class MessDataProvider extends Notifier<MessMealDays> {
+  @override
+  MessMealDays build() {
+    return initialMessMealDays;
+  }
 
   Future<void> loadData(WidgetRef ref) async {
     final messBox = Hive.box<MessMealDays>("mess_app_data");
@@ -271,8 +250,6 @@ class MessDataProvider extends StateNotifier<MessMealDays> {
   }
 }
 
-final messDataNotifier = StateNotifierProvider<MessDataProvider, MessMealDays>((
-  ref,
-) {
-  return MessDataProvider();
-});
+final messDataNotifier = NotifierProvider<MessDataProvider, MessMealDays>(
+  MessDataProvider.new,
+);

@@ -8,9 +8,9 @@ class AppColors {
   static const Color accentOrange = Color(0xFFFF7043); // Warm orange accent
 
   // Surface colors
-  static const Color lightSurface = Color(0xFFFAFAFA);
+  static const Color lightSurface = Color(0xFFF5F5F5); // Softer grey background
   static const Color darkSurface = Color(0xFF121212);
-  static const Color cardLight = Color(0xFFFFFFFF);
+  static const Color cardLight = Color(0xFFFAFAFA); // Warm off-white for cards
   static const Color cardDark = Color(0xFF1E1E1E);
 
   // Text colors
@@ -25,15 +25,17 @@ final ThemeData messLightTheme = ThemeData(
     seedColor: AppColors.primaryGreen,
     primary: AppColors.primaryGreen,
     secondary: AppColors.accentOrange,
-    surface: AppColors.lightSurface,
+    surface: const Color(0xFFF8F8F8), // Softer warm grey
     surfaceContainerHighest: AppColors.cardLight,
     brightness: Brightness.light,
   ).copyWith(
     primaryContainer: AppColors.lightGreen.withValues(alpha: 0.15),
     secondaryContainer: AppColors.accentOrange.withValues(alpha: 0.15),
+    surfaceContainer: const Color(0xFFFAFAFA), // Slightly warmer container
   ),
-  scaffoldBackgroundColor: AppColors.lightSurface,
-
+  scaffoldBackgroundColor: const Color(
+    0xFFF5F5F5,
+  ), // Warm light grey background
   // Modern AppBar design
   appBarTheme: AppBarTheme(
     backgroundColor: Colors.transparent,
@@ -116,10 +118,10 @@ final ThemeData messLightTheme = ThemeData(
 
   // Modern card design
   cardTheme: CardThemeData(
-    color: AppColors.cardLight,
-    elevation: 2,
-    shadowColor: Colors.black.withValues(alpha: 0.1),
-    surfaceTintColor: AppColors.primaryGreen.withValues(alpha: 0.05),
+    color: const Color(0xFFFDFDFD), // Very soft off-white
+    elevation: 1,
+    shadowColor: Colors.black.withValues(alpha: 0.08),
+    surfaceTintColor: AppColors.primaryGreen.withValues(alpha: 0.03),
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
     margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
   ),
@@ -163,9 +165,11 @@ final ThemeData messLightTheme = ThemeData(
 
   // Modern navigation theme
   navigationBarTheme: NavigationBarThemeData(
-    backgroundColor: AppColors.cardLight,
-    surfaceTintColor: AppColors.primaryGreen.withValues(alpha: 0.05),
+    backgroundColor: const Color(0xFFFDFDFD), // Soft off-white
+    surfaceTintColor: AppColors.primaryGreen.withValues(alpha: 0.03),
     indicatorColor: AppColors.primaryGreen.withValues(alpha: 0.15),
+    elevation: 2,
+    shadowColor: Colors.black.withValues(alpha: 0.06),
     labelTextStyle: WidgetStateProperty.resolveWith((states) {
       if (states.contains(WidgetState.selected)) {
         return const TextStyle(
@@ -382,15 +386,12 @@ final ThemeData messDarkTheme = ThemeData(
   ),
 );
 
-
 class AppThemes {
   static ThemeData createLightTheme(ColorScheme? lightDynamic) {
     if (lightDynamic != null) {
       return ThemeData(
         useMaterial3: true,
-        colorScheme: lightDynamic.copyWith(
-          secondary: AppColors.primaryGreen,
-        ),
+        colorScheme: lightDynamic.copyWith(secondary: AppColors.primaryGreen),
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.transparent,
           elevation: 0,
@@ -401,14 +402,11 @@ class AppThemes {
     return messLightTheme;
   }
 
-
   static ThemeData createDarkTheme(ColorScheme? darkDynamic) {
     if (darkDynamic != null) {
       return ThemeData(
         useMaterial3: true,
-        colorScheme: darkDynamic.copyWith(
-          secondary: AppColors.primaryGreen,
-        ),
+        colorScheme: darkDynamic.copyWith(secondary: AppColors.primaryGreen),
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.transparent,
           elevation: 0,

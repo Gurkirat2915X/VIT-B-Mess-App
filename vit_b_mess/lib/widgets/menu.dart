@@ -19,6 +19,7 @@ class _MenuState extends ConsumerState<Menu> {
   DateTime todayDate = DateTime.now();
   Meal? currentMeal;
   int todayIndex = 0;
+  int _previousDayIndex = 0;
   String currentMealTime = "";
 
   @override
@@ -63,6 +64,7 @@ class _MenuState extends ConsumerState<Menu> {
 
   void changeDay(int day) {
     setState(() {
+      _previousDayIndex = todayIndex;
       todayIndex = day;
       messMenu = ref.read(messDataNotifier.notifier).getDayMeal(day);
       if (messMenu != null) {
@@ -100,7 +102,7 @@ class _MenuState extends ConsumerState<Menu> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const SizedBox(height: 18), 
+          const SizedBox(height: 18),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -123,7 +125,49 @@ class _MenuState extends ConsumerState<Menu> {
           const SizedBox(height: 16),
           WeekDays(selectedDay: todayIndex, onDaySelected: changeDay),
           const SizedBox(height: 16),
-          MealWidget(currentMeal: currentMeal!),
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 350),
+            switchInCurve: Curves.easeInOut,
+            switchOutCurve: Curves.easeInOut,
+            layoutBuilder: (
+              Widget? currentChild,
+              List<Widget> previousChildren,
+            ) {
+              return Stack(
+                alignment: Alignment.topCenter,
+                children: <Widget>[
+                  ...previousChildren,
+                  if (currentChild != null) currentChild,
+                ],
+              );
+            },
+            transitionBuilder: (Widget child, Animation<double> animation) {
+              final key = child.key;
+              final isEntering =
+                  key is ValueKey<int> && key.value == todayIndex;
+
+              // Horizontal slide for day changes
+              final offset =
+                  isEntering
+                      ? Offset(todayIndex > _previousDayIndex ? 1.0 : -1.0, 0.0)
+                      : Offset(
+                        todayIndex > _previousDayIndex ? -1.0 : 1.0,
+                        0.0,
+                      );
+
+              return SlideTransition(
+                position: Tween<Offset>(
+                  begin: offset,
+                  end: Offset.zero,
+                ).animate(animation),
+                child: child,
+              );
+            },
+            child: MealWidget(
+              key: ValueKey<int>(todayIndex),
+              currentMeal: currentMeal!,
+            ),
+          ),
           const SizedBox(height: 16),
           MealChanger(
             currentMeals: messMenu!,

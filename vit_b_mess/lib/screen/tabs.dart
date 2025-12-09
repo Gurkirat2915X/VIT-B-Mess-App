@@ -14,6 +14,7 @@ import 'package:vit_b_mess/widgets/preference.dart';
 import 'package:vit_b_mess/mess_app_info.dart' as app_info;
 import 'package:permission_handler/permission_handler.dart';
 import "package:firebase_messaging/firebase_messaging.dart";
+import 'package:vit_b_mess/provider/mess_data.dart';
 
 Future<bool> checkPermissionGranted() async {
   final notificationStatus = await Permission.notification.status;
@@ -23,6 +24,32 @@ Future<bool> checkPermissionGranted() async {
     return true;
   } else {
     return false;
+  }
+}
+
+Future<String> checkLastUpdatedMessData(WidgetRef ref) async {
+  final settings = ref.read(settingsNotifier.notifier).getSettings();
+  final lastUpdatedOn = settings.dataLastUpdatedOn;
+  if (lastUpdatedOn == null ||
+      DateTime.now().difference(lastUpdatedOn).inDays >= 7) {
+    log("Mess data last updated more than 7 days ago, updating mess data");
+    String updateMessage = "";
+    final updateInfo = await updateMessData(ref);
+    settings.dataLastUpdatedOn = DateTime.now();
+    await ref.read(settingsNotifier.notifier).saveSettings(settings);
+    if (updateInfo[0] & updateInfo[1]) {
+      updateMessage += "App Update Available and Mess Data Updated.";
+    } else if (updateInfo[0]) {
+      updateMessage += "App Update Available.";
+    } else if (updateInfo[1]) {
+      updateMessage += "Mess Data Updated.";
+    } else {
+      updateMessage = "No New Updates Available.";
+    }
+    return updateMessage;
+  } else {
+    log("Mess data is up to date, no need to update");
+    return "";
   }
 }
 
@@ -86,6 +113,35 @@ class _TabsState extends ConsumerState<Tabs> {
       }
     });
     setupPushNotifications();
+    checkLastUpdatedMessData(ref).then((message) {
+      if (message.isNotEmpty && mounted) {
+        final colorScheme = Theme.of(context).colorScheme;
+        final bool isUpdate =
+            message.contains("Update Available") || message.contains("Updated");
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                Icon(
+                  isUpdate ? Icons.check_circle : Icons.info,
+                  color:
+                      isUpdate
+                          ? colorScheme.onPrimary
+                          : colorScheme.onSecondary,
+                ),
+                const SizedBox(width: 8),
+                Expanded(child: Text(message)),
+              ],
+            ),
+            backgroundColor: colorScheme.primary,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+        );
+      }
+    });
   }
 
   @override
@@ -127,47 +183,53 @@ class _TabsState extends ConsumerState<Tabs> {
             ),
           ),
         ),
-        title: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: colorScheme.primary.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Hero(
-                tag: const ValueKey("Icon"),
-                child: Icon(
-                  Icons.restaurant,
-                  color: colorScheme.primary,
-                  size: 28,
+        title: LayoutBuilder(
+          builder: (context, constraints) {
+            return Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: colorScheme.primary.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Hero(
+                    tag: const ValueKey("Icon"),
+                    child: Icon(
+                      Icons.restaurant,
+                      color: colorScheme.primary,
+                      size: 28,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "VIT-B Mess",
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: -0.5,
-                    ),
-                    overflow: TextOverflow.ellipsis,
+                const SizedBox(width: 16),
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        "VIT-B Mess",
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: -0.5,
+                          color: colorScheme.primary,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        "Your daily meal companion",
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: colorScheme.primary.withValues(alpha: 0.7),
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
                   ),
-                  Text(
-                    "Your daily meal companion",
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: colorScheme.onSurface.withValues(alpha: 0.7),
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-            ),
-          ],
+                ),
+              ],
+            );
+          },
         ),
         actions: [
           if (settings.newUpdateVersion != settings.version)
@@ -181,15 +243,19 @@ class _TabsState extends ConsumerState<Tabs> {
                   }
                 },
                 style: FilledButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
                   minimumSize: const Size(0, 32),
+                  textStyle: const TextStyle(inherit: false),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const Icon(Icons.system_update_rounded, size: 16),
                     const SizedBox(width: 4),
-                    const Text("Update"),
+                    const Text("Update", style: TextStyle(inherit: false)),
                   ],
                 ),
               ),
@@ -241,7 +307,7 @@ class _TabsState extends ConsumerState<Tabs> {
             NavigationDestination(
               icon: Icon(Icons.tune_outlined),
               selectedIcon: Icon(Icons.tune),
-              label: "Settings",
+              label: "Preferences",
             ),
             NavigationDestination(
               icon: Icon(Icons.info_outline),

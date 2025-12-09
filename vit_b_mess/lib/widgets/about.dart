@@ -6,7 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class About extends ConsumerStatefulWidget {
   const About({super.key});
-  
+
   @override
   ConsumerState<About> createState() => _AboutState();
 }
@@ -16,44 +16,40 @@ class _AboutState extends ConsumerState<About> with TickerProviderStateMixin {
   late AnimationController _fadeController;
   late Animation<Offset> _slideAnimation;
   late Animation<double> _fadeAnimation;
-  
+
   @override
   void initState() {
     super.initState();
-    
+
     _slideController = AnimationController(
       duration: const Duration(milliseconds: 800),
       vsync: this,
     );
-    
+
     _fadeController = AnimationController(
       duration: const Duration(milliseconds: 600),
       vsync: this,
     );
-    
+
     _slideAnimation = Tween<Offset>(
       begin: const Offset(0, 0.3),
       end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _slideController,
-      curve: Curves.easeOutCubic,
-    ));
-    
+    ).animate(
+      CurvedAnimation(parent: _slideController, curve: Curves.easeOutCubic),
+    );
+
     _fadeAnimation = Tween<double>(
       begin: 0.0,
       end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _fadeController,
-      curve: Curves.easeOut,
-    ));
-    
+    ).animate(CurvedAnimation(parent: _fadeController, curve: Curves.easeOut));
+
     // Start animations
     _fadeController.forward();
     Future.delayed(const Duration(milliseconds: 200), () {
       _slideController.forward();
     });
   }
-  
+
   @override
   void dispose() {
     _slideController.dispose();
@@ -89,11 +85,21 @@ class _AboutState extends ConsumerState<About> with TickerProviderStateMixin {
                         width: 2,
                       ),
                     ),
-                    child: Icon(Icons.restaurant, size: 50, color: colorScheme.primary),
+                    child: Icon(
+                      Icons.restaurant,
+                      size: 50,
+                      color: colorScheme.primary,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 16),
-                Text("VIT-B Mess", style: textTheme.headlineSmall),
+                Text(
+                  "VIT-B Mess",
+                  style: textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: colorScheme.primary,
+                  ),
+                ),
                 const SizedBox(height: 24),
                 Container(
                   decoration: BoxDecoration(
@@ -118,10 +124,18 @@ class _AboutState extends ConsumerState<About> with TickerProviderStateMixin {
                         title: Text("Version", style: textTheme.titleMedium),
                         subtitle: Text(app_info.appVersion),
                       ),
-                      Divider(height: 1, indent: 16, endIndent: 16, color: colorScheme.outline.withValues(alpha: 0.2)),
+                      Divider(
+                        height: 1,
+                        indent: 16,
+                        endIndent: 16,
+                        color: colorScheme.outline.withValues(alpha: 0.2),
+                      ),
                       ListTile(
                         leading: const FaIcon(FontAwesomeIcons.github),
-                        title: Text("Source Code", style: textTheme.titleMedium),
+                        title: Text(
+                          "Source Code",
+                          style: textTheme.titleMedium,
+                        ),
                         subtitle: const Text("View on GitHub"),
                         onTap: () async {
                           final Uri url = Uri.parse(app_info.projectLink);
@@ -155,7 +169,23 @@ class _AboutState extends ConsumerState<About> with TickerProviderStateMixin {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Update Notes", style: textTheme.titleLarge),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.auto_awesome,
+                              color: colorScheme.primary,
+                              size: 24,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              "Update Notes",
+                              style: textTheme.titleLarge?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: colorScheme.primary,
+                              ),
+                            ),
+                          ],
+                        ),
                         const SizedBox(height: 10),
                         Text(app_info.updateNotes, style: textTheme.bodyMedium),
                       ],
@@ -183,10 +213,18 @@ class _AboutState extends ConsumerState<About> with TickerProviderStateMixin {
                     children: [
                       ListTile(
                         leading: const Icon(Icons.person_outline),
-                        title: Text("Developed by", style: textTheme.titleMedium),
+                        title: Text(
+                          "Developed by",
+                          style: textTheme.titleMedium,
+                        ),
                         subtitle: Text(app_info.developedBy),
                       ),
-                      Divider(height: 1, indent: 16, endIndent: 16, color: colorScheme.outline.withValues(alpha: 0.2)),
+                      Divider(
+                        height: 1,
+                        indent: 16,
+                        endIndent: 16,
+                        color: colorScheme.outline.withValues(alpha: 0.2),
+                      ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8.0),
                         child: Row(
@@ -205,7 +243,9 @@ class _AboutState extends ConsumerState<About> with TickerProviderStateMixin {
                             IconButton(
                               icon: const FaIcon(FontAwesomeIcons.linkedin),
                               onPressed: () async {
-                                final Uri url = Uri.parse(app_info.linkedInLink);
+                                final Uri url = Uri.parse(
+                                  app_info.linkedInLink,
+                                );
                                 if (!await launchUrl(url)) {
                                   throw Exception('Could not launch $url');
                                 }
@@ -221,7 +261,10 @@ class _AboutState extends ConsumerState<About> with TickerProviderStateMixin {
                 const SizedBox(height: 24),
                 Text(
                   "This app is not affiliated with VIT.",
-                  style: textTheme.bodySmall,
+                  style: textTheme.bodySmall?.copyWith(
+                    color: colorScheme.onSurface.withValues(alpha: 0.6),
+                    fontStyle: FontStyle.italic,
+                  ),
                 ),
               ],
             ),

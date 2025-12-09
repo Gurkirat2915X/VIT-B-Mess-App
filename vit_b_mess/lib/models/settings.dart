@@ -16,6 +16,7 @@ class Settings {
     required this.newUpdateVersion,
     required this.updatedTill,
     this.notificationPermission,
+    this.dataLastUpdatedOn,
   });
 
   @HiveField(0)
@@ -48,8 +49,11 @@ class Settings {
   @HiveField(9)
   bool? notificationPermission;
 
+  @HiveField(10)
+  DateTime? dataLastUpdatedOn;
+
   String getAllInfo() {
-    return "Hostel: ${hostelType.name}, Mess: ${selectedMess.name}, Only Veg: $onlyVeg, Version: $version, First Boot: $isFirstBoot newUpdate: $newUpdate, messDataVersion: $messDataVersion, newUpdateVersion: $newUpdateVersion, updatedTill: $updatedTill, notificationPermission: $notificationPermission";
+    return "Hostel: ${hostelType.name}, Mess: ${selectedMess.name}, Only Veg: $onlyVeg, Version: $version, First Boot: $isFirstBoot newUpdate: $newUpdate, messDataVersion: $messDataVersion, newUpdateVersion: $newUpdateVersion, updatedTill: $updatedTill, notificationPermission: $notificationPermission, lastUpdatedOn: $dataLastUpdatedOn";
   }
 
   @override
