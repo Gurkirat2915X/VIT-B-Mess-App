@@ -1,0 +1,1900 @@
+{
+  "messDataVersion": "1.0.8",
+  "messAppVersion": "v1.3-stable",
+  "UpdatedTill": "9/12/25",
+  "data": {
+    "BoysMayuri": {
+      "0": {
+        "breakfast": {
+          "veg": [
+            "Idli",
+            "Vada",
+            "Peanut Chutney",
+            "Mix Fruit",
+            "Bread Butter Jam",
+            "Milk/Tea/Coffee"
+          ],
+          "nonVeg": []
+        },
+        "lunch": {
+          "veg": [
+            "Roti",
+            "Plain Dal",
+            "Jeera Rice",
+            "Kadi Pakoda",
+            "White Rice",
+            "Kara Kolumbu",
+            "Plain ButterMilk",
+            "Rasam",
+            "Fryums"
+          ],
+          "nonVeg": []
+        },
+        "snacks": {
+          "veg": ["Variety Kachori/Noodles", "Sauce", "Milk/Tea/Coffee"],
+          "nonVeg": []
+        },
+        "dinner": {
+          "veg": [
+            "Roti",
+            "Aloo White Peas Masala",
+            "White Rice",
+            "Dal Fry",
+            "Sambhar",
+            "Pickle"
+          ],
+          "nonVeg": ["Egg Masala"]
+        }
+      },
+      "1": {
+        "breakfast": {
+          "veg": [
+            "Poori/Variety of Paratha",
+            "Bhaji/Aloo Matar Masala",
+            "Chutney",
+            "Fruit",
+            "Bread Butter Jam",
+            "Milk/Tea/Coffee"
+          ],
+          "nonVeg": []
+        },
+        "lunch": {
+          "veg": [
+            "Roti",
+            "Rajma",
+            "Ghee Rice",
+            "Dal Tadka",
+            "White Rice",
+            "Sambhar",
+            "Green Kottu",
+            "Jeera Rasam",
+            "Salad",
+            "Curd"
+          ],
+          "nonVeg": []
+        },
+        "snacks": {
+          "veg": ["Burger", "Sauce", "Tea/Coffee/Milk"],
+          "nonVeg": []
+        },
+        "dinner": {
+          "veg": [
+            "Roti",
+            "Dal Fry",
+            "Rice",
+            "Dry Aloo Soya",
+            "White Rice",
+            "Rasam & Pickle",
+            "Fruit Custard/Paysam"
+          ],
+          "nonVeg": []
+        }
+      },
+      "2": {
+        "breakfast": {
+          "veg": [
+            "Onion/Veg Uttapam",
+            "Sambar",
+            "Tomato Chutney",
+            "Mix Fruit",
+            "Milk/Tea/Coffee",
+            "Sprouts"
+          ],
+          "nonVeg": ["Boiled Egg"]
+        },
+        "lunch": {
+          "veg": [
+            "Roti",
+            "Jeera Aloo",
+            "White Rice",
+            "Dal Makhani",
+            "Puli Kolambu",
+            "Avial",
+            "Garlic Rasam",
+            "Pickle",
+            "Boondi",
+            "Veg Raita"
+          ],
+          "nonVeg": []
+        },
+        "snacks": {
+          "veg": ["Samosa", "Green Chutney", "Red Chutney", "Milk/Tea/Coffee"],
+          "nonVeg": []
+        },
+        "dinner": {
+          "veg": [
+            "Roti",
+            "Plain Dal",
+            "White Rice",
+            "Butter Paneer",
+            "Rasam",
+            "Pickle"
+          ],
+          "nonVeg": ["Kadai Chicken/Chicken Masala"]
+        }
+      },
+      "3": {
+        "breakfast": {
+          "veg": [
+            "Poha",
+            "Jalebi",
+            "Pongal",
+            "Sambar",
+            "Chutney",
+            "Fruit",
+            "Bread Butter Jam",
+            "Milk/Tea/Coffee"
+          ],
+          "nonVeg": []
+        },
+        "lunch": {
+          "veg": [
+            "Poori",
+            "Pindi Chole Masala",
+            "Jeera Rice",
+            "Seasonal Veg",
+            "White Rice",
+            "Pakoda Kolumbu",
+            "Rasam",
+            "Pickle",
+            "Potato Poriyal",
+            "Salad"
+          ],
+          "nonVeg": []
+        },
+        "snacks": {
+          "veg": ["Veg Cutlet", "Sauce", "Milk/Tea/Coffee"],
+          "nonVeg": []
+        },
+        "dinner": {
+          "veg": [
+            "Roti",
+            "Aloo Tomato Jhol",
+            "White Rice",
+            "Dal Fry",
+            "Rasam",
+            "Pickle"
+          ],
+          "nonVeg": ["Egg Curry"]
+        }
+      },
+      "4": {
+        "breakfast": {
+          "veg": [
+            "Bhature",
+            "Chole Masala",
+            "Fruit",
+            "Bread Butter Jam",
+            "Milk/Tea/Coffee"
+          ],
+          "nonVeg": []
+        },
+        "lunch": {
+          "veg": [
+            "Roti",
+            "Masoor Dal",
+            "Kadhai Chana",
+            "White Rice",
+            "Rasam",
+            "Pickle",
+            "Sambhar Rice",
+            "Raw Banana Poriyal",
+            "Butter Milk"
+          ],
+          "nonVeg": []
+        },
+        "snacks": {
+          "veg": [
+            "Dal Vada/Vada Pav",
+            "Coconut Chutney/Green Chutney",
+            "Milk/Tea/Coffee"
+          ],
+          "nonVeg": []
+        },
+        "dinner": {
+          "veg": [
+            "Roti",
+            "Dal Tadka",
+            "White Rice",
+            "Matar Paneer Bhurji",
+            "Rasam",
+            "Pickle"
+          ],
+          "nonVeg": ["Butter Chicken"]
+        }
+      },
+      "5": {
+        "breakfast": {
+          "veg": [
+            "Rava Upma",
+            "Missal Pav",
+            "Chutney",
+            "Bread Butter Jam",
+            "Fruit",
+            "Milk/Tea/Coffee",
+            "Sprouts"
+          ],
+          "nonVeg": ["Boiled Egg"]
+        },
+        "lunch": {
+          "veg": [
+            "Roti",
+            "Veg Kofta",
+            "Veg Pulao",
+            "Tomato Dal",
+            "White Rice",
+            "Sambar",
+            "Beetroot Poriyal",
+            "Drumstick Rasam",
+            "Pickle",
+            "Fryums",
+            "Curd"
+          ],
+          "nonVeg": []
+        },
+        "snacks": {
+          "veg": ["Bhel Puri", "Bread Pakoda", "Sauce", "Milk/Tea/Coffee"],
+          "nonVeg": []
+        },
+        "dinner": {
+          "veg": [
+            "Roti",
+            "Fried Rice",
+            "Masala Dal",
+            "White Rice",
+            "Veg Manchurian",
+            "Aloo Bhindi",
+            "Rasam",
+            "Pickle"
+          ],
+          "nonVeg": []
+        }
+      },
+      "6": {
+        "breakfast": {
+          "veg": [
+            "Masala Dosa",
+            "Sambar",
+            "Chutney",
+            "Fruit",
+            "Bread Butter Jam",
+            "Milk/Tea/Coffee"
+          ],
+          "nonVeg": []
+        },
+        "lunch": {
+          "veg": [
+            "Roti",
+            "Masala Dal",
+            "Rasam",
+            "White Rice",
+            "Veg Biryani",
+            "Matar Paneer",
+            "Onion Cucumber Raita"
+          ],
+          "nonVeg": ["Chicken Dum Biryani (Limited Spice)"]
+        },
+        "snacks": {
+          "veg": ["Pasta/Dhokla", "Sauce", "Milk/Tea/Coffee"],
+          "nonVeg": []
+        },
+        "dinner": {
+          "veg": [
+            "Roti",
+            "Plain Rice",
+            "Dum Aloo",
+            "Masoor Dal",
+            "Rasam",
+            "Pickle",
+            "Gulab Jamun"
+          ],
+          "nonVeg": []
+        }
+      }
+    },
+    "CRCL": {
+      "0": {
+        "breakfast": {
+          "veg": [
+            "Idli Vada",
+            "Sambar",
+            "Coconut Chutney",
+            "Banana/Fruit Salad",
+            "Bread Butter Jam",
+            "Milk/Tea/Coffee"
+          ],
+          "nonVeg": []
+        },
+        "lunch": {
+          "veg": [
+            "Salad",
+            "Roti",
+            "Kadi Pakoda",
+            "Jeera Aloo",
+            "Rice",
+            "MoreKuzhambu",
+            "Rasam"
+          ],
+          "nonVeg": []
+        },
+        "snacks": {
+          "veg": ["Kachori", "Tamrind Chutney", "Milk/Tea/Coffee"],
+          "nonVeg": []
+        },
+        "dinner": {
+          "veg": [
+            "Roti",
+            "Aloo Matar Masala",
+            "Gujrati Dal",
+            "Rice",
+            "Rasam",
+            "Pickle"
+          ],
+          "nonVeg": ["Egg Curry"]
+        }
+      },
+      "1": {
+        "breakfast": {
+          "veg": [
+            "Poori",
+            "Aloo Masala/Veg Kuruma",
+            "Bread Butter Jam",
+            "Milk/Tea/Coffee",
+            "Banana/Fruit Salad"
+          ],
+          "nonVeg": []
+        },
+        "lunch": {
+          "veg": [
+            "Roti",
+            "kala Channa Sabji",
+            "Garlic Dal",
+            "Plain Rice",
+            "Andra Pappu",
+            "Brinjal Puli Kootu",
+            "Rasam",
+            "Green Chutney",
+            "Curd"
+          ],
+          "nonVeg": []
+        },
+        "snacks": {
+          "veg": ["Aloo Papdi Chat", "Milk/Tea/Coffee"],
+          "nonVeg": []
+        },
+        "dinner": {
+          "veg": [
+            "Roti",
+            "Kadai Veg",
+            "Rajasthani Dal",
+            "Matar Pulao",
+            "Rice",
+            "Rasam",
+            "Pickle",
+            "Custard",
+            "Sooji Halwa"
+          ],
+          "nonVeg": []
+        }
+      },
+      "2": {
+        "breakfast": {
+          "veg": [
+            "Uthappam",
+            "Sambar",
+            "Green Chutney",
+            "Coconut Chutney",
+            "Bread Butter Jam",
+            "Milk/Tea/Coffee"
+          ],
+          "nonVeg": []
+        },
+        "lunch": {
+          "veg": [
+            "Salad",
+            "Roti",
+            "Aloo Channa",
+            "Green Leaves Sabji",
+            "Rice",
+            "Dal Fry",
+            "Sambar",
+            "Beetroot Poriyal",
+            "Rasam",
+            "Pickle",
+            "Payasam",
+            "Sweet Boondi"
+          ],
+          "nonVeg": []
+        },
+        "snacks": {
+          "veg": ["Sambar Vada", "Milk/Tea/Coffee"],
+          "nonVeg": []
+        },
+        "dinner": {
+          "veg": [
+            "Roti",
+            "Rice",
+            "Plain Dal",
+            "Variety Paneer",
+            "Rasam",
+            "Pickle"
+          ],
+          "nonVeg": ["Variety Chicken"]
+        }
+      },
+      "3": {
+        "breakfast": {
+          "veg": [
+            "Pav Bhaji",
+            "Upma",
+            "Chutney",
+            "Sprouts",
+            "Bread Butter Jam",
+            "Milk/Tea/Coffee"
+          ],
+          "nonVeg": ["Boiled Egg"]
+        },
+        "lunch": {
+          "veg": [
+            "Roti",
+            "Aloo Palak",
+            "Tomato Dal",
+            "Veg Pulao",
+            "Plain Rice",
+            "Kara Kozhambu",
+            "Greens Koottu",
+            "Rasam",
+            "Pickle",
+            "Butter Milk"
+          ],
+          "nonVeg": []
+        },
+        "snacks": {
+          "veg": ["Samosa", "Chilli Garlic Chutney", "Milk/Tea/Coffee"],
+          "nonVeg": []
+        },
+        "dinner": {
+          "veg": [
+            "Roti",
+            "Meal Maker Matar Masala",
+            "Punjabi Dal",
+            "Rice",
+            "Sambhar",
+            "Pickle"
+          ],
+          "nonVeg": []
+        }
+      },
+      "4": {
+        "breakfast": {
+          "veg": [
+            "Masala Dosa",
+            "Sambar",
+            "Chutney",
+            "Banana/Fruit Salad",
+            "Bread Butter Jam",
+            "Milk/Tea/Coffee"
+          ],
+          "nonVeg": []
+        },
+        "lunch": {
+          "veg": [
+            "Chapathi",
+            "Rice",
+            "Tomato Gravy",
+            "Dal Makhani",
+            "Rasam",
+            "Fryums",
+            "Sambar",
+            "Raw Banana Poriyal",
+            "Pickle"
+          ],
+          "nonVeg": []
+        },
+        "snacks": {
+          "veg": ["Sweet Corn & Peanut/Chana Sundal", "Milk/Tea/Coffee"],
+          "nonVeg": []
+        },
+        "dinner": {
+          "veg": [
+            "Onion Cucumber Raita",
+            "Roti",
+            "Veg Biryani",
+            "Paneer Mutter Masala",
+            "Punjabi Dal"
+          ],
+          "nonVeg": ["Chicken Biryani"]
+        }
+      },
+      "5": {
+        "breakfast": {
+          "veg": [
+            "Indori Poha",
+            "Jalebi",
+            "Banana",
+            "Sambar",
+            "Bread Butter Jam",
+            "Sprouts",
+            "Milk/Tea/Coffee"
+          ],
+          "nonVeg": ["Boiled Egg"]
+        },
+        "lunch": {
+          "veg": [
+            "Roti",
+            "Rajma",
+            "Jeera Rice",
+            "Mix Veg",
+            "Rice",
+            "Pakoda Kuzhambu",
+            "Rasam",
+            "Mix Veg Poriyal",
+            "Pickle"
+          ],
+          "nonVeg": []
+        },
+        "snacks": {
+          "veg": ["Dahi Vada", "Vada Pao", "Milk/Tea/Coffee"],
+          "nonVeg": []
+        },
+        "dinner": {
+          "veg": [
+            "Roti",
+            "Fried Rice",
+            "Manchurian",
+            "Rice",
+            "Dal Fry",
+            "Sambar",
+            "Gulab Jamun"
+          ],
+          "nonVeg": []
+        }
+      },
+      "6": {
+        "breakfast": {
+          "veg": [
+            "Bhatura",
+            "Chole Masala",
+            "Banana/Fruit Salad",
+            "Bread Butter Jam",
+            "Milk/Tea/Coffee"
+          ],
+          "nonVeg": []
+        },
+        "lunch": {
+          "veg": [
+            "Boondi Raita",
+            "Veg Biryani",
+            "Roti",
+            "Aloo Gobhi Masala",
+            "Plain Rice",
+            "Sambhar",
+            "Poriyal",
+            "Rasam",
+            "Pickle"
+          ],
+          "nonVeg": []
+        },
+        "snacks": {
+          "veg": ["Dhokla", "Pasta", "Green Chutney", "Milk/Tea/Coffee"],
+          "nonVeg": []
+        },
+        "dinner": {
+          "veg": [
+            "Roti",
+            "Rice",
+            "Dal Tadka",
+            "Variety Paneer",
+            "Rasam",
+            "Pickle"
+          ],
+          "nonVeg": ["Variety Chicken"]
+        }
+      }
+    },
+    "Safal": {
+      "0": {
+        "breakfast": {
+          "veg": [
+            "Idli Vada",
+            "Sambhar",
+            "Chutney",
+            "Banana",
+            "Bread,Butter,Jam",
+            "Milk/Tea/Coffee"
+          ],
+          "nonVeg": []
+        },
+        "lunch": {
+          "veg": [
+            "Kadhai Veg/Besan Gatte Ki Sabji",
+            "Dal Tadka",
+            "Plain Rice",
+            "Roti",
+            "Mix Salad",
+            "Rice Kheer",
+            "Tamarind Kara Khuzambu",
+            "Carrot Beans Poriyal",
+            "Pepper Rasam",
+            "Pickle"
+          ],
+          "nonVeg": []
+        },
+        "snacks": {
+          "veg": ["Vada Pav/Bhel Puri", "Sauce/Chutney", "Tea/Coffee/Milk"],
+          "nonVeg": []
+        },
+        "dinner": {
+          "veg": [
+            "Veg Kolhapuri",
+            "Dal Fry",
+            "Plain Rice",
+            "Roti",
+            "South Indian Rice",
+            "Tomato Rasam",
+            "Hot & Sour Soup",
+            "Pickle"
+          ],
+          "nonVeg": ["Egg Gravy"]
+        }
+      },
+      "1": {
+        "breakfast": {
+          "veg": [
+            "Poha",
+            "Jalebi",
+            "Pongal",
+            "Chutney",
+            "Mix CutFruit Salad",
+            "Bread,Butter,Jam",
+            "Milk/Tea/Coffee"
+          ],
+          "nonVeg": []
+        },
+        "lunch": {
+          "veg": [
+            "Chhole",
+            "Mix Dal",
+            "Plain Rice",
+            "Puri",
+            "Mix Salad",
+            "South Indian Rice",
+            "Bottle Gourd Kuzhambu",
+            "Tomato Rasam",
+            "Pickle"
+          ],
+          "nonVeg": []
+        },
+        "snacks": {
+          "veg": ["Variety of Samosa", "Tea/Coffee/Milk"],
+          "nonVeg": []
+        },
+        "dinner": {
+          "veg": [
+            "Aloo Mutter Masala",
+            "Dal Tadka",
+            "Plain Rice",
+            "Roti",
+            "Pineapple Halwa",
+            "South Indian Rice",
+            "Pepper Rasam",
+            "Pickle"
+          ],
+          "nonVeg": []
+        }
+      },
+      "2": {
+        "breakfast": {
+          "veg": [
+            "Besan Chilla",
+            "Chutney",
+            "Banana",
+            "Sprouts",
+            "Bread,Butter,Jam",
+            "Milk/Tea/Coffee"
+          ],
+          "nonVeg": ["Boiled Egg"]
+        },
+        "lunch": {
+          "veg": [
+            "Veg Kofta",
+            "Dal Tadka",
+            "Mutter Pulao",
+            "Roti",
+            "Mix Salad",
+            "Sweet Boondi",
+            "South Indian Rice",
+            "Vegetable Sambhar",
+            "Paruppu Rasam",
+            "Pickle"
+          ],
+          "nonVeg": []
+        },
+        "snacks": {
+          "veg": ["Aloo Chana Chat", "Green Chutney", "Tea/Coffee/Milk"],
+          "nonVeg": []
+        },
+        "dinner": {
+          "veg": [
+            "Paneer Masala",
+            "Plain Dal",
+            "Rice",
+            "Roti",
+            "South Indian Rice",
+            "Inji Rasam (Ginger)",
+            "Veg Hakka Soup",
+            "Pickle"
+          ],
+          "nonVeg": ["Kadai Chicken Masala"]
+        }
+      },
+      "3": {
+        "breakfast": {
+          "veg": [
+            "Variety of Paratha",
+            "Aloo Bhaji",
+            "Mix CutFruit Salad",
+            "Bread,Butter,Jam",
+            "Milk/Tea/Coffee"
+          ],
+          "nonVeg": []
+        },
+        "lunch": {
+          "veg": [
+            "Mix Pulse Tadka Masala",
+            "Dal",
+            "Rice",
+            "Roti",
+            "Mix Salad",
+            "South Indian Rice",
+            "Louki More",
+            "Beetroot Poriyal",
+            "Rasam",
+            "Pickle"
+          ],
+          "nonVeg": []
+        },
+        "snacks": {
+          "veg": [
+            "Aloo Vada/Fried Idli",
+            "Tamarind Chutney",
+            "Tea/Coffee/Milk"
+          ],
+          "nonVeg": []
+        },
+        "dinner": {
+          "veg": [
+            "Green Peas Masala",
+            "Dal Fry",
+            "Butter Roti",
+            "Jeera Rice",
+            "Tomato Soup",
+            "Pepper Rasam",
+            "Pickle"
+          ],
+          "nonVeg": ["Egg Gravy"]
+        }
+      },
+      "4": {
+        "breakfast": {
+          "veg": [
+            "Uthappam",
+            "Onion Tomato Chutney",
+            "Banana",
+            "Sprouts",
+            "Bread,Butter,Jam",
+            "Milk/Tea/Coffee"
+          ],
+          "nonVeg": ["Boiled Egg"]
+        },
+        "lunch": {
+          "veg": [
+            "Mix Salad",
+            "Kadi Pakoda",
+            "Dal Fry",
+            "Rice",
+            "Roti",
+            "South Indian Rice",
+            "Brinjal Kuzhambu",
+            "Veg Aviyal",
+            "Rasam",
+            "Pickle"
+          ],
+          "nonVeg": []
+        },
+        "snacks": {
+          "veg": ["Veg Chowmin", "Tea/Coffee/Milk"],
+          "nonVeg": []
+        },
+        "dinner": {
+          "veg": [
+            "Kadai Paneer",
+            "Dal Tadka",
+            "Rice",
+            "Roti",
+            "South Indian Rice",
+            "Puli Rasam",
+            "Hot & Sour Soup",
+            "Pickle"
+          ],
+          "nonVeg": ["Butter Chicken"]
+        }
+      },
+      "5": {
+        "breakfast": {
+          "veg": [
+            "Chhole Bhature",
+            "Mix CutFruit Salad",
+            "Bread,Butter,Jam",
+            "Milk/Tea/Coffee"
+          ],
+          "nonVeg": []
+        },
+        "lunch": {
+          "veg": [
+            "Aloo Jeera Dry",
+            "Mix Dal",
+            "Jeera Rice",
+            "Roti",
+            "Mix Salad",
+            "South Indian Rice",
+            "Potato Poriyal",
+            "Pepper Rasam",
+            "Pickle"
+          ],
+          "nonVeg": []
+        },
+        "snacks": {
+          "veg": ["Dhokla", "Green Chutney", "Tea/Coffee/Milk"],
+          "nonVeg": []
+        },
+        "dinner": {
+          "veg": [
+            "Gobhi Mutter Masala",
+            "Jeera Rice",
+            "Dal Fry",
+            "Roti",
+            "South Indian Rice",
+            "Pepper Rasam",
+            "Pickle"
+          ],
+          "nonVeg": []
+        }
+      },
+      "6": {
+        "breakfast": {
+          "veg": [
+            "Masala Dosa/Mix Veg Dosa",
+            "Sambhar",
+            "Chutney",
+            "Sprouts",
+            "Banana",
+            "Bread,Butter,Jam",
+            "Tea/Coffee/Milk"
+          ],
+          "nonVeg": ["Boiled Egg"]
+        },
+        "lunch": {
+          "veg": [
+            "Onion Raita",
+            "Dal Kolhapuri",
+            "Veg Biryani",
+            "Roti",
+            "Butter Paneer Masala",
+            "Pickle"
+          ],
+          "nonVeg": ["Chicken Biryani"]
+        },
+        "snacks": {
+          "veg": ["White Sauce Pasta", "Sauce/Chutney", "Tea/Coffee/Milk"],
+          "nonVeg": []
+        },
+        "dinner": {
+          "veg": [
+            "Aloo Soya Badi Masala",
+            "Dal Makhani",
+            "Rice",
+            "Roti",
+            "South Indian Rice",
+            "Bhindi Poriyal",
+            "Paruppu Rasam",
+            "Veg Sorba Soup",
+            "Gulab Jamun"
+          ],
+          "nonVeg": []
+        }
+      }
+    },
+    "JMB": {
+      "0": {
+        "breakfast": {
+          "veg": [
+            "Idli Vada",
+            "Sambhar",
+            "Assorted Chutney",
+            "Fruit/Banana",
+            "Bread,Butter,Jam",
+            "Milk/Tea/Coffee"
+          ],
+          "nonVeg": []
+        },
+        "lunch": {
+          "veg": [
+            "Buttermilk",
+            "Aloo Matar Jhol Wali",
+            "Yellow Dal",
+            "Jeera Rice",
+            "Tawa Roti",
+            "Fryums",
+            "Fresh Salad",
+            "Boondi Raita"
+          ],
+          "nonVeg": []
+        },
+        "snacks": {
+          "veg": ["Aloo Pyaz Ki Kachori", "Green Chutney", "Milk/Tea/Coffee"],
+          "nonVeg": []
+        },
+        "dinner": {
+          "veg": [
+            "Tawa Roti",
+            "Punjabi Dum Aloo",
+            "Steam Rice",
+            "Dal Fry",
+            "Noodles",
+            "Manchurian",
+            "Fresh Salad",
+            "Pickle"
+          ],
+          "nonVeg": []
+        }
+      },
+      "1": {
+        "breakfast": {
+          "veg": [
+            "Aloo Matar Paratha",
+            "Mint Curd",
+            "Sprouts Salad",
+            "Fruit",
+            "Bread,Butter,Jam",
+            "Milk/Tea/Coffee"
+          ],
+          "nonVeg": []
+        },
+        "lunch": {
+          "veg": [
+            "Punjabi Chole",
+            "Ghee Rice",
+            "Dal Tadka",
+            "Tawa Roti",
+            "Punjabi Khada Salad",
+            "Fryums",
+            "Veg Raita",
+            "Mango Pickle"
+          ],
+          "nonVeg": []
+        },
+        "snacks": {
+          "veg": ["Sandwich", "Ketchup/Chutney", "Milk/Tea/Coffee"],
+          "nonVeg": []
+        },
+        "dinner": {
+          "veg": [
+            "Tawa Roti",
+            "Dry Bhindi Masala",
+            "Seasonal Veg",
+            "Aloo Gobhi Masala",
+            "Yellow Dal",
+            "Jeera Rice",
+            "Moong Dal Halwa",
+            "Pickle"
+          ],
+          "nonVeg": []
+        }
+      },
+      "2": {
+        "breakfast": {
+          "veg": [
+            "Masala Dal with Chutney",
+            "Pakwan",
+            "Chickpeas Salad",
+            "Fruit/Banana",
+            "Bread,Butter,Jam",
+            "Milk/Tea/Coffee"
+          ],
+          "nonVeg": []
+        },
+        "lunch": {
+          "veg": [
+            "Jeera Aloo",
+            "Hari Mirch Dal Tadka",
+            "Rice",
+            "Tawa Roti",
+            "Fresh Salad with Onion",
+            "Fryums",
+            "Khajoor Ki Launji",
+            "Tadke Wala Dahi"
+          ],
+          "nonVeg": []
+        },
+        "snacks": {
+          "veg": ["Samosa", "Mint Chutney", "Milk/Tea/Coffee"],
+          "nonVeg": []
+        },
+        "dinner": {
+          "veg": [
+            "Tawa Roti",
+            "Dal Hari Mirch",
+            "Seasonal Veg",
+            "Rajma Masala",
+            "Matar Pulao",
+            "Fresh Salad",
+            "Pickle",
+            "Chilli Soya Paneer"
+          ],
+          "nonVeg": []
+        }
+      },
+      "3": {
+        "breakfast": {
+          "veg": [
+            "Uthappam",
+            "Sambar",
+            "Chutney",
+            "Fruits",
+            "Bread,Butter,Jam",
+            "Milk/Tea/Coffee"
+          ],
+          "nonVeg": []
+        },
+        "lunch": {
+          "veg": [
+            "Tadke Wali Chach",
+            "Gatte ki Sabji",
+            "Veg Pulao",
+            "Tomato Dal",
+            "White Rice",
+            "Sada Bati",
+            "Churma",
+            "Chutney",
+            "Papad Churi"
+          ],
+          "nonVeg": []
+        },
+        "snacks": {
+          "veg": ["Vada Pao", "Fried Green Chilli", "Milk/Tea/Coffee"],
+          "nonVeg": []
+        },
+        "dinner": {
+          "veg": [
+            "Dahi Aloo Tikki Fried",
+            "Tomato Soup",
+            "Tawa Roti",
+            "Jeera Rice",
+            "Dal Tadka",
+            "Pickle",
+            "Fresh Salad",
+            "Sev Tamatar"
+          ],
+          "nonVeg": []
+        }
+      },
+      "4": {
+        "breakfast": {
+          "veg": [
+            "Bhatura",
+            "Chole Masala",
+            "Fruit",
+            "Bread,Butter,Jam",
+            "Milk/Tea/Coffee"
+          ],
+          "nonVeg": []
+        },
+        "lunch": {
+          "veg": [
+            "Aloo Gobhi Masala",
+            "Chhole Masala",
+            "Veg Pulao",
+            "Poori",
+            "Fresh Salad with onion",
+            "Fryums",
+            "Kesariya Kheer",
+            "Achar",
+            "Juice"
+          ],
+          "nonVeg": []
+        },
+        "snacks": {
+          "veg": ["Corn Masala/Bhel", "Khaman", "Milk/Tea/Coffee"],
+          "nonVeg": []
+        },
+        "dinner": {
+          "veg": [
+            "Tawa Roti",
+            "Kali Dal",
+            "Rice",
+            "Mix Veg Dry",
+            "Matar Tamatar Semi Gravy",
+            "Fresh Salad",
+            "Pickle"
+          ],
+          "nonVeg": []
+        }
+      },
+      "5": {
+        "breakfast": {
+          "veg": [
+            "Masala Dosa",
+            "Sambhar",
+            "Assorted Chutney",
+            "Fruit/Banana",
+            "Bread,Butter,Jam",
+            "Milk/Tea/Coffee"
+          ],
+          "nonVeg": []
+        },
+        "lunch": {
+          "veg": [
+            "Mix Veg",
+            "Rajma Masala",
+            "Jeera Rice",
+            "Hari Mirch Dal Tadka",
+            "Boondi Raita",
+            "Tawa Roti",
+            "Pickle",
+            "Fryums",
+            "Fresh Salad"
+          ],
+          "nonVeg": []
+        },
+        "snacks": {
+          "veg": ["Bread Pakoda", "Green Chutney", "Milk/Tea/Coffee"],
+          "nonVeg": []
+        },
+        "dinner": {
+          "veg": [
+            "Tawa Roti",
+            "Aloo Kanada Masala Rice",
+            "Vegetable Raita",
+            "Dal Fry",
+            "Methi Curry Kofta",
+            "Fresh Salad",
+            "Pickle"
+          ],
+          "nonVeg": []
+        }
+      },
+      "6": {
+        "breakfast": {
+          "veg": [
+            "Usal",
+            "Poha",
+            "Jalebi",
+            "Fruit",
+            "Bread,Butter,Jam",
+            "Milk/Tea/Coffee"
+          ],
+          "nonVeg": []
+        },
+        "lunch": {
+          "veg": [
+            "Paneer Chana",
+            "Dal Makhani",
+            "Veg Jalfrezi",
+            "Biryani",
+            "Tawa Roti",
+            "Salad",
+            "Fryums",
+            "Pickle",
+            "Cucumber Raita"
+          ],
+          "nonVeg": []
+        },
+        "snacks": {
+          "veg": ["White Sauce Pasta", "Milk/Tea/Coffee"],
+          "nonVeg": []
+        },
+        "dinner": {
+          "veg": [
+            "Tawa Roti",
+            "Paneer Lababdar",
+            "Seasonal Veg",
+            "Dal Tadka",
+            "Jeera Rice",
+            "Fresh Salad with Onion",
+            "Pickle"
+          ],
+          "nonVeg": []
+        }
+      }
+    },
+    "GirlsMayuri": {
+      "0": {
+        "breakfast": {
+          "veg": [
+            "Pav Bhaji",
+            "Vermicelli Khichdi",
+            "Chutney",
+            "Bread",
+            "Butter",
+            "Jam",
+            "Tea/Coffee/Milk",
+            "Fruits"
+          ],
+          "nonVeg": ["Boiled Egg"]
+        },
+        "lunch": {
+          "veg": [
+            "Roti",
+            "Rajma Masala",
+            "Veg Pulao",
+            "Aloo 65",
+            "White Rice",
+            "Sarokai Koottu",
+            "Tomato Rasam",
+            "Cut Lemon",
+            "Beetroot Cucumber Carrot Salad",
+            "Khichdi"
+          ],
+          "nonVeg": []
+        },
+        "snacks": {
+          "veg": ["White Sundal/Black Chana Sundal", "Tea/Coffee/Milk"],
+          "nonVeg": []
+        },
+        "dinner": {
+          "veg": [
+            "Chappathi",
+            "Aloo Soya Gravy/Aloo Gobi Masala",
+            "White Rice",
+            "Chowli Masala",
+            "Sambar",
+            "Pickle",
+            "Khichdi"
+          ],
+          "nonVeg": ["Egg Bhurji"]
+        }
+      },
+      "1": {
+        "breakfast": {
+          "veg": [
+            "Aloo Paratha",
+            "Rava Khichdi",
+            "Coconut Chutney",
+            "Bread",
+            "Butter",
+            "Jam",
+            "Papaya",
+            "Tea/Coffee/Milk"
+          ],
+          "nonVeg": [""]
+        },
+        "lunch": {
+          "veg": [
+            "Roti",
+            "Channa Masala",
+            "Dal Tadka",
+            "White Rice",
+            "Sambhar",
+            "Lemon Rice",
+            "Raw Banana Poriyal",
+            "Pepper Rasam",
+            "Fryums",
+            "Butter Milk",
+            "Khichdi"
+          ],
+          "nonVeg": []
+        },
+        "snacks": {
+          "veg": ["White/Red Sauce Pasta", "Tea/Coffee/Milk"],
+          "nonVeg": []
+        },
+        "dinner": {
+          "veg": [
+            "Coriander Chapathi",
+            "White Rice, Puli Sadhan(Rice)",
+            "Masala Dal",
+            "Veg 65",
+            "Kashmiri Dum Aloo",
+            "Mohan Thal",
+            "Daliya",
+            "Rasam",
+            "Pickle"
+          ],
+          "nonVeg": []
+        }
+      },
+      "2": {
+        "breakfast": {
+          "veg": [
+            "Poha",
+            "Jalebi",
+            "Pongal",
+            "Chutney",
+            "Bread",
+            "Butter",
+            "Jam",
+            "Tea/Coffee/Milk",
+            "Fruits",
+            "Sprouts"
+          ],
+          "nonVeg": []
+        },
+        "lunch": {
+          "veg": [
+            "Roti",
+            "Aloo Tomato Jhol",
+            "Mint Rice",
+            "Moong Dal",
+            "Bhindi More Kolambu",
+            "kara Poriyal",
+            "Rasam",
+            "Pickle",
+            "Salad",
+            "Sahi Tukda/Besan Ladoo",
+            "Khichdi",
+            "Curd"
+          ],
+          "nonVeg": []
+        },
+        "snacks": {
+          "veg": [
+            "Samosa/Kachori",
+            "Green Chutney/Red Chutney",
+            "Tea/Coffee/Milk"
+          ],
+          "nonVeg": []
+        },
+        "dinner": {
+          "veg": [
+            "Butter Roti",
+            "Dal Tadka",
+            "Matar Paneer Bhurji",
+            "White Rice",
+            "Rasam & Pickle",
+            "Khichdi"
+          ],
+          "nonVeg": ["Butter Chicken"]
+        }
+      },
+      "3": {
+        "breakfast": {
+          "veg": [
+            "Idli Vada",
+            "Sambar",
+            "Peanut Chutney",
+            "Bread",
+            "Butter",
+            "Jam",
+            "Tea/Coffee/Milk",
+            "Fruits"
+          ],
+          "nonVeg": []
+        },
+        "lunch": {
+          "veg": [
+            "Roti",
+            "Jeera Aloo",
+            "Jeera Rice",
+            "Dal Tadka",
+            "White Rice",
+            "Curd Rice",
+            "Cabbage Peas Poriyal",
+            "Ennai Katrakai",
+            "Drumstick Rasam",
+            "Pickle & Pappad",
+            "Khichdi"
+          ],
+          "nonVeg": []
+        },
+        "snacks": {
+          "veg": ["Fried Idli/Dhokla", "Chutney", "Tea/Coffee/Milk"],
+          "nonVeg": []
+        },
+        "dinner": {
+          "veg": [
+            "Roti",
+            "Veg Kofta",
+            "White Rice",
+            "Moong Dal",
+            "Rasam & Pickle",
+            "Daliya"
+          ],
+          "nonVeg": ["Egg Masala"]
+        }
+      },
+      "4": {
+        "breakfast": {
+          "veg": [
+            "Onion Carrot Uttappam",
+            "Sambar",
+            "Chutney",
+            "Bread",
+            "Butter",
+            "Jam",
+            "Tea/Coffee/Milk",
+            "Fruits",
+            "Sprouts"
+          ],
+          "nonVeg": []
+        },
+        "lunch": {
+          "veg": [
+            "Butter Roti",
+            "Aloo Peanut Kundru",
+            "Green Peas Pulao",
+
+            "Channa Dal",
+            "Plain Rice",
+            "Sambar Rice",
+            "Avial",
+            "Rasam",
+            "Fryums",
+            "Salad",
+            "Sweet Boondi/Sewaiya Kheer",
+            "Khichdi"
+          ],
+          "nonVeg": []
+        },
+        "snacks": {
+          "veg": ["Sandwich/Burger", "Tea/Coffee/Milk"],
+          "nonVeg": []
+        },
+        "dinner": {
+          "veg": [
+            "Roti",
+            "Tomato Dal",
+            "White Rice",
+            "Kadai Paneer/Chilli Paneer",
+            "Rasam & Pickle",
+            "Khichdi"
+          ],
+          "nonVeg": ["Pepper Chicken"]
+        }
+      },
+      "5": {
+        "breakfast": {
+          "veg": [
+            "Bhatura",
+            "Chole Masala",
+            "Vermicelli Khichdi",
+            "Bread",
+            "Butter",
+            "Jam",
+            "Tea/Coffee/Milk",
+            "Fruits"
+          ],
+          "nonVeg": ["Boiled Egg"]
+        },
+        "lunch": {
+          "veg": [
+            "Roti",
+            "Kadi Pakoda",
+            "White Rice",
+            "Mix Dal",
+            "Mix Veg Poriyal",
+            "Pakoda Kolumbu",
+            "Rice Papad",
+            "Rasam & Pickle",
+            "Juice",
+            "Khichdi"
+          ],
+          "nonVeg": []
+        },
+        "snacks": {
+          "veg": ["Pani Puri/Dal Vada", "Coconut Chutney", "Tea/Coffee/Milk"],
+          "nonVeg": []
+        },
+        "dinner": {
+          "veg": [
+            "Jeera Chapathi",
+            "Fried Rice",
+            "Masoor Dal",
+            "Veg Manchurian",
+            "Sev Tamatar",
+            "White Rice",
+            "Rasam & Pickle",
+            "Daliya"
+          ],
+          "nonVeg": []
+        }
+      },
+      "6": {
+        "breakfast": {
+          "veg": [
+            "Masala Plain Dosa",
+            "Sambar",
+            "Chutney",
+            "Bread",
+            "Butter",
+            "Jam",
+            "Tea/Coffee/Milk",
+            "Sprouts",
+            "Fruits"
+          ],
+          "nonVeg": []
+        },
+        "lunch": {
+          "veg": [
+            "Roti",
+            "Masala Dal",
+            "Veg Biryani",
+            "Paneer Butter Masala",
+            "White Rice",
+            "Rasam",
+            "Pickle",
+            "Onion Cucumber Raita"
+          ],
+          "nonVeg": ["Chicken Dum Biryani (Limited Spice)"]
+        },
+        "snacks": {
+          "veg": ["Noodle/BhelPoori", "Sauce", "Tea/Coffee/Milk"],
+          "nonVeg": []
+        },
+        "dinner": {
+          "veg": [
+            "Roti",
+            "Dal Makhani",
+            "Matar Pulao",
+            "Kadhai Chana/Ghugni",
+            "White Rice",
+            "Gulab Jamun",
+            "Rasam & Pickle",
+            "Khichdi"
+          ],
+          "nonVeg": []
+        }
+      }
+    },
+    "AB": {
+      "0": {
+        "breakfast": {
+          "veg": [
+            "Idli",
+            "Urad Vada",
+            "Coconut Chutney",
+            "Banana",
+            "Bread Butter Jam",
+            "Milk/Tea/Coffee"
+          ],
+          "nonVeg": ["Boiled Egg"]
+        },
+        "lunch": {
+          "veg": [
+            "Chapati",
+            "Dal",
+            "Plain Rice",
+            "Veg Kofta",
+            "Pakoda Kuzhambu",
+            "Rasam",
+            "Curd",
+            "Tomato,Lemon,Onion Salad",
+            "Pickle"
+          ],
+          "nonVeg": []
+        },
+        "snacks": {
+          "veg": ["Fried Idli", "Milk/Tea/Coffee"],
+          "nonVeg": []
+        },
+        "dinner": {
+          "veg": [
+            "Phulka",
+            "Soya Chunks",
+            "Tamarind Rice",
+            "Plain Rice",
+            "Masala Dal",
+            "Paneer Bhurji",
+            "Rasam",
+            "Pickle"
+          ],
+          "nonVeg": ["Egg Bhurji"]
+        }
+      },
+      "1": {
+        "breakfast": {
+          "veg": [
+            "Pav Bhaji",
+            "Rava Khichdi",
+            "Watermelon",
+            "Bread Butter Jam",
+            "Milk/Tea/Coffee"
+          ],
+          "nonVeg": []
+        },
+        "lunch": {
+          "veg": [
+            "Chapati",
+            "Chole Masala",
+            "Plain Rice",
+            "Dal Tadka",
+            "Poondu Kuzhambu/Aviyal",
+            "Rasam",
+            "Butter Milk",
+            "Salad",
+            "Papad & Pickle",
+            "Sweet Boondi"
+          ],
+          "nonVeg": []
+        },
+        "snacks": {
+          "veg": [
+            "Dhokla",
+            "Green Chutney",
+            "Vermicelli Upma",
+            "Milk/Tea/Coffee"
+          ],
+          "nonVeg": []
+        },
+        "dinner": {
+          "veg": [
+            "Corainder Chapathi",
+            "Kadi Pakoda",
+            "Plain Rice",
+            "Plain Dal",
+            "Kushka Masala",
+            "Rasam",
+            "Custard",
+            "Pickle"
+          ],
+          "nonVeg": []
+        }
+      },
+      "2": {
+        "breakfast": {
+          "veg": [
+            "Poha",
+            "Jalebi",
+            "Sev",
+            "Pongal",
+            "Sambhar",
+            "Banana",
+            "Bread Butter Jam",
+            "Milk/Tea/Coffee"
+          ],
+          "nonVeg": ["Boiled Egg"]
+        },
+        "lunch": {
+          "veg": [
+            "Phulka",
+            "Chawli Masala",
+            "Plain Rice",
+            "Moong Dal",
+            "Cabbage Poriyal",
+            "Rasam",
+            "Fryums",
+            "Tossed Salad",
+            "Curd Rice",
+            "Pickle"
+          ],
+          "nonVeg": []
+        },
+        "snacks": {
+          "veg": ["Vada Pao/Paani Poori", "Red Sauce", "Tea/Coffee/Milk"],
+          "nonVeg": []
+        },
+        "dinner": {
+          "veg": [
+            "Phulka",
+            "Dal Tadka",
+            "Plain Rice",
+            "Paneer Pasanda",
+            "Rasam",
+            "Pickle"
+          ],
+          "nonVeg": ["Kadai Chicken"]
+        }
+      },
+      "3": {
+        "breakfast": {
+          "veg": [
+            "Aloo Paratha/Plain Paratha",
+            "Curd/Aloo Sabji",
+            "Sprouts",
+            "Papaya",
+            "Bread Butter Jam",
+            "Milk/Tea/Coffee"
+          ],
+          "nonVeg": []
+        },
+        "lunch": {
+          "veg": [
+            "Phulka",
+            "Kala Chana/Fried Vegetable",
+            "Plain Rice",
+            "Palak Dal",
+            "Veg Pulao/Sambar Rice",
+            "Poriyal",
+            "Rasam",
+            "Papad",
+            "Curd",
+            "Pickle"
+          ],
+          "nonVeg": []
+        },
+        "snacks": {
+          "veg": [
+            "Puff Veg with Sauce",
+            "Sweet Corn Masala",
+            "Tea/Coffee/Milk"
+          ],
+          "nonVeg": []
+        },
+        "dinner": {
+          "veg": [
+            "Methi chapathi",
+            "Veg Jalfrezi",
+            "Plain Rice",
+            "Mutter Sabji",
+            "Sooji Halwa",
+            "Rasam",
+            "Pickle"
+          ],
+          "nonVeg": []
+        }
+      },
+      "4": {
+        "breakfast": {
+          "veg": [
+            "Veg Uthappam",
+            "Sambar",
+            "Tomato Chutney/Kara Chutney",
+            "Banana",
+            "Bread Butter Jam",
+            "Milk/Tea/Coffee"
+          ],
+          "nonVeg": []
+        },
+        "lunch": {
+          "veg": [
+            "Phulka",
+            "Rajma Masala",
+            "Plain Rice",
+            "Kootu/Mor Kuzhambu",
+            "Aloo Fry",
+            "Rasam",
+            "Mint Rice/Tomato Rice",
+            "Semiya/Rice Kheer",
+            "Papad",
+            "Boondi Raita",
+            "Pickle"
+          ],
+          "nonVeg": []
+        },
+        "snacks": {
+          "veg": ["Paniyaram", "Milk/Tea/Coffee"],
+          "nonVeg": []
+        },
+        "dinner": {
+          "veg": [
+            "Triangle Paratha",
+            "Plain Dal",
+            "Plain Rice",
+            "Kadhai Paneer(Spicy)",
+            "Rasam",
+            "Pickle"
+          ],
+          "nonVeg": ["Butter Chicken Gravee"]
+        }
+      },
+      "5": {
+        "breakfast": {
+          "veg": [
+            "Bhatura",
+            "Poori South Aloo Masala",
+            "Chole Masala",
+            "Sprouts",
+            "Muskmelon",
+            "Bread Butter Jam",
+            "Milk/Tea/Coffee"
+          ],
+          "nonVeg": []
+        },
+        "lunch": {
+          "veg": [
+            "Chapathi",
+            "Brinjal Allo Gravee",
+            "Plain Rice",
+            "Tomato Dal",
+            "Sambar",
+            "Lemon Rice",
+            "Mix Veg Poriyal",
+            "Rasam",
+            "Fryums",
+            "Butter Milk",
+            "Pickle"
+          ],
+          "nonVeg": []
+        },
+        "snacks": {
+          "veg": [
+            "Papdi chat/Samosa",
+            "Green Chutney/Red Chutney",
+            "Tea/Coffee/Milk"
+          ],
+          "nonVeg": []
+        },
+        "dinner": {
+          "veg": [
+            "Jeera Chapathi",
+            "Veg Manchurian",
+            "Honey Chilly Potato",
+            "Fried Rice",
+            "Plain Rice",
+            "Masoor Dal",
+            "Rasam",
+            "Pickle"
+          ],
+          "nonVeg": ["Egg Curry"]
+        }
+      },
+      "6": {
+        "breakfast": {
+          "veg": [
+            "Plain Dosa",
+            "Aloo Masala",
+            "Sambar",
+            "Chutney",
+            "Watermelon",
+            "Bread Butter Jam",
+            "Tea/Coffee/Milk"
+          ],
+          "nonVeg": []
+        },
+        "lunch": {
+          "veg": [
+            "Chapathi",
+            "Masala Dal",
+            "Onion Raita",
+            "Vegetable Biryani",
+            "Paneer Gravy",
+            "Plain Rice",
+            "Rasam",
+            "Lemon Juice",
+            "Fryums",
+            "Pickle"
+          ],
+          "nonVeg": ["Chicken Dum Biryani"]
+        },
+        "snacks": {
+          "veg": ["Bhel Poori/Dahi Vada", "Milk/Tea/Coffee"],
+          "nonVeg": []
+        },
+        "dinner": {
+          "veg": [
+            "Butter Roti",
+            "Dal Makhani",
+            "Jeera Rice",
+            "Sev Tamator",
+            "Dum Aloo Masala",
+            "Plain Rice",
+            "Rasam",
+            "Gulab Jamun",
+            "Pickle"
+          ],
+          "nonVeg": []
+        }
+      }
+    }
+  }
+}
