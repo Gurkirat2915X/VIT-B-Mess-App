@@ -432,9 +432,10 @@ class _FirstSetupOptionsState extends ConsumerState<FirstSetupOptions> {
                           : const Icon(Icons.arrow_forward_rounded),
                   label: Text(
                     _isLoading ? "Setting up..." : "Get Started",
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
+                      color: colorScheme.onPrimary,
                     ),
                   ),
                   style: FilledButton.styleFrom(

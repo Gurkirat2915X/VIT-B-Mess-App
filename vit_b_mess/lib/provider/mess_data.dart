@@ -65,7 +65,7 @@ Future<List<bool>> updateMessData(WidgetRef ref) async {
     final currentSettings = ref.read(settingsNotifier);
     var updateMessages = <bool>[false, false];
     dynamic data = await fetchMessData();
-    final receivedMessAppVersion = data["data"]["messAppVersion"];
+    final receivedMessAppVersion = data["messAppVersion"];
     if (currentSettings.newUpdateVersion != receivedMessAppVersion ||
         app_info.appVersion != receivedMessAppVersion) {
       log("New update available: $receivedMessAppVersion");
@@ -74,19 +74,19 @@ Future<List<bool>> updateMessData(WidgetRef ref) async {
     } else {
       log("No new update available.");
     }
-    final messDataVersion = data["data"]["messDataVersion"];
+    final messDataVersion = data["messDataVersion"];
     if (messDataVersion == currentSettings.messDataVersion) {
       log("Mess data version is up to date. No need to update.");
-      currentSettings.updatedTill = data["data"]["UpdatedTill"];
+      currentSettings.updatedTill = data["UpdatedTill"];
       await ref.read(settingsNotifier.notifier).saveSettings(currentSettings);
       return updateMessages;
     }
     log("Mess data version changed. Updating...");
     currentSettings.messDataVersion = messDataVersion;
-    currentSettings.updatedTill = data["data"]["UpdatedTill"];
+    currentSettings.updatedTill = data["UpdatedTill"];
     updateMessages[1] = true;
 
-    final messData = data["data"]["data"];
+    final messData = data["data"];
     final messBox = Hive.box<MessMealDays>("mess_app_data");
     final mess = currentSettings.selectedMess;
     ref
@@ -164,11 +164,7 @@ Future<MessMealDays> messSetup(
 Future<dynamic> fetchMessData() async {
   http.Response data;
   try {
-    data = await http.post(
-      Uri.parse(app_info.backendLink),
-      body: json.encode({"password": app_info.backendPassword}),
-      headers: {"Content-Type": "application/json"},
-    );
+    data = await http.get(Uri.parse(app_info.backendLink));
     if (data.statusCode != 200) {
       throw Exception("Failed to load mess data: ${data.statusCode}");
     }
@@ -181,17 +177,17 @@ Future<dynamic> fetchMessData() async {
 
 Future<MessMealDays> setupMeals(WidgetRef ref) async {
   final data = await fetchMessData();
-  final messData = data["data"]["data"];
+  final messData = data["data"];
   final messBox = Hive.box<MessMealDays>("mess_app_data");
   final currentSettings = ref.read(settingsNotifier);
   final mess = currentSettings.selectedMess;
 
-  final messDataVersion = data["data"]["messDataVersion"];
+  final messDataVersion = data["messDataVersion"];
   currentSettings.messDataVersion = messDataVersion;
-  final newUpdateVersion = data["data"]["messAppVersion"];
+  final newUpdateVersion = data["messAppVersion"];
   currentSettings.newUpdateVersion = newUpdateVersion;
-  log("updated till: ${data["data"]["UpdatedTill"]}");
-  currentSettings.updatedTill = data["data"]["UpdatedTill"];
+  log("updated till: ${data["UpdatedTill"]}");
+  currentSettings.updatedTill = data["UpdatedTill"];
 
   log("Setting up meals for ${mess.name}...");
   MessMealDays messMeals = await messSetup(messBox, messData, mess);
