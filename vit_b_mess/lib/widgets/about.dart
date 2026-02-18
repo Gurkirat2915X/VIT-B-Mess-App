@@ -164,6 +164,64 @@ class _AboutState extends ConsumerState<About> with TickerProviderStateMixin {
                       ),
                     ],
                   ),
+                  child: Column(
+                    children: [
+                      ListTile(
+                        leading: const FaIcon(FontAwesomeIcons.whatsapp),
+                        title: Text(
+                          "WhatsApp Group",
+                          style: textTheme.titleMedium,
+                        ),
+                        subtitle: const Text("Join the community"),
+                        onTap: () async {
+                          final Uri url = Uri.parse(app_info.whatsappGroupLink);
+                          if (!await launchUrl(url)) {
+                            throw Exception('Could not launch $url');
+                          }
+                        },
+                      ),
+                      Divider(
+                        height: 1,
+                        indent: 16,
+                        endIndent: 16,
+                        color: colorScheme.outline.withValues(alpha: 0.2),
+                      ),
+                      ListTile(
+                        leading: const Icon(Icons.edit_document),
+                        title: Text(
+                          "Suggestions Form",
+                          style: textTheme.titleMedium,
+                        ),
+                        subtitle: const Text("Share your feedback"),
+                        onTap: () async {
+                          final Uri url = Uri.parse(
+                            app_info.suggestionsFormLink,
+                          );
+                          if (!await launchUrl(url)) {
+                            throw Exception('Could not launch $url');
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Container(
+                  decoration: BoxDecoration(
+                    color: colorScheme.surfaceContainer.withValues(alpha: 0.5),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: colorScheme.outline.withValues(alpha: 0.2),
+                      width: 1,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: colorScheme.shadow.withValues(alpha: 0.1),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(

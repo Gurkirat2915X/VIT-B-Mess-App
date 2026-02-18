@@ -27,9 +27,9 @@ class MealTime {
 
 final List<MealTime> mealTimes = [
   MealTime(breakfastAlarmId, 'Breakfast', 7, 0),
-  MealTime(lunchAlarmId, 'Lunch', 12, 0),
+  MealTime(lunchAlarmId, 'Lunch', 11, 45),
   MealTime(snackAlarmId, 'Snack', 16, 30),
-  MealTime(dinnerAlarmId, 'Dinner', 19, 0),
+  MealTime(dinnerAlarmId, 'Dinner', 18, 45),
 ];
 
 Future<void> hiveInitializer() async {
@@ -162,7 +162,7 @@ Future<void> dailyNotificationInitializer() async {
       priority: Priority.high,
       showWhen: true,
       styleInformation: BigTextStyleInformation(
-        "Your daily meal notifications have been set up. You will receive notifications for breakfast, lunch, snacks, and dinner",
+        "Your daily meal notifications have been set up.\nYou will receive notifications for breakfast, lunch, snacks, and dinner.",
         htmlFormatBigText: true,
         contentTitle: "Daily Mess Notification",
         htmlFormatContentTitle: true,
@@ -191,8 +191,8 @@ Future<void> setMealNotification(
   final String title = 'Today\'s ${mealTime.name} Menu';
   final currentMeal = getCurrentMeal(mealTime.id, currentMeals);
   final String body = """
-  Menu for ${mealTime.name}:
-  ${currentMeal.veg.isNotEmpty ? "Veg: ${currentMeal.veg.join(', ')}\n" : ""}
+  Menu for ${mealTime.name}:\n
+  ${currentMeal.veg.isNotEmpty ? "Veg: ${currentMeal.veg.join(', ')}\n" : ""}\n
   ${currentMeal.nonVeg.isNotEmpty ? "Non-Veg: ${currentMeal.nonVeg.join(', ')}" : ""}
   """;
   final NotificationDetails platformChannelSpecifics = NotificationDetails(
