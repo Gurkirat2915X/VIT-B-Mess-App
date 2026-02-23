@@ -34,7 +34,7 @@ final List<MealTime> mealTimes = [
 
 Future<void> hiveInitializer() async {
   await Hive.initFlutter();
-  
+
   // Check if adapters are already registered before registering them
   if (!Hive.isAdapterRegistered(0)) {
     Hive.registerAdapter(SettingsAdapter());
@@ -142,42 +142,42 @@ Future<void> dailyNotificationInitializer() async {
 
     final Meals currentMeals = getMealsFromStorage();
 
-  // Schedule all meal notifications
-  for (final mealTime in mealTimes) {
-    await setMealNotification(
-      flutterLocalNotificationsPlugin,
-      mealTime,
-      currentMeals,
-    );
-    log(
-      "Scheduled notification for ${mealTime.name} at ${mealTime.hour}:${mealTime.minute}",
-    );
-  }
-  const NotificationDetails platformChannelSpecifics = NotificationDetails(
-    android: AndroidNotificationDetails(
-      'meal_channel',
-      'Meal Notifications',
-      channelDescription: 'Notifications for meal times',
-      importance: Importance.max,
-      priority: Priority.high,
-      showWhen: true,
-      styleInformation: BigTextStyleInformation(
-        "Your daily meal notifications have been set up.\nYou will receive notifications for breakfast, lunch, snacks, and dinner.",
-        htmlFormatBigText: true,
-        contentTitle: "Daily Mess Notification",
-        htmlFormatContentTitle: true,
-        summaryText: 'Tap to view details',
-        htmlFormatSummaryText: true,
+    // Schedule all meal notifications
+    for (final mealTime in mealTimes) {
+      await setMealNotification(
+        flutterLocalNotificationsPlugin,
+        mealTime,
+        currentMeals,
+      );
+      log(
+        "Scheduled notification for ${mealTime.name} at ${mealTime.hour}:${mealTime.minute}",
+      );
+    }
+    const NotificationDetails platformChannelSpecifics = NotificationDetails(
+      android: AndroidNotificationDetails(
+        'meal_channel',
+        'Meal Notifications',
+        channelDescription: 'Notifications for meal times',
+        importance: Importance.max,
+        priority: Priority.high,
+        showWhen: true,
+        styleInformation: BigTextStyleInformation(
+          "Your daily meal notifications have been set up.<br>You will receive notifications for breakfast, lunch, snacks, and dinner.",
+          htmlFormatBigText: true,
+          contentTitle: "Daily Mess Notification",
+          htmlFormatContentTitle: true,
+          summaryText: 'Tap to view details',
+          htmlFormatSummaryText: true,
+        ),
       ),
-    ),
-  );
-  await flutterLocalNotificationsPlugin.show(
-    dailyMessAlarmId,
-    'Daily Mess Notification',
-    'Your daily meal notifications have been set up.',
-    platformChannelSpecifics,
-  );
-  log("Daily notifications initialized successfully.");
+    );
+    await flutterLocalNotificationsPlugin.show(
+      dailyMessAlarmId,
+      'Daily Mess Notification',
+      'Your daily meal notifications have been set up.',
+      platformChannelSpecifics,
+    );
+    log("Daily notifications initialized successfully.");
   } catch (e) {
     log("Error initializing daily notifications: $e");
   }
@@ -190,11 +190,10 @@ Future<void> setMealNotification(
 ) async {
   final String title = 'Today\'s ${mealTime.name} Menu';
   final currentMeal = getCurrentMeal(mealTime.id, currentMeals);
-  final String body = """
-  Menu for ${mealTime.name}:\n
-  ${currentMeal.veg.isNotEmpty ? "Veg: ${currentMeal.veg.join(', ')}\n" : ""}\n
-  ${currentMeal.nonVeg.isNotEmpty ? "Non-Veg: ${currentMeal.nonVeg.join(', ')}" : ""}
-  """;
+  final String body =
+      "Menu for ${mealTime.name}:<br>"
+      "${currentMeal.veg.isNotEmpty ? "Veg: ${currentMeal.veg.join(', ')}<br>" : ""}"
+      "${currentMeal.nonVeg.isNotEmpty && !vegOnly ? "Non-Veg: ${currentMeal.nonVeg.join(', ')}" : ""}";
   final NotificationDetails platformChannelSpecifics = NotificationDetails(
     android: AndroidNotificationDetails(
       'meal_channel',
@@ -224,10 +223,12 @@ Future<void> setMealNotification(
     mealTime.minute,
   );
   if (scheduledDate.isBefore(now)) {
-    log("Scheduled time for ${mealTime.name} has already passed - skipping notification");
-    return; 
+    log(
+      "Scheduled time for ${mealTime.name} has already passed - skipping notification",
+    );
+    return;
   }
-  
+
   log(
     "Scheduling ${mealTime.name} for today at ${mealTime.hour}:${mealTime.minute}",
   );

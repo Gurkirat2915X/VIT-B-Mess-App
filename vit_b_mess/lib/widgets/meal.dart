@@ -249,25 +249,25 @@ class _MealWidgetState extends ConsumerState<MealWidget>
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(5),
                 decoration: BoxDecoration(
                   color: accentColor.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(
                   icon,
                   color: accentColor,
-                  size: screenWidth > 600 ? 24 : 20,
+                  size: screenWidth > 600 ? 18 : 15,
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 8),
               Expanded(
                 child: Text(
                   title,
-                  style: textTheme.titleMedium?.copyWith(
+                  style: textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.w700,
                     color: accentColor,
-                    fontSize: screenWidth > 600 ? 18 : 16,
+                    fontSize: screenWidth > 600 ? 14 : 13,
                   ),
                 ),
               ),
@@ -284,7 +284,7 @@ class _MealWidgetState extends ConsumerState<MealWidget>
                   child: Text(
                     "Preferred",
                     style: TextStyle(
-                      fontSize: screenWidth > 600 ? 11 : 10,
+                      fontSize: screenWidth > 600 ? 10 : 9,
                       fontWeight: FontWeight.w600,
                       color: accentColor,
                     ),
@@ -292,7 +292,7 @@ class _MealWidgetState extends ConsumerState<MealWidget>
                 ),
             ],
           ),
-          SizedBox(height: screenWidth > 600 ? 16 : 12),
+          SizedBox(height: screenWidth > 600 ? 10 : 8),
           _buildItemsGrid(context, items, accentColor),
         ],
       ),
@@ -314,49 +314,52 @@ class _MealWidgetState extends ConsumerState<MealWidget>
     final verticalPadding = screenWidth > 600 ? 8.0 : 6.0;
     final fontSize = screenWidth > 600 ? 15.0 : 14.0;
 
-    return Wrap(
-      alignment: WrapAlignment.center,
-      spacing: spacing,
-      runSpacing: spacing,
-      children:
-          items.map((item) {
-            return Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: horizontalPadding,
-                vertical: verticalPadding,
-              ),
-              constraints: BoxConstraints(
-                minWidth: screenWidth > 600 ? 80 : 60,
-                maxWidth: screenWidth * 0.4, // Max 40% of screen width
-              ),
-              decoration: BoxDecoration(
-                color: colorScheme.surface,
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: accentColor.withValues(alpha: 0.3),
-                  width: 1,
+    return Center(
+      child: Wrap(
+        alignment: WrapAlignment.center,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        spacing: spacing,
+        runSpacing: spacing,
+        children:
+            items.map((item) {
+              return Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: horizontalPadding,
+                  vertical: verticalPadding,
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    color: accentColor.withValues(alpha: 0.1),
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
+                constraints: BoxConstraints(
+                  minWidth: screenWidth > 600 ? 80 : 60,
+                  maxWidth: screenWidth * 0.4, // Max 40% of screen width
+                ),
+                decoration: BoxDecoration(
+                  color: colorScheme.surface,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: accentColor.withValues(alpha: 0.3),
+                    width: 1,
                   ),
-                ],
-              ),
-              child: Text(
-                item,
-                style: textTheme.bodyMedium?.copyWith(
-                  fontWeight: FontWeight.w500,
-                  color: colorScheme.onSurface,
-                  fontSize: fontSize,
+                  boxShadow: [
+                    BoxShadow(
+                      color: accentColor.withValues(alpha: 0.1),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
                 ),
-                textAlign: TextAlign.center,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 2,
-              ),
-            );
-          }).toList(),
+                child: Text(
+                  item,
+                  style: textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.w500,
+                    color: colorScheme.onSurface,
+                    fontSize: fontSize,
+                  ),
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                ),
+              );
+            }).toList(),
+      ),
     );
   }
 

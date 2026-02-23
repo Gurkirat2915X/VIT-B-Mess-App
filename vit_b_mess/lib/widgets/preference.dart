@@ -18,8 +18,7 @@ class Preference extends ConsumerStatefulWidget {
   }
 }
 
-class _PreferenceState extends ConsumerState<Preference>
-    with TickerProviderStateMixin {
+class _PreferenceState extends ConsumerState<Preference> {
   Settings? settings;
   Hostels? selectedHostel;
   MessType? selectedMess;
@@ -27,12 +26,6 @@ class _PreferenceState extends ConsumerState<Preference>
   bool allowSave = true;
   bool _isUpdating = false;
   bool? notificationEnabled;
-
-  // Animation controllers
-  late AnimationController _slideController;
-  late AnimationController _fadeController;
-  late Animation<Offset> _slideAnimation;
-  late Animation<double> _fadeAnimation;
 
   @override
   void initState() {
@@ -42,35 +35,6 @@ class _PreferenceState extends ConsumerState<Preference>
     selectedMess = settings!.selectedMess;
     isVeg = settings!.onlyVeg;
     notificationEnabled = settings!.notificationPermission;
-
-    // Initialize animation controllers
-    _slideController = AnimationController(
-      duration: const Duration(milliseconds: 800),
-      vsync: this,
-    );
-
-    _fadeController = AnimationController(
-      duration: const Duration(milliseconds: 600),
-      vsync: this,
-    );
-
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.3),
-      end: Offset.zero,
-    ).animate(
-      CurvedAnimation(parent: _slideController, curve: Curves.easeOutCubic),
-    );
-
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(parent: _fadeController, curve: Curves.easeOut));
-
-    // Start animations
-    _fadeController.forward();
-    Future.delayed(const Duration(milliseconds: 200), () {
-      _slideController.forward();
-    });
   }
 
   void onClickOkay() async {
@@ -211,8 +175,6 @@ class _PreferenceState extends ConsumerState<Preference>
 
   @override
   void dispose() {
-    _slideController.dispose();
-    _fadeController.dispose();
     super.dispose();
   }
 
@@ -221,267 +183,256 @@ class _PreferenceState extends ConsumerState<Preference>
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
 
-    return FadeTransition(
-      opacity: _fadeAnimation,
-      child: SlideTransition(
-        position: _slideAnimation,
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 24, 16, 40),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 24, 16, 40),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.tune, color: colorScheme.primary, size: 28),
-                    const SizedBox(width: 8),
-                    Text(
-                      "Preferences",
-                      style: textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: colorScheme.primary,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                Container(
-                  padding: const EdgeInsets.all(16.0),
-                  decoration: BoxDecoration(
-                    color: colorScheme.surfaceContainer.withValues(alpha: 0.5),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: colorScheme.outline.withValues(alpha: 0.2),
-                      width: 1,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: colorScheme.shadow.withValues(alpha: 0.1),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
+                Icon(Icons.tune, color: colorScheme.primary, size: 28),
+                const SizedBox(width: 8),
+                Text(
+                  "Preferences",
+                  style: textTheme.headlineMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: colorScheme.primary,
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text("Hostel Type", style: textTheme.titleLarge),
-                      const SizedBox(height: 8),
-                      Wrap(
-                        spacing: 8,
-                        alignment: WrapAlignment.center,
-                        children:
-                            Hostels.values
-                                .map(
-                                  (hostel) => ChoiceChip(
-                                    label: Text(hostel.name),
-                                    selected: selectedHostel == hostel,
-                                    selectedColor: colorScheme.primaryContainer,
-                                    backgroundColor: colorScheme.surface,
-                                    labelStyle: TextStyle(
-                                      color:
-                                          selectedHostel == hostel
-                                              ? colorScheme.onPrimaryContainer
-                                              : colorScheme.onSurface,
-                                    ),
-                                    side: BorderSide(
-                                      color:
-                                          selectedHostel == hostel
-                                              ? colorScheme.primary
-                                              : colorScheme.outline.withValues(
-                                                alpha: 0.2,
-                                              ),
-                                      width: selectedHostel == hostel ? 2 : 1,
-                                    ),
-                                    onSelected: (bool selected) {
-                                      if (selected) {
-                                        setState(() {
-                                          selectedMess = null;
-                                          selectedHostel = hostel;
-                                        });
-                                      }
-                                    },
-                                  ),
-                                )
-                                .toList(),
-                      ),
-                      const SizedBox(height: 16),
-                      Text("Select Mess", style: textTheme.titleLarge),
-                      const SizedBox(height: 8),
-                      Wrap(
-                        spacing: 8.0,
-                        children:
-                            MessType.getMess(selectedHostel!)
-                                .map(
-                                  (mess) => ChoiceChip(
-                                    label: Text(mess.name),
-                                    selected: selectedMess == mess,
-                                    selectedColor: colorScheme.primaryContainer,
-                                    backgroundColor: colorScheme.surface,
-                                    labelStyle: TextStyle(
-                                      color:
-                                          selectedMess == mess
-                                              ? colorScheme.onPrimaryContainer
-                                              : colorScheme.onSurface,
-                                    ),
-                                    side: BorderSide(
-                                      color:
-                                          selectedMess == mess
-                                              ? colorScheme.primary
-                                              : colorScheme.outline.withValues(
-                                                alpha: 0.2,
-                                              ),
-                                      width: selectedMess == mess ? 2 : 1,
-                                    ),
-                                    onSelected: (bool selected) {
-                                      setState(() {
-                                        selectedMess = mess;
-                                      });
-                                    },
-                                  ),
-                                )
-                                .toList(),
-                      ),
-                      const SizedBox(height: 8),
-                      SwitchListTile(
-                        title: Text(
-                          "Vegetarian Only",
-                          style: textTheme.titleMedium,
-                        ),
-                        value: isVeg!,
-                        onChanged: (bool value) {
-                          setState(() {
-                            isVeg = value;
-                          });
-                        },
-                      ),
-                      const SizedBox(height: 8),
-                      SwitchListTile(
-                        title: Text(
-                          "Enable Notifications",
-                          style: textTheme.titleMedium,
-                        ),
-                        value: notificationEnabled ?? false,
-                        onChanged: (bool value) {
-                          setState(() {
-                            notificationEnabled = value;
-                          });
-                        },
-                      ),
-                      const SizedBox(height: 16),
-                      SizedBox(
-                        width: double.infinity,
-                        child: FilledButton.tonal(
-                          onPressed: allowSave ? onClickOkay : null,
-                          child: const Text("Save Changes"),
-                        ),
-                      ),
-                    ],
-                  ),
+                  textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 24),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.sync, color: colorScheme.primary, size: 28),
-                    const SizedBox(width: 8),
-                    Text(
-                      "Data Sync",
-                      style: textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: colorScheme.primary,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
+              ],
+            ),
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                color: colorScheme.surfaceContainer.withValues(alpha: 0.5),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: colorScheme.outline.withValues(alpha: 0.2),
+                  width: 1,
                 ),
-                const SizedBox(height: 16),
-                Container(
-                  decoration: BoxDecoration(
-                    color: colorScheme.surfaceContainer.withValues(alpha: 0.5),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: colorScheme.outline.withValues(alpha: 0.2),
-                      width: 1,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: colorScheme.shadow.withValues(alpha: 0.1),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
+                boxShadow: [
+                  BoxShadow(
+                    color: colorScheme.shadow.withValues(alpha: 0.1),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
                   ),
-                  child: Column(
-                    children: [
-                      ListTile(
-                        title: Text(
-                          "Server data updated: ${settings!.updatedTill}",
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text("Hostel Type", style: textTheme.titleLarge),
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 8,
+                    alignment: WrapAlignment.center,
+                    children:
+                        Hostels.values
+                            .map(
+                              (hostel) => ChoiceChip(
+                                label: Text(hostel.name),
+                                selected: selectedHostel == hostel,
+                                selectedColor: colorScheme.primaryContainer,
+                                backgroundColor: colorScheme.surface,
+                                labelStyle: TextStyle(
+                                  color:
+                                      selectedHostel == hostel
+                                          ? colorScheme.onPrimaryContainer
+                                          : colorScheme.onSurface,
+                                ),
+                                side: BorderSide(
+                                  color:
+                                      selectedHostel == hostel
+                                          ? colorScheme.primary
+                                          : colorScheme.outline.withValues(
+                                            alpha: 0.2,
+                                          ),
+                                  width: selectedHostel == hostel ? 2 : 1,
+                                ),
+                                onSelected: (bool selected) {
+                                  if (selected) {
+                                    setState(() {
+                                      selectedMess = null;
+                                      selectedHostel = hostel;
+                                    });
+                                  }
+                                },
+                              ),
+                            )
+                            .toList(),
+                  ),
+                  const SizedBox(height: 16),
+                  Text("Select Mess", style: textTheme.titleLarge),
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 8.0,
+                    children:
+                        MessType.getMess(selectedHostel!)
+                            .map(
+                              (mess) => ChoiceChip(
+                                label: Text(mess.name),
+                                selected: selectedMess == mess,
+                                selectedColor: colorScheme.primaryContainer,
+                                backgroundColor: colorScheme.surface,
+                                labelStyle: TextStyle(
+                                  color:
+                                      selectedMess == mess
+                                          ? colorScheme.onPrimaryContainer
+                                          : colorScheme.onSurface,
+                                ),
+                                side: BorderSide(
+                                  color:
+                                      selectedMess == mess
+                                          ? colorScheme.primary
+                                          : colorScheme.outline.withValues(
+                                            alpha: 0.2,
+                                          ),
+                                  width: selectedMess == mess ? 2 : 1,
+                                ),
+                                onSelected: (bool selected) {
+                                  setState(() {
+                                    selectedMess = mess;
+                                  });
+                                },
+                              ),
+                            )
+                            .toList(),
+                  ),
+                  const SizedBox(height: 8),
+                  SwitchListTile(
+                    title: Text(
+                      "Vegetarian Only",
+                      style: textTheme.titleMedium,
+                    ),
+                    value: isVeg!,
+                    onChanged: (bool value) {
+                      setState(() {
+                        isVeg = value;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 8),
+                  SwitchListTile(
+                    title: Text(
+                      "Enable Notifications",
+                      style: textTheme.titleMedium,
+                    ),
+                    value: notificationEnabled ?? false,
+                    onChanged: (bool value) {
+                      setState(() {
+                        notificationEnabled = value;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    width: double.infinity,
+                    child: FilledButton.tonal(
+                      onPressed: allowSave ? onClickOkay : null,
+                      child: const Text("Save Changes"),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 24),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.sync, color: colorScheme.primary, size: 28),
+                const SizedBox(width: 8),
+                Text(
+                  "Data Sync",
+                  style: textTheme.headlineMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: colorScheme.primary,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Container(
+              decoration: BoxDecoration(
+                color: colorScheme.surfaceContainer.withValues(alpha: 0.5),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: colorScheme.outline.withValues(alpha: 0.2),
+                  width: 1,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: colorScheme.shadow.withValues(alpha: 0.1),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  ListTile(
+                    title: Text(
+                      "Server data updated: ${settings!.updatedTill}",
+                    ),
+                    trailing: IconButton(
+                      icon:
+                          _isUpdating
+                              ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
+                              : const Icon(Icons.refresh),
+                      color: colorScheme.primary,
+                      onPressed: _isUpdating ? null : _updateMessData,
+                    ),
+                  ),
+                  Divider(
+                    height: 1,
+                    indent: 16,
+                    endIndent: 16,
+                    color: colorScheme.outline.withValues(alpha: 0.2),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.schedule, color: colorScheme.primary),
+                    title: Text(
+                      "Weekly Update Checks",
+                      style: textTheme.titleMedium,
+                    ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Menu data is automatically checked for updates weekly",
+                          style: textTheme.bodySmall?.copyWith(
+                            color: colorScheme.onSurface.withValues(alpha: 0.6),
+                          ),
                         ),
-                        trailing: IconButton(
-                          icon:
-                              _isUpdating
-                                  ? const SizedBox(
-                                    width: 20,
-                                    height: 20,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                    ),
-                                  )
-                                  : const Icon(Icons.refresh),
-                          color: colorScheme.primary,
-                          onPressed: _isUpdating ? null : _updateMessData,
-                        ),
-                      ),
-                      Divider(
-                        height: 1,
-                        indent: 16,
-                        endIndent: 16,
-                        color: colorScheme.outline.withValues(alpha: 0.2),
-                      ),
-                      ListTile(
-                        leading: Icon(
-                          Icons.schedule,
-                          color: colorScheme.primary,
-                        ),
-                        title: Text(
-                          "Weekly Update Checks",
-                          style: textTheme.titleMedium,
-                        ),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Menu data is automatically checked for updates weekly",
+                        if (settings!.dataLastUpdatedOn != null)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 4.0),
+                            child: Text(
+                              "Last checked: ${settings!.dataLastUpdatedOn!.toString().split(' ')[0]}",
                               style: textTheme.bodySmall?.copyWith(
                                 color: colorScheme.onSurface.withValues(
                                   alpha: 0.6,
                                 ),
                               ),
                             ),
-                            if (settings!.dataLastUpdatedOn != null)
-                              Padding(
-                                padding: const EdgeInsets.only(top: 4.0),
-                                child: Text(
-                                  "Last checked: ${settings!.dataLastUpdatedOn!.toString().split(' ')[0]}",
-                                  style: textTheme.bodySmall?.copyWith(
-                                    color: colorScheme.onSurface.withValues(
-                                      alpha: 0.6,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
-                    ],
+                          ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
