@@ -26,10 +26,23 @@ void main() async {
   runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends ConsumerWidget {
+class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
 
-  Future<void> _initialize(WidgetRef ref) async {
+  @override
+  ConsumerState<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends ConsumerState<MyApp> {
+  late final Future<void> _initializeFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeFuture = _initialize();
+  }
+
+  Future<void> _initialize() async {
     try {
       final settings = ref.read(settingsNotifier.notifier);
       await settings.loadSettings();
@@ -45,14 +58,24 @@ class MyApp extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
+    // Keep the persisted key for backward compatibility; it now controls
+    // dynamic/system color scheme usage while Material 3 stays enabled.
+    final useDynamicColorScheme = ref.watch(
+      settingsNotifier.select((settings) => settings.useMaterialTheme),
+    );
+
     return DynamicColorBuilder(
       builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
         return MaterialApp(
           title: 'VIT-B Mess',
-          theme: AppThemes.createLightTheme(lightDynamic),
-          darkTheme: AppThemes.createDarkTheme(darkDynamic),
-          themeMode: ThemeMode.system, 
+          theme: AppThemes.createLightTheme(
+            useDynamicColorScheme ? lightDynamic : null,
+          ),
+          darkTheme: AppThemes.createDarkTheme(
+            useDynamicColorScheme ? darkDynamic : null,
+          ),
+          themeMode: ThemeMode.system,
           debugShowCheckedModeBanner: false,
           builder: (context, child) {
             return MediaQuery(
@@ -63,7 +86,7 @@ class MyApp extends ConsumerWidget {
             );
           },
           home: FutureBuilder(
-            future: _initialize(ref),
+            future: _initializeFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const SplashScreen();

@@ -387,32 +387,142 @@ final ThemeData messDarkTheme = ThemeData(
 );
 
 class AppThemes {
+  static ThemeData _applyDynamicLightColors(ColorScheme scheme) {
+    return messLightTheme.copyWith(
+      colorScheme: scheme,
+      appBarTheme: messLightTheme.appBarTheme.copyWith(
+        surfaceTintColor: scheme.primary.withValues(alpha: 0.05),
+        iconTheme: IconThemeData(color: scheme.primary, size: 24),
+      ),
+      filledButtonTheme: FilledButtonThemeData(
+        style: messLightTheme.filledButtonTheme.style?.copyWith(
+          backgroundColor: WidgetStatePropertyAll<Color>(scheme.primary),
+          foregroundColor: WidgetStatePropertyAll<Color>(scheme.onPrimary),
+        ),
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: messLightTheme.outlinedButtonTheme.style?.copyWith(
+          foregroundColor: WidgetStatePropertyAll<Color>(scheme.primary),
+          side: WidgetStatePropertyAll<BorderSide>(
+            BorderSide(color: scheme.primary, width: 1.5),
+          ),
+        ),
+      ),
+      floatingActionButtonTheme: messLightTheme.floatingActionButtonTheme
+          .copyWith(
+            backgroundColor: scheme.primary,
+            foregroundColor: scheme.onPrimary,
+          ),
+      navigationBarTheme: messLightTheme.navigationBarTheme.copyWith(
+        surfaceTintColor: scheme.primary.withValues(alpha: 0.03),
+        indicatorColor: scheme.primary.withValues(alpha: 0.15),
+        labelTextStyle: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: scheme.primary,
+            );
+          }
+          return TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w400,
+            color: scheme.onSurfaceVariant,
+          );
+        }),
+        iconTheme: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return IconThemeData(color: scheme.primary, size: 24);
+          }
+          return IconThemeData(color: scheme.onSurfaceVariant, size: 24);
+        }),
+      ),
+      chipTheme: messLightTheme.chipTheme.copyWith(
+        backgroundColor: scheme.primary.withValues(alpha: 0.1),
+        labelStyle: TextStyle(
+          color: scheme.primary,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      cardTheme: messLightTheme.cardTheme.copyWith(
+        surfaceTintColor: scheme.primary.withValues(alpha: 0.03),
+      ),
+    );
+  }
+
+  static ThemeData _applyDynamicDarkColors(ColorScheme scheme) {
+    return messDarkTheme.copyWith(
+      colorScheme: scheme,
+      appBarTheme: messDarkTheme.appBarTheme.copyWith(
+        surfaceTintColor: scheme.primary.withValues(alpha: 0.1),
+        iconTheme: IconThemeData(color: scheme.primary, size: 24),
+      ),
+      filledButtonTheme: FilledButtonThemeData(
+        style: messDarkTheme.filledButtonTheme.style?.copyWith(
+          backgroundColor: WidgetStatePropertyAll<Color>(scheme.primary),
+          foregroundColor: WidgetStatePropertyAll<Color>(scheme.onPrimary),
+        ),
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: messDarkTheme.outlinedButtonTheme.style?.copyWith(
+          foregroundColor: WidgetStatePropertyAll<Color>(scheme.primary),
+          side: WidgetStatePropertyAll<BorderSide>(
+            BorderSide(color: scheme.primary, width: 1.5),
+          ),
+        ),
+      ),
+      floatingActionButtonTheme: messDarkTheme.floatingActionButtonTheme
+          .copyWith(
+            backgroundColor: scheme.primary,
+            foregroundColor: scheme.onPrimary,
+          ),
+      navigationBarTheme: messDarkTheme.navigationBarTheme.copyWith(
+        surfaceTintColor: scheme.primary.withValues(alpha: 0.1),
+        indicatorColor: scheme.primary.withValues(alpha: 0.2),
+        labelTextStyle: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: scheme.primary,
+            );
+          }
+          return TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w400,
+            color: scheme.onSurfaceVariant,
+          );
+        }),
+        iconTheme: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return IconThemeData(color: scheme.primary, size: 24);
+          }
+          return IconThemeData(color: scheme.onSurfaceVariant, size: 24);
+        }),
+      ),
+      chipTheme: messDarkTheme.chipTheme.copyWith(
+        backgroundColor: scheme.primary.withValues(alpha: 0.15),
+        labelStyle: TextStyle(
+          color: scheme.primary,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      cardTheme: messDarkTheme.cardTheme.copyWith(
+        surfaceTintColor: scheme.primary.withValues(alpha: 0.05),
+      ),
+    );
+  }
+
   static ThemeData createLightTheme(ColorScheme? lightDynamic) {
     if (lightDynamic != null) {
-      return ThemeData(
-        useMaterial3: true,
-        colorScheme: lightDynamic.copyWith(secondary: AppColors.primaryGreen),
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          scrolledUnderElevation: 4,
-        ),
-      );
+      return _applyDynamicLightColors(lightDynamic);
     }
     return messLightTheme;
   }
 
   static ThemeData createDarkTheme(ColorScheme? darkDynamic) {
     if (darkDynamic != null) {
-      return ThemeData(
-        useMaterial3: true,
-        colorScheme: darkDynamic.copyWith(secondary: AppColors.primaryGreen),
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          scrolledUnderElevation: 4,
-        ),
-      );
+      return _applyDynamicDarkColors(darkDynamic);
     }
     return messDarkTheme;
   }

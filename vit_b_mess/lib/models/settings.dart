@@ -17,6 +17,7 @@ class Settings {
     required this.updatedTill,
     this.notificationPermission,
     this.dataLastUpdatedOn,
+    this.useMaterialTheme = true,
   });
 
   @HiveField(0)
@@ -52,8 +53,11 @@ class Settings {
   @HiveField(10)
   DateTime? dataLastUpdatedOn;
 
+  @HiveField(11)
+  bool useMaterialTheme;
+
   String getAllInfo() {
-    return "Hostel: ${hostelType.name}, Mess: ${selectedMess.name}, Only Veg: $onlyVeg, Version: $version, First Boot: $isFirstBoot newUpdate: $newUpdate, messDataVersion: $messDataVersion, newUpdateVersion: $newUpdateVersion, updatedTill: $updatedTill, notificationPermission: $notificationPermission, lastUpdatedOn: $dataLastUpdatedOn";
+    return "Hostel: ${hostelType.name}, Mess: ${selectedMess.name}, Only Veg: $onlyVeg, Version: $version, First Boot: $isFirstBoot newUpdate: $newUpdate, messDataVersion: $messDataVersion, newUpdateVersion: $newUpdateVersion, updatedTill: $updatedTill, notificationPermission: $notificationPermission, lastUpdatedOn: $dataLastUpdatedOn, useMaterialTheme: $useMaterialTheme";
   }
 
   @override
@@ -65,11 +69,20 @@ class Settings {
         other.selectedMess == selectedMess &&
         other.onlyVeg == onlyVeg &&
         other.version == version &&
-        other.notificationPermission == notificationPermission;
+        other.notificationPermission == notificationPermission &&
+        other.useMaterialTheme == useMaterialTheme;
   }
 
   @override
   int get hashCode {
-    return Object.hash(isFirstBoot, hostelType, selectedMess, onlyVeg, version);
+    return Object.hash(
+      isFirstBoot,
+      hostelType,
+      selectedMess,
+      onlyVeg,
+      version,
+      notificationPermission,
+      useMaterialTheme,
+    );
   }
 }

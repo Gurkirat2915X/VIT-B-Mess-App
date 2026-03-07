@@ -26,6 +26,7 @@ class _PreferenceState extends ConsumerState<Preference> {
   bool allowSave = true;
   bool _isUpdating = false;
   bool? notificationEnabled;
+  bool? useMaterialTheme;
 
   @override
   void initState() {
@@ -35,6 +36,7 @@ class _PreferenceState extends ConsumerState<Preference> {
     selectedMess = settings!.selectedMess;
     isVeg = settings!.onlyVeg;
     notificationEnabled = settings!.notificationPermission;
+    useMaterialTheme = settings!.useMaterialTheme;
   }
 
   void onClickOkay() async {
@@ -114,6 +116,8 @@ class _PreferenceState extends ConsumerState<Preference> {
       newUpdateVersion: settings!.newUpdateVersion,
       updatedTill: settings!.updatedTill,
       notificationPermission: notificationEnabled!,
+      dataLastUpdatedOn: settings!.dataLastUpdatedOn,
+      useMaterialTheme: useMaterialTheme ?? true,
     );
 
     if (userSettings == settings) {
@@ -325,6 +329,23 @@ class _PreferenceState extends ConsumerState<Preference> {
                     onChanged: (bool value) {
                       setState(() {
                         notificationEnabled = value;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 8),
+                  SwitchListTile(
+                    title: Text(
+                      "Use System Color Scheme",
+                      style: textTheme.titleMedium,
+                    ),
+                    subtitle: Text(
+                      "Use colors from your device",
+                      style: textTheme.bodySmall,
+                    ),
+                    value: useMaterialTheme ?? true,
+                    onChanged: (bool value) {
+                      setState(() {
+                        useMaterialTheme = value;
                       });
                     },
                   ),

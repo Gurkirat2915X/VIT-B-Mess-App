@@ -18,6 +18,7 @@ final initialSettings = Settings(
   updatedTill: "",
   notificationPermission: null,
   dataLastUpdatedOn: null,
+  useMaterialTheme: true,
 );
 
 Box<Settings> settingsBox = Hive.box<Settings>('mess_app_settings');

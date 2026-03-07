@@ -28,13 +28,14 @@ class SettingsAdapter extends TypeAdapter<Settings> {
       updatedTill: fields[8] as String?,
       notificationPermission: fields[9] as bool?,
       dataLastUpdatedOn: fields[10] as DateTime?,
+      useMaterialTheme: fields[11] as bool? ?? true,
     );
   }
 
   @override
   void write(BinaryWriter writer, Settings obj) {
     writer
-      ..writeByte(11)
+      ..writeByte(12)
       ..writeByte(0)
       ..write(obj.isFirstBoot)
       ..writeByte(1)
@@ -56,7 +57,9 @@ class SettingsAdapter extends TypeAdapter<Settings> {
       ..writeByte(9)
       ..write(obj.notificationPermission)
       ..writeByte(10)
-      ..write(obj.dataLastUpdatedOn);
+      ..write(obj.dataLastUpdatedOn)
+      ..writeByte(11)
+      ..write(obj.useMaterialTheme);
   }
 
   @override
