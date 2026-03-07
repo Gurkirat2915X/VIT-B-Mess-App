@@ -190,7 +190,11 @@ Future<void> setMealNotification(
 ) async {
   final String title = 'Today\'s ${mealTime.name} Menu';
   final currentMeal = getCurrentMeal(mealTime.id, currentMeals);
-  final String body =
+  final String plainBody =
+      "Menu for ${mealTime.name}:\n"
+      "${currentMeal.veg.isNotEmpty ? "Veg: ${currentMeal.veg.join(', ')}\n" : ""}"
+      "${currentMeal.nonVeg.isNotEmpty && !vegOnly ? "Non-Veg: ${currentMeal.nonVeg.join(', ')}" : ""}";
+  final String htmlBody =
       "Menu for ${mealTime.name}:<br>"
       "${currentMeal.veg.isNotEmpty ? "Veg: ${currentMeal.veg.join(', ')}<br>" : ""}"
       "${currentMeal.nonVeg.isNotEmpty && !vegOnly ? "Non-Veg: ${currentMeal.nonVeg.join(', ')}" : ""}";
@@ -204,7 +208,7 @@ Future<void> setMealNotification(
       showWhen: true,
       enableVibration: true,
       styleInformation: BigTextStyleInformation(
-        body,
+        htmlBody,
         htmlFormatBigText: true,
         contentTitle: title,
         htmlFormatContentTitle: true,
@@ -236,7 +240,7 @@ Future<void> setMealNotification(
   await flutterLocalNotificationsPlugin.zonedSchedule(
     mealTime.id,
     title,
-    body,
+    plainBody,
     scheduledDate,
     platformChannelSpecifics,
     androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
