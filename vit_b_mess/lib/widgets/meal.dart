@@ -168,7 +168,7 @@ class _MealWidgetState extends ConsumerState<MealWidget>
                               _buildModernSection(
                                 context,
                                 "Non-Vegetarian",
-                                FontAwesomeIcons.drumstickBite,
+                                FontAwesomeIcons.drumstickBite.data,
                                 colorScheme.error,
                                 widget.currentMeal.nonVeg,
                                 false,

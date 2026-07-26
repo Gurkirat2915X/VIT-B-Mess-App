@@ -2,10 +2,10 @@ import 'dart:developer';
 
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:hive_flutter/adapters.dart';
+import 'package:hive_ce_flutter/hive_ce_flutter.dart';
+import 'package:vit_b_mess/hive_registrar.g.dart';
 import 'package:vit_b_mess/models/meals.dart';
 import 'package:vit_b_mess/models/settings.dart';
-import 'package:vit_b_mess/provider/mess_data.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -34,26 +34,10 @@ final List<MealTime> mealTimes = [
 
 Future<void> hiveInitializer() async {
   await Hive.initFlutter();
-
-  // Check if adapters are already registered before registering them
   if (!Hive.isAdapterRegistered(0)) {
-    Hive.registerAdapter(SettingsAdapter());
+    Hive.registerAdapters();
   }
-  if (!Hive.isAdapterRegistered(1)) {
-    Hive.registerAdapter(HostelsAdapter());
-  }
-  if (!Hive.isAdapterRegistered(2)) {
-    Hive.registerAdapter(MessTypeAdapter());
-  }
-  if (!Hive.isAdapterRegistered(5)) {
-    Hive.registerAdapter(MealAdapter());
-  }
-  if (!Hive.isAdapterRegistered(3)) {
-    Hive.registerAdapter(MealsAdapter());
-  }
-  if (!Hive.isAdapterRegistered(4)) {
-    Hive.registerAdapter(MessMealDaysAdapter());
-  }
+
   if (!Hive.isBoxOpen("mess_app_settings")) {
     await Hive.openBox<Settings>("mess_app_settings");
   }
@@ -70,7 +54,9 @@ Future<FlutterLocalNotificationsPlugin> notificationInitializer(
   final InitializationSettings initializationSettings = InitializationSettings(
     android: initializationSettingsAndroid,
   );
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  await flutterLocalNotificationsPlugin.initialize(
+    settings: initializationSettings,
+  );
   return flutterLocalNotificationsPlugin;
 }
 
@@ -172,10 +158,10 @@ Future<void> dailyNotificationInitializer() async {
       ),
     );
     await flutterLocalNotificationsPlugin.show(
-      dailyMessAlarmId,
-      'Daily Mess Notification',
-      'Your daily meal notifications have been set up.',
-      platformChannelSpecifics,
+      id: dailyMessAlarmId,
+      title: 'Daily Mess Notification',
+      body: 'Your daily meal notifications have been set up.',
+      notificationDetails: platformChannelSpecifics,
     );
     log("Daily notifications initialized successfully.");
   } catch (e) {
@@ -238,11 +224,11 @@ Future<void> setMealNotification(
   );
 
   await flutterLocalNotificationsPlugin.zonedSchedule(
-    mealTime.id,
-    title,
-    plainBody,
-    scheduledDate,
-    platformChannelSpecifics,
+    id: mealTime.id,
+    title: title,
+    body: plainBody,
+    scheduledDate: scheduledDate,
+    notificationDetails: platformChannelSpecifics,
     androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
   );
 }
