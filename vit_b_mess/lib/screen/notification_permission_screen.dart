@@ -7,7 +7,7 @@ import "package:vit_b_mess/models/settings.dart";
 import "package:vit_b_mess/provider/settings.dart";
 import "package:vit_b_mess/routines/mess_notification.dart";
 import "package:vit_b_mess/screen/tabs.dart";
-
+import "package:vit_b_mess/widgets/animated_page_background.dart";
 
 class NotificationPermissionScreen extends ConsumerStatefulWidget {
   const NotificationPermissionScreen({super.key});
@@ -176,18 +176,10 @@ class _NotificationPermissionScreenState
     final colorScheme = Theme.of(context).colorScheme;
     
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              colorScheme.primary.withValues(alpha: 0.02),
-              colorScheme.surface,
-            ],
-            stops: const [0.0, 0.3],
-          ),
-        ),
+      backgroundColor: colorScheme.surface,
+      body: AnimatedPageBackground(
+        drift: true,
+        startDelay: const Duration(milliseconds: 120),
         child: SafeArea(
           child: Center(
             child: AnimatedBuilder(
@@ -201,15 +193,11 @@ class _NotificationPermissionScreenState
                       margin: const EdgeInsets.all(24),
                       padding: const EdgeInsets.all(32),
                       decoration: BoxDecoration(
-                        color: colorScheme.surface,
-                        borderRadius: BorderRadius.circular(24),
-                        boxShadow: [
-                          BoxShadow(
-                            color: colorScheme.shadow.withValues(alpha: 0.1),
-                            blurRadius: 20,
-                            offset: const Offset(0, 10),
-                          ),
-                        ],
+                        color: colorScheme.surfaceContainer,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: colorScheme.outline.withValues(alpha: 0.2),
+                        ),
                       ),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -217,42 +205,56 @@ class _NotificationPermissionScreenState
                           Container(
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
-                              color: colorScheme.primaryContainer,
-                              borderRadius: BorderRadius.circular(20),
+                              color: colorScheme.primary.withValues(alpha: 0.15),
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
+                                color: colorScheme.primary.withValues(
+                                  alpha: 0.2,
+                                ),
+                              ),
                             ),
                             child: Icon(
                               Icons.notifications_active_rounded,
-                              size: 64,
-                              color: colorScheme.onPrimaryContainer,
+                              size: 56,
+                              color: colorScheme.primary,
                             ),
                           ),
                           const SizedBox(height: 24),
                           Text(
                             "Stay Updated!",
-                            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: colorScheme.onSurface,
-                            ),
+                            style: Theme.of(context).textTheme.headlineSmall
+                                ?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: colorScheme.primary,
+                                ),
                             textAlign: TextAlign.center,
                           ),
                           const SizedBox(height: 12),
                           Text(
                             "Get instant notifications about mess menu updates, special meals, and important announcements.",
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: colorScheme.onSurface.withValues(alpha: 0.7),
-                              height: 1.5,
-                            ),
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(
+                                  color: colorScheme.onSurface.withValues(
+                                    alpha: 0.7,
+                                  ),
+                                  height: 1.5,
+                                ),
                             textAlign: TextAlign.center,
                           ),
                           const SizedBox(height: 32),
-
                           if (settings!.notificationPermission == true) ...[
                             Container(
                               padding: const EdgeInsets.all(16),
                               decoration: BoxDecoration(
-                                color: colorScheme.primaryContainer.withValues(alpha: 0.5),
+                                color: colorScheme.primaryContainer.withValues(
+                                  alpha: 0.5,
+                                ),
                                 borderRadius: BorderRadius.circular(12),
-                                border: Border.all(color: colorScheme.primary.withValues(alpha: 0.3)),
+                                border: Border.all(
+                                  color: colorScheme.primary.withValues(
+                                    alpha: 0.3,
+                                  ),
+                                ),
                               ),
                               child: Row(
                                 children: [
@@ -280,7 +282,9 @@ class _NotificationPermissionScreenState
                               child: ElevatedButton.icon(
                                 onPressed: () {
                                   Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(builder: (ctx) => const Tabs()),
+                                    MaterialPageRoute(
+                                      builder: (ctx) => const Tabs(),
+                                    ),
                                   );
                                 },
                                 icon: const Icon(Icons.arrow_forward_rounded),
@@ -288,11 +292,13 @@ class _NotificationPermissionScreenState
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: colorScheme.primary,
                                   foregroundColor: colorScheme.onPrimary,
-                                  padding: const EdgeInsets.symmetric(vertical: 16),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 16,
+                                  ),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12),
                                   ),
-                                  elevation: 2,
+                                  elevation: 0,
                                 ),
                               ),
                             ),
@@ -300,31 +306,46 @@ class _NotificationPermissionScreenState
                             SizedBox(
                               width: double.infinity,
                               child: ElevatedButton.icon(
-                                onPressed: isLoading ? null : () {
-                                  setState(() {
-                                    isLoading = true;
-                                  });
-                                  requestNotificationPermission(ref);
-                                },
-                                icon: isLoading 
-                                  ? SizedBox(
-                                      width: 20,
-                                      height: 20,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                        valueColor: AlwaysStoppedAnimation<Color>(colorScheme.onPrimary),
-                                      ),
-                                    )
-                                  : const Icon(Icons.notifications_rounded),
-                                label: Text(isLoading ? "Requesting..." : "Allow Notifications"),
+                                onPressed:
+                                    isLoading
+                                        ? null
+                                        : () {
+                                          setState(() {
+                                            isLoading = true;
+                                          });
+                                          requestNotificationPermission(ref);
+                                        },
+                                icon:
+                                    isLoading
+                                        ? SizedBox(
+                                          width: 20,
+                                          height: 20,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                            valueColor:
+                                                AlwaysStoppedAnimation<Color>(
+                                                  colorScheme.onPrimary,
+                                                ),
+                                          ),
+                                        )
+                                        : const Icon(
+                                          Icons.notifications_rounded,
+                                        ),
+                                label: Text(
+                                  isLoading
+                                      ? "Requesting..."
+                                      : "Allow Notifications",
+                                ),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: colorScheme.primary,
                                   foregroundColor: colorScheme.onPrimary,
-                                  padding: const EdgeInsets.symmetric(vertical: 16),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 16,
+                                  ),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12),
                                   ),
-                                  elevation: 2,
+                                  elevation: 0,
                                 ),
                               ),
                             ),
@@ -337,17 +358,21 @@ class _NotificationPermissionScreenState
                                   await ref
                                       .read(settingsNotifier.notifier)
                                       .saveSettings(settings!);
-                                  if (mounted) {
-                                    Navigator.of(context).pushReplacement(
-                                      MaterialPageRoute(builder: (ctx) => const Tabs()),
-                                    );
-                                  }
+                                  if (!context.mounted) return;
+                                  Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                      builder: (ctx) => const Tabs(),
+                                    ),
+                                  );
                                 },
                                 icon: const Icon(Icons.skip_next_rounded),
                                 label: const Text("Maybe Later"),
                                 style: TextButton.styleFrom(
-                                  foregroundColor: colorScheme.onSurface.withValues(alpha: 0.6),
-                                  padding: const EdgeInsets.symmetric(vertical: 12),
+                                  foregroundColor: colorScheme.onSurface
+                                      .withValues(alpha: 0.6),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 12,
+                                  ),
                                 ),
                               ),
                             ),
