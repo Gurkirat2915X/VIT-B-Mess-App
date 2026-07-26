@@ -93,8 +93,8 @@ class _MealWidgetState extends ConsumerState<MealWidget>
     final settings = ref.watch(settingsNotifier);
     final screenHeight = MediaQuery.of(context).size.height;
 
-    final fixedHeight =
-        screenHeight * 0.35; // 35% of screen height (reduced from 45%)
+    // Use more vertical space now that bottom nav is gone.
+    final fixedHeight = screenHeight * 0.48;
 
     return FadeTransition(
       opacity: _fadeAnimation,
@@ -102,8 +102,8 @@ class _MealWidgetState extends ConsumerState<MealWidget>
         width: double.infinity,
         height: fixedHeight,
         constraints: const BoxConstraints(
-          minHeight: 250,
-          maxHeight: 350,
+          minHeight: 280,
+          maxHeight: 520,
         ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(24),

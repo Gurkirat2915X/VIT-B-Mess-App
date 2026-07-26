@@ -15,12 +15,21 @@ class Menu extends ConsumerStatefulWidget {
 }
 
 class _MenuState extends ConsumerState<Menu> {
+  static const _mealOrder = ['Breakfast', 'Lunch', 'Snacks', 'Dinner'];
+
   Meals? messMenu;
   DateTime todayDate = DateTime.now();
   Meal? currentMeal;
   int todayIndex = 0;
   int _previousDayIndex = 0;
+  int _previousMealIndex = 0;
+  bool _slideByDay = true;
   String currentMealTime = "";
+
+  int get _mealIndex {
+    final index = _mealOrder.indexOf(currentMealTime);
+    return index < 0 ? 0 : index;
+  }
 
   @override
   void initState() {
@@ -34,6 +43,7 @@ class _MenuState extends ConsumerState<Menu> {
     if (messMenu != null) {
       currentMeal = getCurrentMeal(messMenu!);
       currentMealTime = getMealTimeString;
+      _previousMealIndex = _mealIndex;
     }
   }
 
@@ -64,7 +74,9 @@ class _MenuState extends ConsumerState<Menu> {
 
   void changeDay(int day) {
     setState(() {
+      _slideByDay = true;
       _previousDayIndex = todayIndex;
+      _previousMealIndex = _mealIndex;
       todayIndex = day;
       messMenu = ref.read(messDataNotifier.notifier).getDayMeal(day);
       if (messMenu != null) {
@@ -76,6 +88,8 @@ class _MenuState extends ConsumerState<Menu> {
 
   void changeMeal(Meal meal, String mealTime) {
     setState(() {
+      _slideByDay = false;
+      _previousMealIndex = _mealIndex;
       currentMeal = meal;
       currentMealTime = mealTime;
     });
@@ -143,18 +157,19 @@ class _MenuState extends ConsumerState<Menu> {
               );
             },
             transitionBuilder: (Widget child, Animation<double> animation) {
-              final key = child.key;
-              final isEntering =
-                  key is ValueKey<int> && key.value == todayIndex;
+              final currentKey = ValueKey<String>('$todayIndex-$currentMealTime');
+              final isEntering = child.key == currentKey;
 
-              // Horizontal slide for day changes
+              final forward =
+                  _slideByDay
+                      ? todayIndex > _previousDayIndex
+                      : _mealIndex > _previousMealIndex;
+
+              // Day and meal changes both slide horizontally by direction.
               final offset =
                   isEntering
-                      ? Offset(todayIndex > _previousDayIndex ? 1.0 : -1.0, 0.0)
-                      : Offset(
-                        todayIndex > _previousDayIndex ? -1.0 : 1.0,
-                        0.0,
-                      );
+                      ? Offset(forward ? 1.0 : -1.0, 0.0)
+                      : Offset(forward ? -1.0 : 1.0, 0.0);
 
               return SlideTransition(
                 position: Tween<Offset>(
@@ -165,7 +180,7 @@ class _MenuState extends ConsumerState<Menu> {
               );
             },
             child: MealWidget(
-              key: ValueKey<int>(todayIndex),
+              key: ValueKey<String>('$todayIndex-$currentMealTime'),
               currentMeal: currentMeal!,
             ),
           ),
