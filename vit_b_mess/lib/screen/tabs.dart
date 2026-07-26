@@ -166,20 +166,24 @@ class _TabsState extends ConsumerState<Tabs> {
     ];
 
     return Scaffold(
+      backgroundColor: colorScheme.surface,
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.transparent,
-        scrolledUnderElevation: 8,
-        surfaceTintColor: colorScheme.primary.withValues(alpha: 0.08),
+        scrolledUnderElevation: 0,
+        // Opaque page fill behind bottom corner notches (mirrors bottom nav)
+        backgroundColor: colorScheme.surface,
+        surfaceTintColor: Colors.transparent,
+        shadowColor: Colors.transparent,
         flexibleSpace: Container(
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                colorScheme.primary.withValues(alpha: 0.1),
-                colorScheme.secondary.withValues(alpha: 0.05),
-              ],
+            color: colorScheme.surfaceContainer,
+            borderRadius: const BorderRadius.vertical(
+              bottom: Radius.circular(20),
+            ),
+            border: Border(
+              bottom: BorderSide(
+                color: colorScheme.outline.withValues(alpha: 0.2),
+              ),
             ),
           ),
         ),
