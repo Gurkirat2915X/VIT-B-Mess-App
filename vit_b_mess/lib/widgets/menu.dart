@@ -206,7 +206,7 @@ class _MenuState extends ConsumerState<Menu> {
               );
             },
           ),
-          const SizedBox(height: 24), // Bottom padding for navigation bar
+          const SizedBox(height: 16),
         ],
       ),
     );

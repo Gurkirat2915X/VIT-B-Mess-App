@@ -8,6 +8,7 @@ import 'package:vit_b_mess/provider/settings.dart';
 import 'package:vit_b_mess/routines/mess_notification.dart';
 import 'package:vit_b_mess/screen/notification_permission_screen.dart';
 import 'package:vit_b_mess/screen/tabs.dart';
+import 'package:vit_b_mess/widgets/animated_page_background.dart';
 
 class Preference extends ConsumerStatefulWidget {
   const Preference({super.key});
@@ -187,29 +188,17 @@ class _PreferenceState extends ConsumerState<Preference> {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
 
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 24, 16, 40),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.tune, color: colorScheme.primary, size: 28),
-                const SizedBox(width: 8),
-                Text(
-                  "Preferences",
-                  style: textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: colorScheme.primary,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            _SurfaceCard(
+    return AnimatedPageBackground(
+      drift: true,
+      // Let the route transition settle so the curtain is visible.
+      startDelay: const Duration(milliseconds: 180),
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 24, 16, 40),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _SurfaceCard(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -425,6 +414,7 @@ class _PreferenceState extends ConsumerState<Preference> {
             ),
           ],
         ),
+      ),
       ),
     );
   }
