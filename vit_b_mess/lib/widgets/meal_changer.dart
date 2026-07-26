@@ -69,37 +69,16 @@ class _MealChangerState extends ConsumerState<MealChanger>
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
     return ScaleTransition(
       scale: _scaleAnimation,
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        padding: const EdgeInsets.all(4),
-        decoration: BoxDecoration(
-          color: colorScheme.surfaceContainer.withValues(alpha: 0.5),
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: colorScheme.outline.withValues(alpha: 0.2),
-            width: 1,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: colorScheme.shadow.withValues(alpha: 0.1),
-              blurRadius: 12,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Row(
-          children:
-              mealOptions.map((meal) {
-                final isSelected = widget.currentMeal == meal['name'];
-                return Expanded(
-                  child: _buildMealOption(context, meal, isSelected),
-                );
-              }).toList(),
-        ),
+      child: Row(
+        children:
+            mealOptions.map((meal) {
+              final isSelected = widget.currentMeal == meal['name'];
+              return Expanded(
+                child: _buildMealOption(context, meal, isSelected),
+              );
+            }).toList(),
       ),
     );
   }
@@ -122,16 +101,6 @@ class _MealChangerState extends ConsumerState<MealChanger>
         decoration: BoxDecoration(
           color: isSelected ? colorScheme.primary : Colors.transparent,
           borderRadius: BorderRadius.circular(16),
-          boxShadow:
-              isSelected
-                  ? [
-                    BoxShadow(
-                      color: colorScheme.primary.withValues(alpha: 0.3),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ]
-                  : null,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
