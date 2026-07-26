@@ -165,8 +165,8 @@ final ThemeData messLightTheme = ThemeData(
 
   // Modern navigation theme
   navigationBarTheme: NavigationBarThemeData(
-    backgroundColor: const Color(0xFFFDFDFD), // Soft off-white
-    surfaceTintColor: AppColors.primaryGreen.withValues(alpha: 0.03),
+    backgroundColor: const Color(0xFFFAFAFA), // Match surfaceContainer
+    surfaceTintColor: Colors.transparent,
     indicatorColor: AppColors.primaryGreen.withValues(alpha: 0.15),
     elevation: 2,
     shadowColor: Colors.black.withValues(alpha: 0.06),
@@ -349,8 +349,8 @@ final ThemeData messDarkTheme = ThemeData(
 
   // Dark navigation theme
   navigationBarTheme: NavigationBarThemeData(
-    backgroundColor: AppColors.cardDark,
-    surfaceTintColor: AppColors.lightGreen.withValues(alpha: 0.1),
+    backgroundColor: AppColors.cardDark, // Match surfaceContainer
+    surfaceTintColor: Colors.transparent,
     indicatorColor: AppColors.lightGreen.withValues(alpha: 0.2),
     labelTextStyle: WidgetStateProperty.resolveWith((states) {
       if (states.contains(WidgetState.selected)) {
@@ -414,7 +414,8 @@ class AppThemes {
             foregroundColor: scheme.onPrimary,
           ),
       navigationBarTheme: messLightTheme.navigationBarTheme.copyWith(
-        surfaceTintColor: scheme.primary.withValues(alpha: 0.03),
+        backgroundColor: scheme.surfaceContainer,
+        surfaceTintColor: Colors.transparent,
         indicatorColor: scheme.primary.withValues(alpha: 0.15),
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
@@ -477,7 +478,8 @@ class AppThemes {
             foregroundColor: scheme.onPrimary,
           ),
       navigationBarTheme: messDarkTheme.navigationBarTheme.copyWith(
-        surfaceTintColor: scheme.primary.withValues(alpha: 0.1),
+        backgroundColor: scheme.surfaceContainer,
+        surfaceTintColor: Colors.transparent,
         indicatorColor: scheme.primary.withValues(alpha: 0.2),
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {

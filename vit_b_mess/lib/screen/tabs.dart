@@ -285,36 +285,46 @@ class _TabsState extends ConsumerState<Tabs> {
           children: pages,
         ),
       ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: colorScheme.shadow.withValues(alpha: 0.1),
-              blurRadius: 20,
-              offset: const Offset(0, -5),
+      bottomNavigationBar: ColoredBox(
+        // Opaque page fill behind top corner notches
+        color: colorScheme.surface,
+        child: Container(
+          decoration: BoxDecoration(
+            color: colorScheme.surfaceContainer,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+            border: Border(
+              top: BorderSide(
+                color: colorScheme.outline.withValues(alpha: 0.2),
+              ),
             ),
-          ],
-        ),
-        child: NavigationBar(
-          selectedIndex: pageIndex,
-          onDestinationSelected: _onSelectBottom,
-          destinations: const [
-            NavigationDestination(
-              icon: Icon(Icons.restaurant_menu_outlined),
-              selectedIcon: Icon(Icons.restaurant_menu),
-              label: "Menu",
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.tune_outlined),
-              selectedIcon: Icon(Icons.tune),
-              label: "Preferences",
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.info_outline),
-              selectedIcon: Icon(Icons.info),
-              label: "About",
-            ),
-          ],
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: NavigationBar(
+            selectedIndex: pageIndex,
+            onDestinationSelected: _onSelectBottom,
+            backgroundColor: Colors.transparent,
+            surfaceTintColor: Colors.transparent,
+            indicatorColor: colorScheme.primary.withValues(alpha: 0.15),
+            elevation: 0,
+            shadowColor: Colors.transparent,
+            destinations: const [
+              NavigationDestination(
+                icon: Icon(Icons.restaurant_menu_outlined),
+                selectedIcon: Icon(Icons.restaurant_menu),
+                label: "Menu",
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.tune_outlined),
+                selectedIcon: Icon(Icons.tune),
+                label: "Preferences",
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.info_outline),
+                selectedIcon: Icon(Icons.info),
+                label: "About",
+              ),
+            ],
+          ),
         ),
       ),
     );
