@@ -209,23 +209,8 @@ class _PreferenceState extends ConsumerState<Preference> {
               ],
             ),
             const SizedBox(height: 16),
-            Container(
+            _SurfaceCard(
               padding: const EdgeInsets.all(16.0),
-              decoration: BoxDecoration(
-                color: colorScheme.surfaceContainer.withValues(alpha: 0.5),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: colorScheme.outline.withValues(alpha: 0.2),
-                  width: 1,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: colorScheme.shadow.withValues(alpha: 0.1),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -377,22 +362,7 @@ class _PreferenceState extends ConsumerState<Preference> {
               ],
             ),
             const SizedBox(height: 16),
-            Container(
-              decoration: BoxDecoration(
-                color: colorScheme.surfaceContainer.withValues(alpha: 0.5),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: colorScheme.outline.withValues(alpha: 0.2),
-                  width: 1,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: colorScheme.shadow.withValues(alpha: 0.1),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
+            _SurfaceCard(
               child: Column(
                 children: [
                   ListTile(
@@ -539,6 +509,33 @@ class _PreferenceState extends ConsumerState<Preference> {
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
+    );
+  }
+}
+
+/// Opaque [Material] card so [ListTile]/[SwitchListTile] ink has a valid surface.
+class _SurfaceCard extends StatelessWidget {
+  const _SurfaceCard({required this.child, this.padding});
+
+  final Widget child;
+  final EdgeInsetsGeometry? padding;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Material(
+      color: colorScheme.surfaceContainer,
+      elevation: 1,
+      shadowColor: colorScheme.shadow.withValues(alpha: 0.2),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(
+          color: colorScheme.outline.withValues(alpha: 0.2),
+        ),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: padding != null ? Padding(padding: padding!, child: child) : child,
     );
   }
 }
