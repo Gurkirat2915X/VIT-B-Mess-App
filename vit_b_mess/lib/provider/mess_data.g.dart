@@ -8,7 +8,7 @@ part of 'mess_data.dart';
 
 class HostelsAdapter extends TypeAdapter<Hostels> {
   @override
-  final int typeId = 1;
+  final typeId = 1;
 
   @override
   Hostels read(BinaryReader reader) {
@@ -27,10 +27,8 @@ class HostelsAdapter extends TypeAdapter<Hostels> {
     switch (obj) {
       case Hostels.Boys:
         writer.writeByte(0);
-        break;
       case Hostels.Girls:
         writer.writeByte(1);
-        break;
     }
   }
 
@@ -47,7 +45,7 @@ class HostelsAdapter extends TypeAdapter<Hostels> {
 
 class MessTypeAdapter extends TypeAdapter<MessType> {
   @override
-  final int typeId = 2;
+  final typeId = 2;
 
   @override
   MessType read(BinaryReader reader) {
@@ -74,22 +72,16 @@ class MessTypeAdapter extends TypeAdapter<MessType> {
     switch (obj) {
       case MessType.CRCL:
         writer.writeByte(0);
-        break;
       case MessType.BoysMayuri:
         writer.writeByte(1);
-        break;
       case MessType.Safal:
         writer.writeByte(2);
-        break;
       case MessType.JMB:
         writer.writeByte(3);
-        break;
       case MessType.GirlsMayuri:
         writer.writeByte(4);
-        break;
       case MessType.AB:
         writer.writeByte(5);
-        break;
     }
   }
 

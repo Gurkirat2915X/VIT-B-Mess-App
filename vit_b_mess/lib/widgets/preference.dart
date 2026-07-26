@@ -8,6 +8,7 @@ import 'package:vit_b_mess/provider/settings.dart';
 import 'package:vit_b_mess/routines/mess_notification.dart';
 import 'package:vit_b_mess/screen/notification_permission_screen.dart';
 import 'package:vit_b_mess/screen/tabs.dart';
+import 'package:vit_b_mess/widgets/animated_page_background.dart';
 
 class Preference extends ConsumerStatefulWidget {
   const Preference({super.key});
@@ -187,45 +188,18 @@ class _PreferenceState extends ConsumerState<Preference> {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
 
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 24, 16, 40),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.tune, color: colorScheme.primary, size: 28),
-                const SizedBox(width: 8),
-                Text(
-                  "Preferences",
-                  style: textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: colorScheme.primary,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Container(
+    return AnimatedPageBackground(
+      drift: true,
+      // Let the route transition settle so the curtain is visible.
+      startDelay: const Duration(milliseconds: 180),
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 24, 16, 40),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _SurfaceCard(
               padding: const EdgeInsets.all(16.0),
-              decoration: BoxDecoration(
-                color: colorScheme.surfaceContainer.withValues(alpha: 0.5),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: colorScheme.outline.withValues(alpha: 0.2),
-                  width: 1,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: colorScheme.shadow.withValues(alpha: 0.1),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -377,22 +351,7 @@ class _PreferenceState extends ConsumerState<Preference> {
               ],
             ),
             const SizedBox(height: 16),
-            Container(
-              decoration: BoxDecoration(
-                color: colorScheme.surfaceContainer.withValues(alpha: 0.5),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: colorScheme.outline.withValues(alpha: 0.2),
-                  width: 1,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: colorScheme.shadow.withValues(alpha: 0.1),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
+            _SurfaceCard(
               child: Column(
                 children: [
                   ListTile(
@@ -455,6 +414,7 @@ class _PreferenceState extends ConsumerState<Preference> {
             ),
           ],
         ),
+      ),
       ),
     );
   }
@@ -539,6 +499,33 @@ class _PreferenceState extends ConsumerState<Preference> {
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
+    );
+  }
+}
+
+/// Opaque [Material] card so [ListTile]/[SwitchListTile] ink has a valid surface.
+class _SurfaceCard extends StatelessWidget {
+  const _SurfaceCard({required this.child, this.padding});
+
+  final Widget child;
+  final EdgeInsetsGeometry? padding;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Material(
+      color: colorScheme.surfaceContainer,
+      elevation: 1,
+      shadowColor: colorScheme.shadow.withValues(alpha: 0.2),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(
+          color: colorScheme.outline.withValues(alpha: 0.2),
+        ),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: padding != null ? Padding(padding: padding!, child: child) : child,
     );
   }
 }

@@ -15,10 +15,14 @@ class _UpdateScreenState extends ConsumerState<UpdateScreen>
     with TickerProviderStateMixin {
   late AnimationController _animationController;
   late AnimationController _checkController;
+  late AnimationController _glowController;
+  late AnimationController _breathController;
   late Animation<double> _slideAnimation;
   late Animation<double> _fadeAnimation;
   late Animation<double> _checkAnimation;
   late Animation<double> _scaleAnimation;
+  late Animation<double> _glowScale;
+  late Animation<double> _glowOpacity;
 
   @override
   void initState() {
@@ -31,6 +35,15 @@ class _UpdateScreenState extends ConsumerState<UpdateScreen>
 
     _checkController = AnimationController(
       duration: const Duration(milliseconds: 600),
+      vsync: this,
+    );
+
+    _glowController = AnimationController(
+      duration: const Duration(milliseconds: 750),
+      vsync: this,
+    );
+    _breathController = AnimationController(
+      duration: const Duration(milliseconds: 2800),
       vsync: this,
     );
 
@@ -59,9 +72,25 @@ class _UpdateScreenState extends ConsumerState<UpdateScreen>
       ),
     );
 
+    final glowCurved = CurvedAnimation(
+      parent: _glowController,
+      curve: Curves.easeOutCubic,
+    );
+    _glowScale = Tween<double>(begin: 0.35, end: 1).animate(glowCurved);
+    _glowOpacity = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(
+        parent: _glowController,
+        curve: const Interval(0, 0.55, curve: Curves.easeOut),
+      ),
+    );
+
     _animationController.forward();
-    Future.delayed(const Duration(milliseconds: 500), () {
+    Future.delayed(const Duration(milliseconds: 500), () async {
+      if (!mounted) return;
       _checkController.forward();
+      // Same open + breathe glow as About, timed with the check mark.
+      await _glowController.forward();
+      if (mounted) _breathController.repeat(reverse: true);
     });
   }
 
@@ -69,6 +98,8 @@ class _UpdateScreenState extends ConsumerState<UpdateScreen>
   void dispose() {
     _animationController.dispose();
     _checkController.dispose();
+    _glowController.dispose();
+    _breathController.dispose();
     super.dispose();
   }
 
@@ -88,19 +119,8 @@ class _UpdateScreenState extends ConsumerState<UpdateScreen>
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              colorScheme.primary.withValues(alpha: 0.02),
-              colorScheme.surface,
-            ],
-            stops: const [0.0, 0.3],
-          ),
-        ),
-        child: SafeArea(
+      backgroundColor: colorScheme.surface,
+      body: SafeArea(
           child: AnimatedBuilder(
             animation: _animationController,
             builder: (context, child) {
@@ -114,22 +134,27 @@ class _UpdateScreenState extends ConsumerState<UpdateScreen>
                       children: [
                         const SizedBox(height: 40),
 
-                        // App Header
+                        // App header — same logo chip as the main AppBar / About.
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Container(
-                              padding: const EdgeInsets.all(12),
+                              padding: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
-                                color: colorScheme.surface.withValues(
-                                  alpha: 0.2,
+                                color: colorScheme.primary.withValues(
+                                  alpha: 0.15,
                                 ),
-                                borderRadius: BorderRadius.circular(16),
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: colorScheme.primary.withValues(
+                                    alpha: 0.2,
+                                  ),
+                                ),
                               ),
                               child: Icon(
                                 Icons.restaurant,
-                                size: 32,
-                                color: colorScheme.onSurface,
+                                size: 28,
+                                color: colorScheme.primary,
                               ),
                             ),
                             const SizedBox(width: 16),
@@ -139,7 +164,7 @@ class _UpdateScreenState extends ConsumerState<UpdateScreen>
                                 context,
                               ).textTheme.headlineMedium?.copyWith(
                                 fontWeight: FontWeight.bold,
-                                color: colorScheme.onSurface,
+                                color: colorScheme.primary,
                               ),
                             ),
                           ],
@@ -147,34 +172,95 @@ class _UpdateScreenState extends ConsumerState<UpdateScreen>
 
                         const SizedBox(height: 60),
 
-                        // Success Icon with Animation
+                        // Success icon — radial glow opens then breathes (like About).
                         ScaleTransition(
                           scale: _scaleAnimation,
                           child: ScaleTransition(
                             scale: _checkAnimation,
-                            child: Container(
-                              padding: const EdgeInsets.all(32),
-                              decoration: BoxDecoration(
-                                color: colorScheme.surface,
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: colorScheme.primary.withValues(
-                                    alpha: 0.3,
+                            child: Stack(
+                              alignment: Alignment.center,
+                              clipBehavior: Clip.none,
+                              children: [
+                                Positioned(
+                                  left: -88,
+                                  top: -88,
+                                  right: -88,
+                                  bottom: -88,
+                                  child: IgnorePointer(
+                                    child: FadeTransition(
+                                      opacity: _glowOpacity,
+                                      child: ScaleTransition(
+                                        scale: _glowScale,
+                                        child: AnimatedBuilder(
+                                          animation: _breathController,
+                                          builder: (context, child) {
+                                            final breath =
+                                                _breathController.value;
+                                            final scale = 1.0 + (0.08 * breath);
+                                            final core = 0.20 + (0.06 * breath);
+                                            final mid = 0.09 + (0.04 * breath);
+                                            final outer =
+                                                0.025 + (0.02 * breath);
+
+                                            return Transform.scale(
+                                              scale: scale,
+                                              child: DecoratedBox(
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  gradient: RadialGradient(
+                                                    colors: [
+                                                      colorScheme.primary
+                                                          .withValues(
+                                                            alpha: core,
+                                                          ),
+                                                      colorScheme.primary
+                                                          .withValues(
+                                                            alpha: mid,
+                                                          ),
+                                                      colorScheme.primary
+                                                          .withValues(
+                                                            alpha: outer,
+                                                          ),
+                                                      colorScheme.surface
+                                                          .withValues(alpha: 0),
+                                                    ],
+                                                    stops: const [
+                                                      0.0,
+                                                      0.35,
+                                                      0.65,
+                                                      1.0,
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                  width: 2,
                                 ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: colorScheme.shadow,
-                                    blurRadius: 20,
+                                Container(
+                                  padding: const EdgeInsets.all(32),
+                                  decoration: BoxDecoration(
+                                    color: colorScheme.surface.withValues(
+                                      alpha: 0.92,
+                                    ),
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: colorScheme.primary.withValues(
+                                        alpha: 0.3,
+                                      ),
+                                      width: 2,
+                                    ),
                                   ),
-                                ],
-                              ),
-                              child: Icon(
-                                Icons.check_circle_rounded,
-                                size: 80,
-                                color: colorScheme.primary,
-                              ),
+                                  child: Icon(
+                                    Icons.check_circle_rounded,
+                                    size: 80,
+                                    color: colorScheme.primary,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -218,22 +304,16 @@ class _UpdateScreenState extends ConsumerState<UpdateScreen>
 
                         const SizedBox(height: 40),
 
-                        // What's New Card
+                        // What's New — bordered surface card, no shadow.
                         Container(
                           width: double.infinity,
                           padding: const EdgeInsets.all(24),
                           decoration: BoxDecoration(
-                            color: colorScheme.surface,
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: colorScheme.shadow.withValues(
-                                  alpha: 0.1,
-                                ),
-                                blurRadius: 20,
-                                offset: const Offset(0, 10),
-                              ),
-                            ],
+                            color: colorScheme.surfaceContainer,
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(
+                              color: colorScheme.outline.withValues(alpha: 0.2),
+                            ),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -243,13 +323,20 @@ class _UpdateScreenState extends ConsumerState<UpdateScreen>
                                   Container(
                                     padding: const EdgeInsets.all(8),
                                     decoration: BoxDecoration(
-                                      color: colorScheme.primaryContainer,
-                                      borderRadius: BorderRadius.circular(8),
+                                      color: colorScheme.primary.withValues(
+                                        alpha: 0.15,
+                                      ),
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(
+                                        color: colorScheme.primary.withValues(
+                                          alpha: 0.2,
+                                        ),
+                                      ),
                                     ),
                                     child: Icon(
-                                      Icons.new_releases_rounded,
-                                      color: colorScheme.onPrimaryContainer,
-                                      size: 24,
+                                      Icons.restaurant,
+                                      color: colorScheme.primary,
+                                      size: 22,
                                     ),
                                   ),
                                   const SizedBox(width: 12),
@@ -259,7 +346,7 @@ class _UpdateScreenState extends ConsumerState<UpdateScreen>
                                       context,
                                     ).textTheme.titleLarge?.copyWith(
                                       fontWeight: FontWeight.bold,
-                                      color: colorScheme.onSurface,
+                                      color: colorScheme.primary,
                                     ),
                                   ),
                                 ],
@@ -314,7 +401,6 @@ class _UpdateScreenState extends ConsumerState<UpdateScreen>
               );
             },
           ),
-        ),
       ),
     );
   }

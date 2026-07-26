@@ -11,9 +11,51 @@ class About extends ConsumerStatefulWidget {
   ConsumerState<About> createState() => _AboutState();
 }
 
-class _AboutState extends ConsumerState<About> {
+class _AboutState extends ConsumerState<About>
+    with TickerProviderStateMixin {
+  late final AnimationController _glowController;
+  late final AnimationController _breathController;
+  late final Animation<double> _glowScale;
+  late final Animation<double> _glowOpacity;
+
+  @override
+  void initState() {
+    super.initState();
+    _glowController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 750),
+    );
+    _breathController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 2800),
+    );
+
+    final curved = CurvedAnimation(
+      parent: _glowController,
+      curve: Curves.easeOutCubic,
+    );
+    _glowScale = Tween<double>(begin: 0.35, end: 1).animate(curved);
+    _glowOpacity = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(
+        parent: _glowController,
+        curve: const Interval(0, 0.55, curve: Curves.easeOut),
+      ),
+    );
+
+    // Grow in after the header → logo Hero settles, then breathe.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future<void>.delayed(const Duration(milliseconds: 280), () async {
+        if (!mounted) return;
+        await _glowController.forward();
+        if (mounted) _breathController.repeat(reverse: true);
+      });
+    });
+  }
+
   @override
   void dispose() {
+    _glowController.dispose();
+    _breathController.dispose();
     super.dispose();
   }
 
@@ -22,56 +64,105 @@ class _AboutState extends ConsumerState<About> {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
 
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 24, 16, 40),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Hero(
-              tag: const ValueKey("Icon"),
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: colorScheme.primary.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    color: colorScheme.primary.withValues(alpha: 0.2),
-                    width: 2,
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      color: colorScheme.surface,
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 24, 16, 40),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Glow paints outside the icon; layout stays icon-sized.
+              Stack(
+                alignment: Alignment.center,
+                clipBehavior: Clip.none,
+                children: [
+                  Positioned(
+                    left: -88,
+                    top: -88,
+                    right: -88,
+                    bottom: -88,
+                    child: IgnorePointer(
+                      child: FadeTransition(
+                        opacity: _glowOpacity,
+                        child: ScaleTransition(
+                          scale: _glowScale,
+                          child: AnimatedBuilder(
+                            animation: _breathController,
+                            builder: (context, child) {
+                              final breath = _breathController.value;
+                              final scale = 1.0 + (0.08 * breath);
+                              final core = 0.20 + (0.06 * breath);
+                              final mid = 0.09 + (0.04 * breath);
+                              final outer = 0.025 + (0.02 * breath);
+
+                              return Transform.scale(
+                                scale: scale,
+                                child: DecoratedBox(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    gradient: RadialGradient(
+                                      colors: [
+                                        colorScheme.primary.withValues(
+                                          alpha: core,
+                                        ),
+                                        colorScheme.primary.withValues(
+                                          alpha: mid,
+                                        ),
+                                        colorScheme.primary.withValues(
+                                          alpha: outer,
+                                        ),
+                                        colorScheme.surface.withValues(
+                                          alpha: 0,
+                                        ),
+                                      ],
+                                      stops: const [0.0, 0.35, 0.65, 1.0],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-                child: Icon(
-                  Icons.restaurant,
-                  size: 50,
-                  color: colorScheme.primary,
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              "VIT-B Mess",
-              style: textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: colorScheme.primary,
-              ),
-            ),
-            const SizedBox(height: 24),
-            Container(
-              decoration: BoxDecoration(
-                color: colorScheme.surfaceContainer.withValues(alpha: 0.5),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: colorScheme.outline.withValues(alpha: 0.2),
-                  width: 1,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: colorScheme.shadow.withValues(alpha: 0.1),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
+                  Hero(
+                    tag: const ValueKey('Icon'),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: colorScheme.primary.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            color: colorScheme.primary.withValues(alpha: 0.2),
+                            width: 2,
+                          ),
+                        ),
+                        child: Icon(
+                          Icons.restaurant,
+                          size: 50,
+                          color: colorScheme.primary,
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),
+              const SizedBox(height: 16),
+              Text(
+                "VIT-B Mess",
+                style: textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: colorScheme.primary,
+                ),
+              ),
+              const SizedBox(height: 24),
+              _SurfaceCard(
               child: Column(
                 children: [
                   ListTile(
@@ -100,22 +191,7 @@ class _AboutState extends ConsumerState<About> {
               ),
             ),
             const SizedBox(height: 16),
-            Container(
-              decoration: BoxDecoration(
-                color: colorScheme.surfaceContainer.withValues(alpha: 0.5),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: colorScheme.outline.withValues(alpha: 0.2),
-                  width: 1,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: colorScheme.shadow.withValues(alpha: 0.1),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
+            _SurfaceCard(
               child: Column(
                 children: [
                   ListTile(
@@ -153,67 +229,35 @@ class _AboutState extends ConsumerState<About> {
               ),
             ),
             const SizedBox(height: 16),
-            Container(
-              decoration: BoxDecoration(
-                color: colorScheme.surfaceContainer.withValues(alpha: 0.5),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: colorScheme.outline.withValues(alpha: 0.2),
-                  width: 1,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: colorScheme.shadow.withValues(alpha: 0.1),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.auto_awesome,
+            _SurfaceCard(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.auto_awesome,
+                        color: colorScheme.primary,
+                        size: 24,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        "Update Notes",
+                        style: textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
                           color: colorScheme.primary,
-                          size: 24,
                         ),
-                        const SizedBox(width: 8),
-                        Text(
-                          "Update Notes",
-                          style: textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: colorScheme.primary,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    Text(app_info.updateNotes, style: textTheme.bodyMedium),
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Text(app_info.updateNotes, style: textTheme.bodyMedium),
+                ],
               ),
             ),
             const SizedBox(height: 16),
-            Container(
-              decoration: BoxDecoration(
-                color: colorScheme.surfaceContainer.withValues(alpha: 0.5),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: colorScheme.outline.withValues(alpha: 0.2),
-                  width: 1,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: colorScheme.shadow.withValues(alpha: 0.1),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
+            _SurfaceCard(
               child: Column(
                 children: [
                   ListTile(
@@ -259,16 +303,44 @@ class _AboutState extends ConsumerState<About> {
               ),
             ),
             const SizedBox(height: 24),
-            Text(
-              "This app is not affiliated with VIT.",
-              style: textTheme.bodySmall?.copyWith(
-                color: colorScheme.onSurface.withValues(alpha: 0.6),
-                fontStyle: FontStyle.italic,
+              Text(
+                "This app is not affiliated with VIT.",
+                style: textTheme.bodySmall?.copyWith(
+                  color: colorScheme.onSurface.withValues(alpha: 0.6),
+                  fontStyle: FontStyle.italic,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
+    );
+  }
+}
+
+/// Opaque [Material] card so [ListTile] ink splashes have a valid surface.
+class _SurfaceCard extends StatelessWidget {
+  const _SurfaceCard({required this.child, this.padding});
+
+  final Widget child;
+  final EdgeInsetsGeometry? padding;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Material(
+      color: colorScheme.surfaceContainer,
+      elevation: 1,
+      shadowColor: colorScheme.shadow.withValues(alpha: 0.2),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(
+          color: colorScheme.outline.withValues(alpha: 0.2),
+        ),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: padding != null ? Padding(padding: padding!, child: child) : child,
     );
   }
 }

@@ -58,7 +58,9 @@ Future<void> notificationInitializer() async {
         AndroidInitializationSettings('@mipmap/ic_launcher');
     final InitializationSettings initializationSettings =
         InitializationSettings(android: initializationSettingsAndroid);
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+    await flutterLocalNotificationsPlugin.initialize(
+      settings: initializationSettings,
+    );
     log("Notification system initialized");
   } catch (e) {
     log("Failed to initialize notifications: $e");

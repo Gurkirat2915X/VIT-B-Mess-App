@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:vit_b_mess/routines/mess_notification.dart'
     as mess_notification;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive_ce_flutter/hive_ce_flutter.dart';
 import 'package:vit_b_mess/models/meals.dart';
 import 'package:vit_b_mess/provider/settings.dart';
 import 'package:vit_b_mess/mess_app_info.dart' as app_info;

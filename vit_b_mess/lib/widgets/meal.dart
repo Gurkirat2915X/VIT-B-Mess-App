@@ -91,51 +91,35 @@ class _MealWidgetState extends ConsumerState<MealWidget>
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final settings = ref.watch(settingsNotifier);
-    final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    // Calculate responsive dimensions
-    final containerWidth =
-        screenWidth > 600
-            ? screenWidth * 0.8
-            : screenWidth - 32; // 16px margin on each side
-    final fixedHeight =
-        screenHeight * 0.35; // 35% of screen height (reduced from 45%)
+    // Use more vertical space now that bottom nav is gone.
+    final fixedHeight = screenHeight * 0.48;
 
     return FadeTransition(
       opacity: _fadeAnimation,
-      child: Center(
-        child: Container(
-          margin: const EdgeInsets.all(12),
-          width: containerWidth,
-          height: fixedHeight,
-          constraints: const BoxConstraints(
-            minHeight: 250,
-            maxHeight: 350,
-            maxWidth: 800,
-          ),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(24),
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                colorScheme.surface,
-                colorScheme.surfaceContainerHighest,
-              ],
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: colorScheme.shadow.withValues(alpha: 0.15),
-                blurRadius: 20,
-                offset: const Offset(0, 8),
-              ),
+      child: Container(
+        width: double.infinity,
+        height: fixedHeight,
+        constraints: const BoxConstraints(
+          minHeight: 280,
+          maxHeight: 520,
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(24),
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              colorScheme.surface,
+              colorScheme.surfaceContainerHighest,
             ],
           ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(24),
-            child: Stack(
-              children: [
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(24),
+          child: Stack(
+            children: [
                 Column(
                   children: [
                     // Fixed content area with scrolling
@@ -168,7 +152,7 @@ class _MealWidgetState extends ConsumerState<MealWidget>
                               _buildModernSection(
                                 context,
                                 "Non-Vegetarian",
-                                FontAwesomeIcons.drumstickBite,
+                                FontAwesomeIcons.drumstickBite.data,
                                 colorScheme.error,
                                 widget.currentMeal.nonVeg,
                                 false,
@@ -205,7 +189,6 @@ class _MealWidgetState extends ConsumerState<MealWidget>
             ),
           ),
         ),
-      ),
     );
   }
 
@@ -338,13 +321,6 @@ class _MealWidgetState extends ConsumerState<MealWidget>
                     color: accentColor.withValues(alpha: 0.3),
                     width: 1,
                   ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: accentColor.withValues(alpha: 0.1),
-                      blurRadius: 4,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
                 ),
                 child: Text(
                   item,

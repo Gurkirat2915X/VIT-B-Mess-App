@@ -15,12 +15,21 @@ class Menu extends ConsumerStatefulWidget {
 }
 
 class _MenuState extends ConsumerState<Menu> {
+  static const _mealOrder = ['Breakfast', 'Lunch', 'Snacks', 'Dinner'];
+
   Meals? messMenu;
   DateTime todayDate = DateTime.now();
   Meal? currentMeal;
   int todayIndex = 0;
   int _previousDayIndex = 0;
+  int _previousMealIndex = 0;
+  bool _slideByDay = true;
   String currentMealTime = "";
+
+  int get _mealIndex {
+    final index = _mealOrder.indexOf(currentMealTime);
+    return index < 0 ? 0 : index;
+  }
 
   @override
   void initState() {
@@ -34,6 +43,7 @@ class _MenuState extends ConsumerState<Menu> {
     if (messMenu != null) {
       currentMeal = getCurrentMeal(messMenu!);
       currentMealTime = getMealTimeString;
+      _previousMealIndex = _mealIndex;
     }
   }
 
@@ -64,7 +74,9 @@ class _MenuState extends ConsumerState<Menu> {
 
   void changeDay(int day) {
     setState(() {
+      _slideByDay = true;
       _previousDayIndex = todayIndex;
+      _previousMealIndex = _mealIndex;
       todayIndex = day;
       messMenu = ref.read(messDataNotifier.notifier).getDayMeal(day);
       if (messMenu != null) {
@@ -76,6 +88,8 @@ class _MenuState extends ConsumerState<Menu> {
 
   void changeMeal(Meal meal, String mealTime) {
     setState(() {
+      _slideByDay = false;
+      _previousMealIndex = _mealIndex;
       currentMeal = meal;
       currentMealTime = mealTime;
     });
@@ -98,33 +112,34 @@ class _MenuState extends ConsumerState<Menu> {
     }
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(12, 16, 12, 12),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const SizedBox(height: 18),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.restaurant_menu,
-                color: Theme.of(context).colorScheme.primary,
-                size: 28,
-              ),
-              const SizedBox(width: 8),
-              Text(
-                "${ref.watch(settingsNotifier).selectedMess.name}'s Menu",
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
+          Padding(
+            padding: const EdgeInsets.fromLTRB(28, 28, 28, 32),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.restaurant_menu,
                   color: Theme.of(context).colorScheme.primary,
+                  size: 28,
                 ),
-                textAlign: TextAlign.center,
-              ),
-            ],
+                const SizedBox(width: 8),
+                Flexible(
+                  child: Text(
+                    "${ref.watch(settingsNotifier).selectedMess.name}'s Menu",
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
+            ),
           ),
-          const SizedBox(height: 16),
-          WeekDays(selectedDay: todayIndex, onDaySelected: changeDay),
-          const SizedBox(height: 16),
           AnimatedSwitcher(
             duration: const Duration(milliseconds: 350),
             switchInCurve: Curves.easeInOut,
@@ -142,18 +157,19 @@ class _MenuState extends ConsumerState<Menu> {
               );
             },
             transitionBuilder: (Widget child, Animation<double> animation) {
-              final key = child.key;
-              final isEntering =
-                  key is ValueKey<int> && key.value == todayIndex;
+              final currentKey = ValueKey<String>('$todayIndex-$currentMealTime');
+              final isEntering = child.key == currentKey;
 
-              // Horizontal slide for day changes
+              final forward =
+                  _slideByDay
+                      ? todayIndex > _previousDayIndex
+                      : _mealIndex > _previousMealIndex;
+
+              // Day and meal changes both slide horizontally by direction.
               final offset =
                   isEntering
-                      ? Offset(todayIndex > _previousDayIndex ? 1.0 : -1.0, 0.0)
-                      : Offset(
-                        todayIndex > _previousDayIndex ? -1.0 : 1.0,
-                        0.0,
-                      );
+                      ? Offset(forward ? 1.0 : -1.0, 0.0)
+                      : Offset(forward ? -1.0 : 1.0, 0.0);
 
               return SlideTransition(
                 position: Tween<Offset>(
@@ -164,17 +180,48 @@ class _MenuState extends ConsumerState<Menu> {
               );
             },
             child: MealWidget(
-              key: ValueKey<int>(todayIndex),
+              key: ValueKey<String>('$todayIndex-$currentMealTime'),
               currentMeal: currentMeal!,
             ),
           ),
           const SizedBox(height: 16),
-          MealChanger(
-            currentMeals: messMenu!,
-            onMealChanged: changeMeal,
-            currentMeal: currentMealTime,
+          Builder(
+            builder: (context) {
+              final colorScheme = Theme.of(context).colorScheme;
+              return Material(
+                color: colorScheme.surfaceContainer,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(24),
+                  side: BorderSide(
+                    color: colorScheme.outline.withValues(alpha: 0.2),
+                  ),
+                ),
+                clipBehavior: Clip.antiAlias,
+                child: Padding(
+                  padding: const EdgeInsets.all(6),
+                  child: Column(
+                    children: [
+                      WeekDays(
+                        selectedDay: todayIndex,
+                        onDaySelected: changeDay,
+                      ),
+                      Divider(
+                        height: 12,
+                        thickness: 1,
+                        color: colorScheme.outline.withValues(alpha: 0.15),
+                      ),
+                      MealChanger(
+                        currentMeals: messMenu!,
+                        onMealChanged: changeMeal,
+                        currentMeal: currentMealTime,
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
           ),
-          const SizedBox(height: 24), // Bottom padding for navigation bar
+          const SizedBox(height: 16),
         ],
       ),
     );

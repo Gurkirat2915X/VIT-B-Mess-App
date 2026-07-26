@@ -1,4 +1,4 @@
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive_ce_flutter/hive_ce_flutter.dart';
 import 'package:vit_b_mess/provider/mess_data.dart';
 part 'meals.g.dart';
 

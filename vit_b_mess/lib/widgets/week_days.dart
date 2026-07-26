@@ -18,10 +18,6 @@ class _WeekDaysState extends ConsumerState<WeekDays>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _slideAnimation;
-  late ScrollController _scrollController;
-
-  bool _showLeftIndicator = false;
-  bool _showRightIndicator = true;
 
   @override
   void initState() {
@@ -33,145 +29,26 @@ class _WeekDaysState extends ConsumerState<WeekDays>
     _slideAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _animationController, curve: Curves.easeOut),
     );
-
-    _scrollController = ScrollController();
-    _scrollController.addListener(_updateScrollIndicators);
     _animationController.forward();
-
-    // Check if scrolling is possible after the widget is built and scroll to selected day
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_scrollController.hasClients) {
-        _scrollToSelectedDay();
-        _updateScrollIndicators();
-      }
-    });
-  }
-
-  @override
-  void didUpdateWidget(WeekDays oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    // Scroll to selected day when the selected day changes
-    if (oldWidget.selectedDay != widget.selectedDay) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (_scrollController.hasClients) {
-          _scrollToSelectedDay();
-        }
-      });
-    }
-  }
-
-  void _scrollToSelectedDay() {
-    if (!_scrollController.hasClients) return;
-
-    // Calculate the position of the selected day button
-    // Each button has margins of 4px (all around) + padding of 16px horizontal
-    // Total button width is approximately 70-80px depending on text width
-    const double estimatedButtonWidth = 75.0;
-    final double targetPosition = widget.selectedDay * estimatedButtonWidth;
-    final double maxScroll = _scrollController.position.maxScrollExtent;
-    final double viewportWidth = _scrollController.position.viewportDimension;
-
-    // Only scroll if the selected day might be out of view
-    final double currentScroll = _scrollController.offset;
-    final double buttonStart = targetPosition - 20; // Small buffer
-    final double buttonEnd =
-        targetPosition + estimatedButtonWidth + 20; // Small buffer
-
-    double? newScrollPosition;
-
-    // If button is to the left of viewport, scroll left
-    if (buttonStart < currentScroll) {
-      newScrollPosition = (buttonStart).clamp(0.0, maxScroll);
-    }
-    // If button is to the right of viewport, scroll right
-    else if (buttonEnd > currentScroll + viewportWidth) {
-      newScrollPosition = (buttonEnd - viewportWidth).clamp(0.0, maxScroll);
-    }
-
-    // Animate to new position if needed
-    if (newScrollPosition != null) {
-      _scrollController.animateTo(
-        newScrollPosition,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-    }
-  }
-
-  void _updateScrollIndicators() {
-    final maxScroll = _scrollController.position.maxScrollExtent;
-    final currentScroll = _scrollController.offset;
-
-    setState(() {
-      _showLeftIndicator = currentScroll > 10;
-      _showRightIndicator = currentScroll < maxScroll - 10;
-    });
   }
 
   @override
   void dispose() {
-    _scrollController.removeListener(_updateScrollIndicators);
-    _scrollController.dispose();
     _animationController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
     return FadeTransition(
       opacity: _slideAnimation,
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-        padding: const EdgeInsets.all(3),
-        decoration: BoxDecoration(
-          color: colorScheme.surfaceContainer.withValues(alpha: 0.5),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: colorScheme.outline.withValues(alpha: 0.2),
-            width: 1,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: colorScheme.shadow.withValues(alpha: 0.1),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Stack(
-          children: [
-            SingleChildScrollView(
-              controller: _scrollController,
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: List.generate(7, (index) {
-                  final isSelected = widget.selectedDay == index;
-                  return _buildDayButton(context, index, isSelected);
-                }),
-              ),
-            ),
-            // Left scroll indicator
-            if (_showLeftIndicator)
-              Positioned(
-                left: 0,
-                top: 0,
-                bottom: 0,
-                child: _buildScrollIndicator(colorScheme, isLeft: true),
-              ),
-            // Right scroll indicator
-            if (_showRightIndicator)
-              Positioned(
-                right: 0,
-                top: 0,
-                bottom: 0,
-                child: _buildScrollIndicator(colorScheme, isLeft: false),
-              ),
-          ],
-        ),
+      child: Row(
+        children: List.generate(7, (index) {
+          final isSelected = widget.selectedDay == index;
+          return Expanded(
+            child: _buildDayButton(context, index, isSelected),
+          );
+        }),
       ),
     );
   }
@@ -186,20 +63,10 @@ class _WeekDaysState extends ConsumerState<WeekDays>
         duration: const Duration(milliseconds: 200),
         curve: Curves.easeInOut,
         margin: const EdgeInsets.all(4),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 16),
         decoration: BoxDecoration(
           color: isSelected ? colorScheme.primary : Colors.transparent,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow:
-              isSelected
-                  ? [
-                    BoxShadow(
-                      color: colorScheme.primary.withValues(alpha: 0.3),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ]
-                  : null,
+          borderRadius: BorderRadius.circular(14),
         ),
         child: AnimatedDefaultTextStyle(
           duration: const Duration(milliseconds: 200),
@@ -209,39 +76,14 @@ class _WeekDaysState extends ConsumerState<WeekDays>
                     ? colorScheme.onPrimary
                     : colorScheme.onSurface.withValues(alpha: 0.7),
             fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-            letterSpacing: 0.5,
-            fontSize: 14.0,
+            letterSpacing: 0.2,
+            fontSize: 15,
             inherit: false,
           ),
-          child: Text(dayNames[dayIndex]),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildScrollIndicator(
-    ColorScheme colorScheme, {
-    required bool isLeft,
-  }) {
-    return AnimatedOpacity(
-      duration: const Duration(milliseconds: 200),
-      opacity: 1.0,
-      child: Container(
-        width: 24,
-        margin: const EdgeInsets.symmetric(vertical: 4),
-
-        child: Center(
-          child: Container(
-            padding: const EdgeInsets.all(4),
-            decoration: BoxDecoration(
-              color: colorScheme.primary.withValues(alpha: 0.2),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Icon(
-              isLeft ? Icons.chevron_left : Icons.chevron_right,
-              size: 14,
-              color: colorScheme.primary.withValues(alpha: 1),
-            ),
+          child: Text(
+            dayNames[dayIndex],
+            textAlign: TextAlign.center,
+            overflow: TextOverflow.ellipsis,
           ),
         ),
       ),
